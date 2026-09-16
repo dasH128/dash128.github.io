@@ -1,0 +1,103 @@
+---
+const groups = [
+  { label: "Languages", items: ["Dart", "Kotlin", "TypeScript", "Python"] },
+  {
+    label: "Frameworks",
+    items: ["Flutter", "React Native", "React", "Angular", "Vue", "NestJS", "Express"],
+  },
+  { label: "Data", items: ["MongoDB", "PostgreSQL", "Firebase", "Supabase"] },
+  {
+    label: "APIs & Integrations",
+    items: ["REST", "GraphQL", "Push Notifications", "Google Maps & Geolocation"],
+  },
+  {
+    label: "Practice & Tools",
+    items: ["SOLID", "Clean Code", "Git", "Docker", "Android Studio", "Xcode"],
+  },
+];
+---
+
+<section id="stack">
+  <div class="wrap">
+    <div class="skills__head">
+      <h2 class="skills__title">The stack, end to end.</h2>
+    </div>
+
+    <div class="skills__list">
+      {
+        groups.map((g) => (
+          <div class="skills__row">
+            <span class="skills__label">{g.label}</span>
+            <ul class="skills__tags">
+              {g.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .skills__head {
+    max-width: 60ch;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .skills__title {
+    font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+    line-height: 1.15;
+  }
+
+  .skills__list {
+    border-top: var(--stroke) solid var(--line);
+  }
+
+  .skills__row {
+    display: grid;
+    grid-template-columns: 14rem minmax(0, 1fr);
+    gap: 1.5rem;
+    padding-block: 1.5rem;
+    border-bottom: var(--stroke) solid var(--line);
+    align-items: baseline;
+  }
+
+  .skills__label {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    color: var(--ink-soft);
+  }
+
+  .skills__tags {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .skills__tags li {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.4em 0.9em;
+    border-radius: 999px;
+    border: var(--stroke) solid var(--line);
+    background: var(--paper);
+  }
+
+  @media (max-width: 640px) {
+    .skills__row {
+      grid-template-columns: 1fr;
+      gap: 0.6rem;
+    }
+  }
+</style>

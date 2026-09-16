@@ -1,0 +1,137 @@
+---
+const roles = [
+  {
+    n: "01",
+    company: "Motorline",
+    role: "Full Stack & Mobile Developer",
+    place: "Portugal",
+    dates: "Jul 2022 — Present",
+    detail:
+      "Led a Flutter desktop app for production-efficiency monitoring, cutting operational errors by 20%; built native Android/iOS widget integrations and a Node.js backend syncing data across platforms.",
+  },
+  {
+    n: "02",
+    company: "ITData Consulting",
+    role: "Full Stack Developer",
+    place: "Peru",
+    dates: "May 2021 — Feb 2022",
+    detail:
+      "Automated key processes and led React web development inside a Scrum team, delivering projects 10% faster than planned.",
+  },
+  {
+    n: "03",
+    company: "Holinsys",
+    role: "Software Engineering Analyst",
+    place: "Peru",
+    dates: "Feb 2020 — Feb 2021",
+    detail:
+      "Built dynamic frontends with Angular and Ionic and scalable backends with Node.js and Express; optimized MySQL/PostgreSQL for faster, more reliable queries.",
+  },
+  {
+    n: "04",
+    company: "Clínica Médica Climper",
+    role: "Software Analyst",
+    place: "Peru",
+    dates: "Jan 2015 — Feb 2020",
+    detail:
+      "Built mobile apps and a REST API for service delivery, and designed database architectures supporting multiple systems as they scaled.",
+  },
+];
+---
+
+<section id="experience">
+  <div class="wrap">
+    <div class="exp__head">
+      <h2 class="exp__title">Eight years, four companies, one habit: ship it, then make it faster.</h2>
+    </div>
+
+    <ol class="exp__list">
+      {
+        roles.map((r) => (
+          <li class="exp__row">
+            <span class="exp__n">{r.n}</span>
+            <div class="exp__body">
+              <div class="exp__meta">
+                <h3>{r.company} · {r.role}</h3>
+                <span class="exp__dates">{r.place} · {r.dates}</span>
+              </div>
+              <p>{r.detail}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .exp__head {
+    max-width: 62ch;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .exp__title {
+    font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+    line-height: 1.15;
+  }
+
+  .exp__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: var(--stroke) solid var(--line);
+  }
+
+  .exp__row {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+    gap: 1.5rem;
+    padding-block: 2rem;
+    border-bottom: var(--stroke) solid var(--line);
+  }
+
+  .exp__n {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--ink-soft);
+  }
+
+  .exp__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .exp__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem 1rem;
+  }
+
+  .exp__meta h3 {
+    font-size: 1.3rem;
+  }
+
+  .exp__dates {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+
+  .exp__body p {
+    color: var(--ink-soft);
+    max-width: 68ch;
+  }
+
+  @media (max-width: 560px) {
+    .exp__row {
+      grid-template-columns: 1fr;
+      gap: 0.6rem;
+    }
+  }
+</style>

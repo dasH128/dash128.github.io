@@ -1,0 +1,71 @@
+---
+interface Props {
+  variant?: "tangle" | "loop" | "flick" | "underline";
+  color?: string;
+  width?: number;
+  class?: string;
+}
+
+const { variant = "flick", color = "currentColor", width = 90, class: className = "" } = Astro.props;
+
+const paths: Record<string, { d: string; vb: string }> = {
+  tangle: {
+    d: "M6 34c4-10 14-16 24-12 12 4.6 4 16-4 15.6-9-.4-13-13 1-18 12-6.2 26-2 30 8.4 3 8-3.4 15-11 13",
+    vb: "0 0 100 52",
+  },
+  loop: {
+    d: "M4 20c8-14 24-18 34-8 9 9-1 22-14 20-11-1.6-16-14-6-20 9-5.6 20-2 24 6",
+    vb: "0 0 62 40",
+  },
+  flick: {
+    d: "M4 16c16-14 34-14 48 0 10 10 22 10 32-2",
+    vb: "0 0 88 30",
+  },
+  underline: {
+    d: "M3 10c22-9 56-9 90 0",
+    vb: "0 0 96 18",
+  },
+};
+
+const shape = paths[variant] ?? paths.flick;
+const [, , vbW, vbH] = shape.vb.split(" ").map(Number);
+const height = Math.round((width * vbH) / vbW);
+---
+
+<svg
+  class={`doodle-draw ${className}`}
+  width={width}
+  height={height}
+  viewBox={shape.vb}
+  fill="none"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path
+    d={shape.d}
+    pathLength="1"
+    stroke={color}
+    stroke-width="2.4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>
+
+<style>
+  .doodle-draw path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 1.3s var(--ease-out);
+  }
+
+  .doodle-draw.is-drawn path {
+    stroke-dashoffset: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .doodle-draw path {
+      transition: none;
+      stroke-dashoffset: 0;
+    }
+  }
+</style>

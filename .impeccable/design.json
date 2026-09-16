@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-16T00:00:00Z",
+  "title": "Design System: Jordy Rojas Aliaga — Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "green": { "role": "primary", "displayName": "Signal Green", "canonical": "#2e7d32", "tonalRamp": ["#0d2b0f", "#153d18", "#1e4f22", "#2e7d32", "#3f9a45", "#5fb865", "#93d497", "#d3efd5"] },
+      "forest": { "role": "secondary", "displayName": "Deep Forest", "canonical": "#2e5c43", "tonalRamp": ["#0f1f17", "#183024", "#204030", "#2e5c43", "#3f7a58", "#5b9a74", "#8fc0a3", "#d1e8dc"] },
+      "burgundy": { "role": "secondary", "displayName": "Dark Burgundy", "canonical": "#631f2a", "tonalRamp": ["#210a0e", "#33111a", "#4a1721", "#631f2a", "#823140", "#a65261", "#cf8e97", "#eecfd3"] },
+      "periwinkle": { "role": "reserve", "displayName": "Periwinkle (unshipped reserve)", "canonical": "#8890ee", "tonalRamp": ["#171a4a", "#232a6c", "#3b428f", "#6068c8", "#8890ee", "#a9afef", "#c9cdf5", "#e9ebfc"] },
+      "rust": { "role": "reserve", "displayName": "Rust (unshipped reserve)", "canonical": "#b9481d", "tonalRamp": ["#331206", "#4d1c0a", "#752a0f", "#973a18", "#b9481d", "#d16b3f", "#e79c7d", "#f6ccb9"] },
+      "paper": { "role": "neutral", "displayName": "Paper", "canonical": "#f7f2e7" },
+      "paper-dim": { "role": "neutral", "displayName": "Paper Dim", "canonical": "#efe8d8" },
+      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#15130f" },
+      "ink-soft": { "role": "neutral", "displayName": "Ink Soft", "canonical": "#4a463d" },
+      "line": { "role": "neutral", "displayName": "Line (outline)", "canonical": "rgba(21, 19, 15, 0.86)" },
+      "night": { "role": "neutral", "displayName": "Night (footer ground)", "canonical": "#121009" },
+      "night-ink": { "role": "neutral", "displayName": "Night Ink", "canonical": "#f4efe3" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero headline only." },
+      "title": { "displayName": "Section Title", "purpose": "Section headings: Work, Experience, Stack." },
+      "label": { "displayName": "Label", "purpose": "Nav links, pill/CTA text, tags, company/date metadata. Never small-caps or letter-spaced into an eyebrow." },
+      "body": { "displayName": "Body", "purpose": "Paragraph copy: subheads, project detail, experience descriptions." }
+    },
+    "shadows": [
+      { "name": "card-lift", "value": "0 14px 30px -14px rgba(21, 19, 15, 0.35)", "purpose": "Ambient lift under project cards and the hero ledger card. The system's only general-purpose shadow." },
+      { "name": "cta-glow", "value": "0 10px 22px -12px var(--green-ink)", "purpose": "Green-tinted glow scoped to the primary pill CTA, intensifying on hover." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Default easing for hovers, reveal, and doodle draw-in." },
+      { "name": "doodle-draw", "value": "stroke-dashoffset 1.3s var(--ease-out)", "purpose": "Self-draw animation for the signature squiggle SVGs, staggered per-instance via transition-delay." },
+      { "name": "hero-reveal", "value": "opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out)", "purpose": "Fade + rise (28px) on scroll-into-view, scoped to the Hero copy and ledger only, not a global section-enter treatment." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "card-stack", "value": "780px" },
+      { "name": "hero-stack", "value": "880px" },
+      { "name": "footer-stack", "value": "720px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button (pill)",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Green filled pill CTA, e.g. the hero and footer email links.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">Get in Touch</a>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 0.5em; border-radius: 999px; border: 1.75px solid rgba(21,19,15,0.86); padding: 0.75em 1.5em; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 0.98rem; text-decoration: none; white-space: nowrap; background: #2e7d32; color: #ffffff; box-shadow: 0 10px 22px -12px #143d18; transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), box-shadow 0.35s cubic-bezier(0.16,1,0.3,1); } .ds-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 26px -12px #143d18; } .ds-btn-primary:focus-visible { outline: 2.5px solid #143d18; outline-offset: 3px; } .ds-btn-primary:active { transform: translateY(0); box-shadow: 0 6px 16px -12px #143d18; }"
+    },
+    {
+      "name": "Secondary Link",
+      "kind": "button",
+      "refersTo": "link-underline",
+      "description": "Low-emphasis underlined text CTA, e.g. 'View my work'.",
+      "html": "<a class=\"ds-link\" href=\"#\">View my work</a>",
+      "css": ".ds-link { color: #15130f; text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 4px; font-weight: 600; font-family: 'Hanken Grotesk', sans-serif; } .ds-link:focus-visible { outline: 2.5px solid #143d18; outline-offset: 3px; }"
+    },
+    {
+      "name": "Project Card (accent)",
+      "kind": "card",
+      "refersTo": "card-forest",
+      "description": "Flat-color project card with numbered header, doodle accent, body, and tag footer.",
+      "html": "<article class=\"ds-card\"><div class=\"ds-card__top\"><span class=\"ds-card__n\">01.</span></div><div class=\"ds-card__body\"><h3>Native Mobile Integration</h3><p>A Flutter mobile app extended with native Android and iOS widgets.</p></div><div class=\"ds-card__footer\"><span class=\"ds-card__context\">Motorline · 2022–Present</span><ul class=\"ds-card__tags\"><li>Flutter</li><li>Kotlin</li></ul></div></article>",
+      "css": ".ds-card { border-radius: 28px; border: 1.75px solid rgba(21,19,15,0.86); box-shadow: 0 14px 30px -14px rgba(21,19,15,0.35); display: flex; flex-direction: column; overflow: hidden; background: #2e5c43; color: #eef4ee; transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); } .ds-card:hover { transform: translateY(-6px); } .ds-card__top { display: flex; align-items: flex-start; justify-content: space-between; padding: 1.75rem 1.75rem 0; } .ds-card__n { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 1.6rem; background: rgba(255,255,255,0.14); border: 1.75px solid currentColor; border-radius: 999px; width: 3rem; height: 3rem; display: grid; place-items: center; } .ds-card__body { padding: 1.5rem 1.75rem 2rem; display: flex; flex-direction: column; gap: 0.9rem; flex: 1; } .ds-card__body h3 { font-family: 'Bricolage Grotesque', sans-serif; font-size: 1.6rem; color: inherit; margin: 0; } .ds-card__body p { color: inherit; opacity: 0.92; margin: 0; } .ds-card__footer { background: rgba(0,0,0,0.16); border-top: 1.75px solid rgba(21,19,15,0.86); padding: 1.25rem 1.75rem; display: flex; flex-direction: column; gap: 0.75rem; } .ds-card__context { font-family: 'Bricolage Grotesque', sans-serif; font-size: 0.85rem; font-weight: 600; } .ds-card__tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; } .ds-card__tags li { font-size: 0.78rem; font-weight: 600; padding: 0.3em 0.75em; border-radius: 999px; border: 1.25px solid currentColor; opacity: 0.9; }"
+    },
+    {
+      "name": "Tag Chip",
+      "kind": "chip",
+      "refersTo": "card__tags-li",
+      "description": "Skill/stack pill on the paper ground.",
+      "html": "<li class=\"ds-chip\">Flutter</li>",
+      "css": ".ds-chip { list-style: none; font-family: 'Bricolage Grotesque', sans-serif; font-size: 0.9rem; font-weight: 600; padding: 0.4em 0.9em; border-radius: 999px; border: 1.75px solid rgba(21,19,15,0.86); background: #f7f2e7; color: #15130f; display: inline-block; }"
+    },
+    {
+      "name": "Top Navigation",
+      "kind": "nav",
+      "refersTo": "nav",
+      "description": "Sticky translucent-paper nav with outlined initials mark, inline links, and pill CTA.",
+      "html": "<header class=\"ds-nav\"><a class=\"ds-nav__mark\" href=\"#\">JR</a><nav class=\"ds-nav__links\"><a href=\"#\">Work</a><a href=\"#\">Experience</a><a href=\"#\">Stack</a></nav><a class=\"ds-btn-primary\" href=\"#\">Contact</a></header>",
+      "css": ".ds-nav { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1.1rem; background: color-mix(in srgb, #f7f2e7 88%, transparent); backdrop-filter: blur(10px); } .ds-nav__mark { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 10px; border: 1.75px solid rgba(21,19,15,0.86); background: #f7f2e7; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 1.05rem; text-decoration: none; color: #15130f; } .ds-nav__links { display: flex; align-items: center; gap: 1.5rem; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 500; font-size: 0.98rem; } .ds-nav__links a { text-decoration: none; color: #4a463d; transition: color 0.25s cubic-bezier(0.16,1,0.3,1); } .ds-nav__links a:hover, .ds-nav__links a:focus-visible { color: #15130f; }"
+    },
+    {
+      "name": "Doodle (signature)",
+      "kind": "custom",
+      "refersTo": "doodle",
+      "description": "Self-drawing single-stroke squiggle SVG accent; the system's signature motion device.",
+      "html": "<svg class=\"ds-doodle\" width=\"86\" height=\"45\" viewBox=\"0 0 100 52\" fill=\"none\" aria-hidden=\"true\"><path d=\"M6 34c4-10 14-16 24-12 12 4.6 4 16-4 15.6-9-.4-13-13 1-18 12-6.2 26-2 30 8.4 3 8-3.4 15-11 13\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\" pathLength=\"1\" /></svg>",
+      "css": ".ds-doodle path { stroke-dasharray: 1; stroke-dashoffset: 0; transition: stroke-dashoffset 1.3s cubic-bezier(0.16,1,0.3,1); } .ds-doodle.is-drawn path { stroke-dashoffset: 0; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Evidence Ledger",
+    "overview": "The site treats \"considering Jordy for a role\" as a product decision, not a portfolio to browse. It borrows the confident, flat-color, hand-illustrated register of a SaaS landing page (the user's pinned reference, rothfinder.com) and applies it to a person: an off-white paper ground, oversized bold display type, black-outlined cards in saturated flat accent colors, and a stat ledger styled like a scoreboard. The only ornament is a set of thin, single-stroke hand-drawn squiggles that self-draw on load and on scroll — everything else is flat color, hard black-ish outlines, and rounded geometry. The pinned reference used small-caps tracked eyebrow labels throughout; this build ships with none. That is a deliberate, reviewed craft-floor deviation (eyebrows are banned outright), not an oversight — do not reintroduce them to \"match the reference\" more closely.",
+    "keyCharacteristics": [
+      "Off-white paper ground with near-black ink and a near-black (not pure-black) outline color reused everywhere.",
+      "Two shipped accent-card colors (forest, burgundy) out of four defined in tokens; periwinkle and rust exist as unused reserve tokens.",
+      "One signature motion device: hand-drawn squiggle doodles that self-draw via stroke-dasharray/stroke-dashoffset.",
+      "Scroll-triggered reveal (fade + rise) is scoped to the Hero only — not a generic section-enter treatment.",
+      "Bricolage Grotesque for all display/heading/label text, Hanken Grotesk for body — chosen to avoid the Space Grotesk/DM Sans default pairing."
+    ],
+    "rules": [
+      { "name": "The Outline-Not-Shadow Rule", "body": "Every bordered surface (pills, cards, tags, the nav mark) is defined primarily by a ~1.75px near-black outline (--line), not by shadow. Where a shadow is present (--shadow-card), it's a soft ambient lift under the whole card, never the thing that defines the edge.", "section": "colors" },
+      { "name": "The No-Eyebrow Rule", "body": "No small-caps, letter-spaced-uppercase label sits above a heading anywhere in the build, even though the pinned visual reference uses them. This is a standing prohibition carried from the finish review, not a gap to fill in on the next surface.", "section": "typography" },
+      { "name": "The One-Shadow Rule", "body": "There is exactly one ambient card shadow and one CTA-specific glow in the whole system. Don't add new shadow values for new components; reuse --shadow-card or state explicitly why a component needs the CTA glow instead.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do pair every filled or bordered surface with the same 1.75px near-black outline (--line) — it's the connective tissue between the paper, card, and pill components.",
+      "Do keep the Doodle component sparse and low-opacity; it's an accent, not a pattern-fill.",
+      "Do use Bricolage Grotesque for anything that functions as a label, stat, or heading, and Hanken Grotesk for anything read as a paragraph.",
+      "Do scope the .reveal scroll-fade-and-rise treatment to the Hero's copy and ledger only; it is not a generic section-enter animation to apply everywhere."
+    ],
+    "donts": [
+      "Don't add small-caps, tracked-uppercase eyebrow labels above headings anywhere, even though the pinned visual reference (rothfinder.com) uses them — this was banned by the finish review as a craft-floor default, not left out by accident.",
+      "Don't introduce hard-offset (non-blurred) drop shadows; the system's only shadow is the soft ambient --shadow-card lift plus the tinted CTA glow.",
+      "Don't treat the unused --periwinkle / --rust tokens as a mandate to invent additional project cards just to \"use\" the palette; add a third/fourth accent card only when a third/fourth real project exists.",
+      "Don't reintroduce the brighter, pre-review green (~#3fa92e); #2e7d32 is the canonical primary and exists specifically to clear white-text contrast."
+    ]
+  }
+}

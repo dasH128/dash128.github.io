@@ -1,0 +1,191 @@
+---
+import Doodle from "./Doodle.astro";
+---
+
+<section id="top" class="hero">
+  <div class="hero__doodles" aria-hidden="true">
+    <Doodle variant="tangle" width={86} class="d d--1" />
+    <Doodle variant="loop" width={64} class="d d--2" />
+    <Doodle variant="tangle" width={110} class="d d--3" />
+    <Doodle variant="flick" width={78} class="d d--4" />
+    <Doodle variant="loop" width={54} class="d d--5" />
+  </div>
+
+  <div class="wrap hero__grid">
+    <div class="hero__copy reveal">
+      <h1 class="hero__title">
+        I build fullstack and mobile software that ships ahead of schedule —
+        and breaks less once it's live.
+      </h1>
+      <p class="hero__subhead">
+        Jordy Rojas Aliaga, Fullstack &amp; Mobile Engineer based in Porto,
+        Portugal — 8+ years designing and shipping web and mobile products
+        across Portugal and Peru, from Flutter production tools to NestJS
+        APIs.
+      </p>
+      <div class="hero__actions">
+        <a class="pill pill--primary" href="mailto:rojas71421@gmail.com">Get in Touch</a>
+        <a class="link-underline" href="#work">View my work</a>
+      </div>
+    </div>
+
+    <aside class="ledger reveal" aria-label="Career highlights">
+      <div class="ledger__row">
+        <div class="ledger__stat">
+          <strong>8+</strong>
+          <span>Years shipping software</span>
+        </div>
+        <div class="ledger__stat">
+          <strong>4</strong>
+          <span>Companies, 2 countries</span>
+        </div>
+      </div>
+      <div class="ledger__highlight">
+        <strong>20% fewer</strong>
+        <span>operational errors — production-monitoring app, Motorline</span>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: clip;
+    padding-block: clamp(3.5rem, 9vw, 6.5rem) clamp(4rem, 10vw, 8rem);
+  }
+
+  .hero__doodles {
+    position: absolute;
+    inset: 0;
+    color: var(--ink);
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  .hero__doodles :global(svg) {
+    position: absolute;
+  }
+
+  .d--1 { top: 8%; left: 4%; }
+  .d--2 { top: 20%; left: 88%; }
+  .d--3 { top: 62%; left: 2%; }
+  .d--4 { top: 78%; left: 90%; }
+  .d--5 { top: 4%; left: 44%; }
+
+  .d--1 :global(path) { transition-delay: 0.1s; }
+  .d--2 :global(path) { transition-delay: 0.35s; }
+  .d--3 :global(path) { transition-delay: 0.5s; }
+  .d--4 :global(path) { transition-delay: 0.2s; }
+  .d--5 :global(path) { transition-delay: 0.6s; }
+
+  .hero__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
+    gap: clamp(2.5rem, 6vw, 5rem);
+    align-items: end;
+  }
+
+  .hero__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .hero__title {
+    font-size: clamp(2.4rem, 5.2vw, 4.4rem);
+    line-height: 1.05;
+    max-width: 16ch;
+  }
+
+  .hero__subhead {
+    font-size: 1.15rem;
+    color: var(--ink-soft);
+    max-width: 46ch;
+  }
+
+  .hero__actions {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+
+  .ledger {
+    background: var(--paper);
+    border: var(--stroke) solid var(--line);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+  }
+
+  .ledger__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ledger__stat {
+    padding: 1.4rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    border-bottom: var(--stroke) solid var(--line);
+  }
+
+  .ledger__stat:first-child {
+    border-right: var(--stroke) solid var(--line);
+  }
+
+  .ledger__stat strong {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .ledger__stat span {
+    font-size: 0.86rem;
+    color: var(--ink-soft);
+    line-height: 1.3;
+  }
+
+  .ledger__highlight {
+    background: var(--green);
+    color: #ffffff;
+    padding: 1.3rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .ledger__highlight strong {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+
+  .ledger__highlight span {
+    font-size: 0.86rem;
+    opacity: 0.92;
+    line-height: 1.3;
+  }
+
+  @media (max-width: 880px) {
+    .hero__grid {
+      grid-template-columns: 1fr;
+    }
+    .ledger {
+      max-width: 420px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero__title {
+      max-width: none;
+    }
+    .d--3, .d--4 {
+      display: none;
+    }
+  }
+</style>

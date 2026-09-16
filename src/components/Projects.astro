@@ -1,0 +1,199 @@
+---
+import Doodle from "./Doodle.astro";
+
+const projects = [
+  {
+    n: "01",
+    tone: "forest",
+    title: "Native Mobile Integration",
+    context: "Motorline · 2022–Present",
+    detail:
+      "A Flutter mobile app extended with native Android and iOS widgets, closing the gap between the framework and the platform for a smoother, more responsive experience.",
+    tags: ["Flutter", "Kotlin", "Native Widgets", "Push Notifications"],
+    doodle: "loop" as const,
+  },
+  {
+    n: "02",
+    tone: "burgundy",
+    title: "Production Monitoring & Quality Control",
+    context: "Motorline · 2022–Present",
+    detail:
+      "A Flutter desktop platform that tracks production-task efficiency in real time and syncs data across systems, giving operators visibility to catch problems before they become defects.",
+    outcome: "20% fewer operational errors",
+    tags: ["Flutter", "Node.js", "Cron Automation", "Data Sync"],
+    doodle: "tangle" as const,
+  },
+];
+---
+
+<section id="work">
+  <div class="wrap">
+    <div class="work__head">
+      <h2 class="work__title">Two systems, two different pressures.</h2>
+    </div>
+
+    <div class="work__grid">
+      {
+        projects.map((p) => (
+          <article class={`card card--${p.tone}`}>
+            <div class="card__top">
+              <span class="card__n">{p.n}.</span>
+              <Doodle variant={p.doodle} width={72} class="card__doodle" />
+            </div>
+
+            <div class="card__body">
+              <h3>{p.title}</h3>
+              <p>{p.detail}</p>
+              {p.outcome && <p class="card__outcome">{p.outcome}</p>}
+            </div>
+
+            <div class="card__footer">
+              <span class="card__context">{p.context}</span>
+              <ul class="card__tags">
+                {p.tags.map((t) => (
+                  <li>{t}</li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .work__head {
+    max-width: 60ch;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .work__title {
+    font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+    line-height: 1.15;
+  }
+
+  .work__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .card {
+    border-radius: var(--radius-lg);
+    border: var(--stroke) solid var(--line);
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+    min-height: 420px;
+    overflow: hidden;
+    transition: transform 0.4s var(--ease-out);
+  }
+
+  .card:hover {
+    transform: translateY(-6px);
+  }
+
+  .card--forest {
+    background: var(--forest);
+    color: var(--forest-ink);
+  }
+
+  .card--burgundy {
+    background: var(--burgundy);
+    color: var(--burgundy-ink);
+  }
+
+  .card__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 1.75rem 1.75rem 0;
+  }
+
+  .card__n {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 700;
+    font-size: 1.6rem;
+    background: rgba(255, 255, 255, 0.14);
+    border: var(--stroke) solid currentColor;
+    border-radius: 999px;
+    width: 3rem;
+    height: 3rem;
+    display: grid;
+    place-items: center;
+  }
+
+  .card__doodle {
+    opacity: 0.5;
+    margin-top: 0.5rem;
+  }
+
+  .card__body {
+    padding: 1.5rem 1.75rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    flex: 1;
+  }
+
+  .card__body h3 {
+    font-size: 1.6rem;
+    color: inherit;
+  }
+
+  .card__body p {
+    color: inherit;
+    opacity: 0.92;
+    max-width: 42ch;
+  }
+
+  .card__outcome {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    opacity: 1 !important;
+  }
+
+  .card__footer {
+    background: rgba(0, 0, 0, 0.16);
+    border-top: var(--stroke) solid var(--line);
+    padding: 1.25rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .card__context {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .card__tags {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .card__tags li {
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.3em 0.75em;
+    border-radius: 999px;
+    border: 1.25px solid currentColor;
+    opacity: 0.9;
+  }
+
+  @media (max-width: 780px) {
+    .work__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
