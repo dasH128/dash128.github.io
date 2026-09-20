@@ -33,7 +33,17 @@ const projects = [
     tags: ["NestJS", "Prisma", "PostgreSQL", "PDFKit"],
     doodle: "flick" as const,
     href: "/projects/pdf-report-api",
-    wide: true,
+  },
+  {
+    n: "04",
+    tone: "rust",
+    title: "Cinemapedia",
+    context: "Personal Project · 2024",
+    detail:
+      "A Flutter mobile app for browsing and searching TMDB movies, with cast and synopsis on every detail page, offline favorites via Isar, and a light/dark theme with 15 accent colors.",
+    tags: ["Flutter", "Riverpod", "Isar", "TMDB API"],
+    doodle: "underline" as const,
+    href: "/projects/movies-app",
   },
 ];
 ---
@@ -127,6 +137,11 @@ const projects = [
   .card--periwinkle {
     background: var(--periwinkle);
     color: var(--periwinkle-ink);
+  }
+
+  .card--rust {
+    background: var(--rust);
+    color: var(--rust-ink);
   }
 
   .card--wide {
