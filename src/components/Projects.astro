@@ -23,19 +23,31 @@ const projects = [
     tags: ["Flutter", "Node.js", "Cron Automation", "Data Sync"],
     doodle: "tangle" as const,
   },
+  {
+    n: "03",
+    tone: "periwinkle",
+    title: "PDF Report Generation API",
+    context: "Personal Project · 2024",
+    detail:
+      "A NestJS API that turns Prisma/PostgreSQL data into PDF reports on demand — invoices, certificates, country tables, and dashboards with embedded SVG charts — with no templating engine in between.",
+    tags: ["NestJS", "Prisma", "PostgreSQL", "PDFKit"],
+    doodle: "flick" as const,
+    href: "/projects/pdf-report-api",
+    wide: true,
+  },
 ];
 ---
 
 <section id="work">
   <div class="wrap">
     <div class="work__head">
-      <h2 class="work__title">Two systems, two different pressures.</h2>
+      <h2 class="work__title">Systems shipped under different pressures.</h2>
     </div>
 
     <div class="work__grid">
       {
         projects.map((p) => (
-          <article class={`card card--${p.tone}`}>
+          <article class={`card card--${p.tone} ${p.wide ? "card--wide" : ""}`}>
             <div class="card__top">
               <span class="card__n">{p.n}.</span>
               <Doodle variant={p.doodle} width={72} class="card__doodle" />
@@ -54,6 +66,11 @@ const projects = [
                   <li>{t}</li>
                 ))}
               </ul>
+              {p.href && (
+                <a href={p.href} class="card__link link-underline">
+                  Read the case study →
+                </a>
+              )}
             </div>
           </article>
         ))
@@ -105,6 +122,20 @@ const projects = [
   .card--burgundy {
     background: var(--burgundy);
     color: var(--burgundy-ink);
+  }
+
+  .card--periwinkle {
+    background: var(--periwinkle);
+    color: var(--periwinkle-ink);
+  }
+
+  .card--wide {
+    grid-column: 1 / -1;
+    min-height: 320px;
+  }
+
+  .card--wide .card__body p {
+    max-width: 62ch;
   }
 
   .card__top {
@@ -189,6 +220,12 @@ const projects = [
     border-radius: 999px;
     border: 1.25px solid currentColor;
     opacity: 0.9;
+  }
+
+  .card__link {
+    display: inline-block;
+    margin-top: 0.9rem;
+    font-size: 0.92rem;
   }
 
   @media (max-width: 780px) {
