@@ -1,0 +1,381 @@
+---
+import "../../styles/global.css";
+
+const description =
+  "A Vue 3 + TypeScript trivia game built on PokeAPI: guess the Pokémon from its silhouette before the clock — and your hearts — run out, across three difficulty tiers with a local high-score board.";
+
+const modules = [
+  {
+    base: "api/pokemonApi.ts",
+    summary:
+      "A single Axios instance pointed at PokeAPI's /pokemon endpoint — every request for a Pokémon's name and id goes through it.",
+  },
+  {
+    base: "helper/getPokemonOptions.ts",
+    summary:
+      "Shuffles the 650 Kanto-through-Unova ids client-side, takes four, and resolves all four PokeAPI requests in parallel with Promise.all.",
+  },
+  {
+    base: "helper/dificultad.ts + scoreStorage.ts",
+    summary:
+      "Difficulty presets (lives, seconds per question, hints, total time) and a localStorage-backed top-10 leaderboard, re-sorted and trimmed on every save.",
+  },
+];
+
+const shots = [
+  {
+    src: "/projects/poke-web/menu.png",
+    alt: "Main menu styled as a holographic Kanto terminal, with a blurred Pokémon silhouette on the left and Empezar, Configurar, Puntajes and Créditos options on the right",
+    caption: "Main menu — the holographic-terminal redesign, with a live silhouette preview.",
+  },
+  {
+    src: "/projects/poke-web/config.png",
+    alt: "Difficulty selection screen showing Fácil, Normal and Difícil options, each listing their lives, time per question and available hints",
+    caption: "Difficulty picker — Fácil, Normal and Difícil each tune lives, time and hints differently.",
+  },
+  {
+    src: "/projects/poke-web/game.png",
+    alt: "Game screen with a black Pokémon silhouette inside a Pokédex-style scanner, a countdown timer, a hint button and four answer options below",
+    caption: "The guessing screen — a countdown, a hint button, and four PokeAPI-sourced options.",
+  },
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <title>¿Quién es ese Pokémon? — Jordy Rojas Aliaga</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="top">
+      <div class="wrap top__row">
+        <a href="/#work" class="back-link link-underline">← Back to portfolio</a>
+        <div class="top__links">
+          <a class="pill pill--primary" href="https://pokigame.netlify.app/" target="_blank" rel="noopener">
+            Live demo
+          </a>
+          <a class="pill pill--primary" href="https://github.com/dasH128/poke-web" target="_blank" rel="noopener">
+            View on GitHub
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero-block wrap">
+        <span class="eyebrow-tag">Personal Project · 2021–2026</span>
+        <h1>¿Quién es ese Pokémon?</h1>
+        <p class="lede">
+          A Vue 3 + TypeScript trivia game that turns PokeAPI into a "Who's That Pokémon?" quiz: a silhouette
+          appears, a countdown starts, and you pick the right name from four options before your hearts — or
+          the clock — run out.
+        </p>
+        <ul class="tags">
+          {["Vue 3", "TypeScript", "Axios", "PokeAPI", "Vue CLI"].map((t) => (
+            <li>{t}</li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="wrap block">
+        <h2>Why I built it</h2>
+        <p>
+          This was one of my first Vue 3 + TypeScript projects, built in 2021 to practice component
+          composition, computed properties, and pulling live data from a public REST API instead of static
+          fixtures. I came back to it in 2026 to redesign the interface from scratch — the current
+          "holographic Kanto terminal" look — while leaving the original game logic untouched.
+        </p>
+      </section>
+
+      <section class="wrap block">
+        <h2>What it does</h2>
+        <p>
+          Every round shuffles the 650 Kanto-through-Unova Pokémon ids, fetches four of them from PokeAPI,
+          and renders one as a black silhouette that only reveals itself once you answer. The difficulty
+          picked at the start — Fácil, Normal, or Difícil — sets your lives, the seconds per question, and
+          how many hints you get; each hint strips two of the three wrong options down to a 50/50 guess.
+          Normal and Difícil add a shared total-game clock that costs a life and resets every time it runs
+          out. Final scores are saved straight to a local top-10 leaderboard, no backend involved.
+        </p>
+      </section>
+
+      <section class="wrap block">
+        <h2>Architecture</h2>
+        <p>
+          There's no router or state library — <code>App.vue</code> just toggles between the menu and the
+          game screen via a prop/emit pair, and each screen owns its own state through the Options API. The
+          logic that isn't UI lives in three small, single-purpose modules:
+        </p>
+
+        <div class="controllers">
+          {modules.map((m) => (
+            <div class="controller-row">
+              <code class="controller-base">{m.base}</code>
+              <p>{m.summary}</p>
+            </div>
+          ))}
+        </div>
+
+        <pre class="code-block"><code>{`usarAyuda() {
+  if (this.ayudasRestantes <= 0 || this.ayudaUsadaEnPregunta || this.mostrarRespuesta) return
+
+  const correcta = this.opcionesMostradas.find(p => p.id === this.pokemon.id)
+  const incorrectas = this.opcionesMostradas.filter(p => p.id !== this.pokemon.id)
+  const incorrectaAlAzar = incorrectas[Math.floor(Math.random() * incorrectas.length)]
+
+  this.opcionesMostradas = [correcta, incorrectaAlAzar].sort(() => Math.random() - 0.5)
+  this.ayudasRestantes--
+  this.ayudaUsadaEnPregunta = true
+}`}</code></pre>
+        <p class="code-caption">
+          <code>PokemonPage.vue</code> — using a hint keeps the correct Pokémon and one random decoy, then
+          reshuffles the two so the answer's position on screen doesn't give it away.
+        </p>
+      </section>
+
+      <section class="wrap block">
+        <h2>Screens</h2>
+        <p>Screenshots below are from the app running locally, not mockups.</p>
+
+        <div class="gallery">
+          {shots.map((s) => (
+            <figure class="shot">
+              <img src={s.src} alt={s.alt} loading="lazy" />
+              <figcaption>{s.caption}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+
+      <section class="wrap block block--last">
+        <h2>Stack</h2>
+        <p>
+          Vue 3 with the Options API and TypeScript for the app itself, Axios talking directly to PokeAPI
+          with no caching layer in between, and utility-class styling with a handful of scoped keyframe
+          animations for the Pokédex scanlines and lens glow.
+        </p>
+        <div class="footer-links">
+          <a class="pill pill--primary" href="https://pokigame.netlify.app/" target="_blank" rel="noopener">
+            Try the live demo
+          </a>
+          <a class="pill pill--primary" href="https://github.com/dasH128/poke-web" target="_blank" rel="noopener">
+            View the source on GitHub
+          </a>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
+
+<style>
+  .top {
+    padding-block: 1.25rem;
+    border-bottom: var(--stroke) solid var(--line);
+    background: var(--paper);
+  }
+
+  .top__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .back-link {
+    font-family: "Bricolage Grotesque", sans-serif;
+  }
+
+  .top__links {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-block {
+    padding-block: clamp(3rem, 7vw, 5rem) clamp(2rem, 4vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .eyebrow-tag {
+    display: inline-block;
+    width: fit-content;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0.4em 0.9em;
+    border-radius: 999px;
+    border: 1.25px solid var(--line);
+    background: var(--night);
+    color: var(--night-ink);
+  }
+
+  h1 {
+    font-size: clamp(2.1rem, 4.4vw, 3.2rem);
+    line-height: 1.1;
+    max-width: 20ch;
+  }
+
+  .lede {
+    font-size: 1.15rem;
+    color: var(--ink-soft);
+    max-width: 62ch;
+  }
+
+  .tags {
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tags li {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 0.35em 0.85em;
+    border-radius: 999px;
+    border: 1.25px solid var(--line);
+  }
+
+  .block {
+    padding-block: clamp(1.75rem, 4vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    border-top: var(--stroke) solid var(--line);
+  }
+
+  .block--last {
+    padding-bottom: clamp(3.5rem, 8vw, 6rem);
+  }
+
+  .block h2 {
+    font-size: clamp(1.5rem, 2.8vw, 2rem);
+  }
+
+  .block p {
+    max-width: 68ch;
+  }
+
+  code {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    background: var(--paper-dim);
+    padding: 0.1em 0.4em;
+    border-radius: 4px;
+    font-size: 0.92em;
+  }
+
+  .controllers {
+    display: flex;
+    flex-direction: column;
+    border-top: var(--stroke) solid var(--line);
+  }
+
+  .controller-row {
+    display: grid;
+    grid-template-columns: minmax(160px, 260px) 1fr;
+    gap: 1.5rem;
+    padding-block: 1rem;
+    border-bottom: var(--stroke) solid var(--line);
+  }
+
+  .controller-base {
+    align-self: start;
+    width: fit-content;
+  }
+
+  .controller-row p {
+    color: var(--ink-soft);
+  }
+
+  .code-block {
+    background: var(--night);
+    color: var(--night-ink);
+    border-radius: var(--radius-md);
+    border: var(--stroke) solid var(--line);
+    padding: 1.5rem;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    line-height: 1.55;
+  }
+
+  .code-block code {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+  }
+
+  .code-caption {
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+  }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.25rem, 3vw, 1.75rem);
+  }
+
+  .shot {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    border: var(--stroke) solid var(--line);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    background: #ffffff;
+  }
+
+  .shot img {
+    width: 100%;
+    display: block;
+    border-bottom: var(--stroke) solid var(--line);
+  }
+
+  .shot figcaption {
+    padding: 0.9rem 1.1rem 1.1rem;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 780px) {
+    .gallery {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .controller-row {
+      grid-template-columns: 1fr;
+      gap: 0.4rem;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .gallery {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

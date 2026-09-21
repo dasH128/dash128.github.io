@@ -45,6 +45,19 @@ const projects = [
     doodle: "underline" as const,
     href: "/projects/movies-app",
   },
+  {
+    n: "05",
+    tone: "night",
+    title: "¿Quién es ese Pokémon?",
+    context: "Personal Project · 2021–2026",
+    detail:
+      "A Vue 3 + TypeScript trivia game built on PokeAPI: guess the Pokémon from its silhouette before the clock — and your hearts — run out, across three difficulty tiers with a local high-score board.",
+    tags: ["Vue 3", "TypeScript", "PokeAPI", "Axios"],
+    doodle: "loop" as const,
+    href: "/projects/poke-web",
+    demo: "https://pokigame.netlify.app/",
+    wide: true,
+  },
 ];
 ---
 
@@ -79,6 +92,11 @@ const projects = [
               {p.href && (
                 <a href={p.href} class="card__link link-underline">
                   Read the case study →
+                </a>
+              )}
+              {p.demo && (
+                <a href={p.demo} target="_blank" rel="noopener" class="card__link link-underline">
+                  Try the live demo →
                 </a>
               )}
             </div>
@@ -142,6 +160,11 @@ const projects = [
   .card--rust {
     background: var(--rust);
     color: var(--rust-ink);
+  }
+
+  .card--night {
+    background: var(--night);
+    color: var(--night-ink);
   }
 
   .card--wide {
