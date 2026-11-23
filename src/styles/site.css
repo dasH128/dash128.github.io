@@ -1,5 +1,5 @@
-/* Redesign "personality": paper, ink, one azulejo blue.
-   Project case-study pages still use global.css until Phase 6. */
+/* Site-wide design system: paper, ink, one azulejo blue.
+   Case-study pages add their own shared styles in layouts/CaseStudy.astro. */
 
 :root {
   --paper: #f4f1e8;
