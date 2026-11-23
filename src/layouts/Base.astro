@@ -1,0 +1,72 @@
+---
+import "../styles/site.css";
+import { content, langs, langPath, type Lang } from "../i18n/content";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = content[lang];
+const site = Astro.site ? Astro.site.origin : "";
+---
+
+<!doctype html>
+<html lang={t.htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={t.meta.description} />
+    <title>{t.meta.title}</title>
+    <meta property="og:title" content={t.meta.title} />
+    <meta property="og:description" content={t.meta.description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={lang === "es" ? "es_ES" : "en_US"} />
+    {langs.map((l) => <link rel="alternate" hreflang={l} href={`${site}${langPath(l)}`} />)}
+    <link rel="alternate" hreflang="x-default" href={`${site}${import.meta.env.BASE_URL}`} />
+    <link rel="canonical" href={`${site}${langPath(lang)}`} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <slot />
+
+    <script>
+      // Remember the language the visitor picked, so "/" can send them back to it.
+      document.querySelectorAll<HTMLAnchorElement>("[data-lang]").forEach((a) => {
+        a.addEventListener("click", () => {
+          try {
+            localStorage.setItem("lang", a.dataset.lang ?? "");
+          } catch {}
+        });
+      });
+
+      // Hand-drawn doodles sketch themselves in as they enter the viewport.
+      const doodles = document.querySelectorAll(".doodle-draw");
+      if (!("IntersectionObserver" in window)) {
+        doodles.forEach((el) => el.classList.add("is-drawn"));
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-drawn");
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { threshold: 0.4 },
+        );
+        doodles.forEach((el) => io.observe(el));
+      }
+    </script>
+  </body>
+</html>

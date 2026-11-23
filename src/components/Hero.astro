@@ -1,191 +1,247 @@
 ---
 import Doodle from "./Doodle.astro";
+import { content, EMAIL, type Lang } from "../i18n/content";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = content[lang].hero;
 ---
 
 <section id="top" class="hero">
-  <div class="hero__doodles" aria-hidden="true">
-    <Doodle variant="tangle" width={86} class="d d--1" />
-    <Doodle variant="loop" width={64} class="d d--2" />
-    <Doodle variant="tangle" width={110} class="d d--3" />
-    <Doodle variant="flick" width={78} class="d d--4" />
-    <Doodle variant="loop" width={54} class="d d--5" />
-  </div>
-
   <div class="wrap hero__grid">
-    <div class="hero__copy reveal">
+    <div class="hero__copy">
       <h1 class="hero__title">
-        I build fullstack and mobile software that ships ahead of schedule —
-        and breaks less once it's live.
+        <span class="hero__a rise" style="--d: 0.05s">{t.lineA}</span>
+        <span class="hero__b rise" style="--d: 0.2s">{t.lineB}</span>
       </h1>
-      <p class="hero__subhead">
-        Jordy Rojas Aliaga, Fullstack &amp; Mobile Engineer based in Porto,
-        Portugal — 8+ years designing and shipping web and mobile products
-        across Portugal and Peru, from Flutter production tools to NestJS
-        APIs.
-      </p>
-      <div class="hero__actions">
-        <a class="pill pill--primary" href="mailto:rojas71421@gmail.com">Get in Touch</a>
-        <a class="link-underline" href="#work">View my work</a>
+      <p class="hero__sub rise" style="--d: 0.4s">{t.sub}</p>
+      <div class="hero__actions rise" style="--d: 0.55s">
+        <a class="btn" href={`mailto:${EMAIL}`}>{t.cta}</a>
+        <a class="link" href="#work">{t.secondary} ↓</a>
       </div>
     </div>
 
-    <aside class="ledger reveal" aria-label="Career highlights">
-      <div class="ledger__row">
-        <div class="ledger__stat">
-          <strong>8+</strong>
-          <span>Years shipping software</span>
-        </div>
-        <div class="ledger__stat">
-          <strong>4</strong>
-          <span>Companies, 2 countries</span>
-        </div>
-      </div>
-      <div class="ledger__highlight">
-        <strong>20% fewer</strong>
-        <span>operational errors — production-monitoring app, Motorline</span>
-      </div>
-    </aside>
+    <figure class="hero__photo">
+      <div class="hero__stage" aria-hidden="true"></div>
+      <img src="/me/jordy.png" alt={t.photoAlt} width="1024" height="1536" fetchpriority="high" />
+      <Doodle variant="tangle" width={150} color="var(--blue)" class="d d--1" />
+      <Doodle variant="loop" width={110} color="var(--ink)" class="d d--2" />
+      <Doodle variant="flick" width={140} color="var(--blue)" class="d d--3" />
+    </figure>
+  </div>
+
+  <div class="wrap">
+    <dl class="stats" aria-label={t.statsLabel}>
+      {
+        t.stats.map((s) => (
+          <div class="stats__item">
+            <dt>{s.n}</dt>
+            <dd>{s.l}</dd>
+          </div>
+        ))
+      }
+    </dl>
   </div>
 </section>
 
 <style>
   .hero {
-    position: relative;
+    border-top: 0;
+    padding-block: clamp(2.5rem, 6vw, 5rem) 0;
     overflow: clip;
-    padding-block: clamp(3.5rem, 9vw, 6.5rem) clamp(4rem, 10vw, 8rem);
   }
-
-  .hero__doodles {
-    position: absolute;
-    inset: 0;
-    color: var(--ink);
-    opacity: 0.55;
-    pointer-events: none;
-  }
-
-  .hero__doodles :global(svg) {
-    position: absolute;
-  }
-
-  .d--1 { top: 8%; left: 4%; }
-  .d--2 { top: 20%; left: 88%; }
-  .d--3 { top: 62%; left: 2%; }
-  .d--4 { top: 78%; left: 90%; }
-  .d--5 { top: 4%; left: 44%; }
-
-  .d--1 :global(path) { transition-delay: 0.1s; }
-  .d--2 :global(path) { transition-delay: 0.35s; }
-  .d--3 :global(path) { transition-delay: 0.5s; }
-  .d--4 :global(path) { transition-delay: 0.2s; }
-  .d--5 :global(path) { transition-delay: 0.6s; }
 
   .hero__grid {
-    position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
-    gap: clamp(2.5rem, 6vw, 5rem);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
     align-items: end;
   }
 
   .hero__copy {
+    grid-column: 1 / span 9;
+    grid-row: 1;
+    position: relative;
+    z-index: 2;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.75rem;
+    align-self: center;
+    padding-bottom: clamp(2rem, 5vw, 4rem);
   }
 
   .hero__title {
-    font-size: clamp(2.4rem, 5.2vw, 4.4rem);
-    line-height: 1.05;
-    max-width: 16ch;
+    display: flex;
+    flex-direction: column;
+    gap: 0.04em;
+    font-size: clamp(3rem, 6.9vw, 6.6rem);
+    line-height: 0.92;
   }
 
-  .hero__subhead {
-    font-size: 1.15rem;
+  .hero__a {
+    color: var(--ink);
+  }
+
+  .hero__b {
+    color: var(--blue);
+    max-width: 17ch;
+  }
+
+  .hero__sub {
+    font-size: 1.2rem;
     color: var(--ink-soft);
-    max-width: 46ch;
+    max-width: min(46ch, 77%);
   }
 
   .hero__actions {
     display: flex;
     align-items: center;
-    gap: 1.75rem;
     flex-wrap: wrap;
-    margin-top: 0.5rem;
+    gap: 1.75rem;
   }
 
-  .ledger {
-    background: var(--paper);
-    border: var(--stroke) solid var(--line);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-card);
-    overflow: hidden;
+  .hero__photo {
+    grid-column: 8 / -1;
+    grid-row: 1;
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    align-self: end;
+    justify-self: end;
+    width: min(100%, 400px);
   }
 
-  .ledger__row {
+  .hero__stage {
+    position: absolute;
+    inset: 30% 12% 10% 12%;
+    background: var(--blue);
+    border: var(--rule) solid var(--ink);
+  }
+
+  .hero__photo img {
+    position: relative;
+    width: 100%;
+    height: auto;
+    max-height: min(74svh, 640px);
+    object-fit: contain;
+    object-position: bottom;
+  }
+
+  /* :global because the class is passed to <Doodle>, which owns the <svg>. */
+  .hero__photo :global(.d) {
+    position: absolute;
+    z-index: 3;
+  }
+  .hero__photo :global(.d--1) { top: 4%; left: 2%; }
+  .hero__photo :global(.d--2) { top: 30%; right: -2%; }
+  .hero__photo :global(.d--3) { bottom: 16%; left: -6%; }
+
+  .stats {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0;
+    border-top: var(--rule) solid var(--ink);
+    position: relative;
+    z-index: 3;
+    background: var(--paper);
   }
 
-  .ledger__stat {
-    padding: 1.4rem 1.5rem;
+  .stats__item {
+    padding: clamp(1.25rem, 3vw, 2.25rem) clamp(1rem, 2vw, 2rem);
+    border-right: var(--rule) solid var(--ink);
     display: flex;
     flex-direction: column;
-    gap: 0.3rem;
-    border-bottom: var(--stroke) solid var(--line);
+    gap: 0.4rem;
   }
 
-  .ledger__stat:first-child {
-    border-right: var(--stroke) solid var(--line);
+  .stats__item:first-child {
+    padding-left: 0;
   }
 
-  .ledger__stat strong {
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 2rem;
-    font-weight: 700;
+  .stats__item:last-child {
+    border-right: 0;
   }
 
-  .ledger__stat span {
-    font-size: 0.86rem;
+  .stats dt {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    line-height: 0.9;
+    color: var(--ink);
+  }
+
+  .stats__item:last-child dt {
+    color: var(--blue);
+  }
+
+  .stats dd {
+    margin: 0;
+    font-size: 0.95rem;
     color: var(--ink-soft);
-    line-height: 1.3;
+    max-width: 24ch;
+    line-height: 1.35;
   }
 
-  .ledger__highlight {
-    background: var(--green);
-    color: #ffffff;
-    padding: 1.3rem 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
+  .rise {
+    animation: rise 0.9s var(--ease-out) both;
+    animation-delay: var(--d, 0s);
   }
 
-  .ledger__highlight strong {
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 1.4rem;
-    font-weight: 700;
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(28px);
+    }
   }
 
-  .ledger__highlight span {
-    font-size: 0.86rem;
-    opacity: 0.92;
-    line-height: 1.3;
-  }
-
-  @media (max-width: 880px) {
+  @media (max-width: 700px) {
     .hero__grid {
       grid-template-columns: 1fr;
     }
-    .ledger {
-      max-width: 420px;
+    .hero__copy,
+    .hero__photo {
+      grid-column: 1;
+      grid-row: auto;
+    }
+    .hero__photo {
+      justify-self: center;
+      width: min(78%, 360px);
+      margin-top: 0.5rem;
+    }
+    .hero__title {
+      font-size: clamp(3rem, 16.5vw, 6rem);
+    }
+    .hero__b {
+      max-width: none;
+    }
+    .hero__sub {
+      max-width: 46ch;
     }
   }
 
-  @media (max-width: 640px) {
-    .hero__title {
-      max-width: none;
+  @media (max-width: 560px) {
+    .stats {
+      grid-template-columns: 1fr;
     }
-    .d--3, .d--4 {
+    .stats__item {
+      border-right: 0;
+      border-bottom: var(--rule) solid var(--ink);
+      padding-left: 0;
+      flex-direction: row;
+      align-items: baseline;
+      gap: 1rem;
+    }
+    .stats__item:last-child {
+      border-bottom: 0;
+    }
+    .hero__photo :global(.d--3) {
       display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rise {
+      animation: none;
     }
   }
 </style>

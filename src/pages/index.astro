@@ -1,68 +1,37 @@
 ---
-import "../styles/global.css";
-import Nav from "../components/Nav.astro";
-import Hero from "../components/Hero.astro";
-import Experience from "../components/Experience.astro";
-import Projects from "../components/Projects.astro";
-import Skills from "../components/Skills.astro";
-import Education from "../components/Education.astro";
-import Contact from "../components/Contact.astro";
+import { langPath } from "../i18n/content";
 
-const description =
-  "Jordy Rojas Aliaga — Fullstack & Mobile Software Engineer with 8+ years shipping web and mobile products in Portugal and Peru.";
+const fallback = langPath("en");
 ---
 
+<!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<meta name="description" content={description} />
-		<title>Jordy Rojas Aliaga — Fullstack & Mobile Engineer</title>
-
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&display=swap"
-			rel="stylesheet"
-		/>
-	</head>
-	<body>
-		<Nav />
-		<main>
-			<Hero />
-			<Experience />
-			<Projects />
-			<Skills />
-			<Education />
-		</main>
-		<Contact />
-
-		<script>
-			function onEnter(selector, activeClass, options) {
-				const targets = document.querySelectorAll(selector);
-				if (!("IntersectionObserver" in window)) {
-					targets.forEach((el) => el.classList.add(activeClass));
-					return;
-				}
-				const io = new IntersectionObserver((entries) => {
-					for (const entry of entries) {
-						if (entry.isIntersecting) {
-							entry.target.classList.add(activeClass);
-							io.unobserve(entry.target);
-						}
-					}
-				}, options);
-				targets.forEach((el) => io.observe(el));
-			}
-
-			// Hero's first-impression entrance.
-			onEnter(".reveal", "is-visible", { threshold: 0.15, rootMargin: "0px 0px -60px 0px" });
-
-			// Signature moment: the hand-drawn doodles sketch themselves in as they enter view.
-			onEnter(".doodle-draw", "is-drawn", { threshold: 0.4 });
-		</script>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Jordy Rojas Aliaga</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <noscript><meta http-equiv="refresh" content={`0;url=${fallback}`} /></noscript>
+    <script is:inline define:vars={{ es: langPath("es"), en: langPath("en") }}>
+      // Saved choice first, then the browser language, then English.
+      var lang = "en";
+      try {
+        var saved = localStorage.getItem("lang");
+        if (saved === "es" || saved === "en") lang = saved;
+        else {
+          var prefs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language];
+          for (var i = 0; i < prefs.length; i++) {
+            var p = String(prefs[i]).toLowerCase();
+            if (p.indexOf("es") === 0) { lang = "es"; break; }
+            if (p.indexOf("en") === 0) { lang = "en"; break; }
+          }
+        }
+      } catch (e) {}
+      location.replace((lang === "es" ? es : en) + location.hash);
+    </script>
+  </head>
+  <body>
+    <p><a href={langPath("en")}>English</a> · <a href={langPath("es")}>Español</a></p>
+  </body>
 </html>

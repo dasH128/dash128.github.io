@@ -1,115 +1,150 @@
 ---
 import Doodle from "./Doodle.astro";
+import { content, EMAIL, LINKEDIN, type Lang } from "../i18n/content";
 
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = content[lang].contact;
 const year = new Date().getFullYear();
 ---
 
 <footer id="contact" class="contact">
-  <div class="wrap contact__inner">
-    <div class="contact__main">
-      <h2 class="contact__title">Let's build something that ships.</h2>
-      <div class="contact__actions">
-        <a class="pill pill--primary" href="mailto:rojas71421@gmail.com">rojas71421@gmail.com</a>
-        <a class="link-underline" href="https://www.linkedin.com/in/dash128/" target="_blank" rel="noopener noreferrer">
-          LinkedIn ↗
-        </a>
+  <div class="wrap">
+    <h2 class="contact__title">{t.title}</h2>
+    <p class="contact__intro">{t.intro}</p>
+
+    <ol class="clauses">
+      {
+        t.clauses.map((c, i) => (
+          <li class="clause">
+            <span class="clause__n">{String(i + 1).padStart(2, "0")}</span>
+            <div>
+              <h3>{c.h}</h3>
+              <p>{c.p}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="sign">
+      <div class="sign__who">
+        <span class="mono">{t.signed}</span>
+        <span class="sign__name">Jordy Rojas Aliaga</span>
+        <Doodle variant="underline" width={260} color="var(--blue-on-ink)" class="sign__doodle" />
       </div>
-      <Doodle variant="underline" width={140} class="contact__doodle" />
+      <div class="sign__actions">
+        <a class="btn btn--paper" href={`mailto:${EMAIL}`}>{t.cta} · {EMAIL}</a>
+        <a class="link" href={LINKEDIN} target="_blank" rel="noopener noreferrer">{t.linkedin} ↗</a>
+      </div>
     </div>
 
-    <div class="contact__meta">
-      <div class="contact__mark" aria-hidden="true">JR</div>
-      <p class="contact__loc">Porto, Portugal</p>
-      <p class="contact__lang">Español (native) · Português (B2) · English (B1)</p>
+    <div class="contact__bar mono">
+      <span>© {year} Jordy Rojas Aliaga · {t.copyright}</span>
+      <span>{t.loc} · {t.lang}</span>
     </div>
-  </div>
-
-  <div class="wrap contact__bar">
-    <span>© {year} Jordy Rojas Aliaga. Built with Astro.</span>
   </div>
 </footer>
 
 <style>
   .contact {
-    background: var(--night);
-    color: var(--night-ink);
-    padding-block: clamp(4rem, 9vw, 7rem) 2rem;
-  }
-
-  .contact__inner {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
-    gap: clamp(2.5rem, 6vw, 5rem);
-    padding-bottom: clamp(3rem, 6vw, 4.5rem);
-    border-bottom: 1px solid rgba(244, 239, 227, 0.18);
-  }
-
-  .contact__main {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    background: var(--ink);
+    color: var(--paper);
+    padding-block: clamp(4rem, 9vw, 8rem) 2rem;
   }
 
   .contact__title {
-    color: var(--night-ink);
-    font-size: clamp(2.1rem, 4.6vw, 3.4rem);
-    line-height: 1.08;
+    font-size: clamp(2.8rem, 8vw, 7.5rem);
     max-width: 14ch;
+    color: var(--paper);
   }
 
-  .contact__actions {
-    display: flex;
-    align-items: center;
-    gap: 1.75rem;
-    flex-wrap: wrap;
+  .contact__intro {
+    margin-top: 1.5rem;
+    color: color-mix(in srgb, var(--paper) 70%, transparent);
+    font-size: 1.1rem;
   }
 
-  .contact__doodle {
-    color: rgba(244, 239, 227, 0.5);
+  .clauses {
+    list-style: none;
+    padding: 0;
+    margin-top: clamp(2.5rem, 6vw, 4.5rem);
+    border-top: var(--rule) solid var(--paper);
+  }
+
+  .clause {
+    display: grid;
+    grid-template-columns: clamp(3.5rem, 8vw, 7rem) minmax(0, 1fr);
+    gap: 1.5rem;
+    padding-block: clamp(1.25rem, 2.5vw, 2rem);
+    border-bottom: var(--rule) solid var(--paper);
+  }
+
+  .clause__n {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 5vw, 4.2rem);
+    line-height: 0.9;
+    color: var(--blue-on-ink);
+  }
+
+  .clause h3 {
+    font-size: clamp(1.5rem, 3vw, 2.4rem);
+    color: var(--paper);
+  }
+
+  .clause p {
     margin-top: 0.5rem;
+    color: color-mix(in srgb, var(--paper) 72%, transparent);
   }
 
-  .contact__meta {
+  .sign {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem 3rem;
+    margin-top: clamp(2.5rem, 6vw, 4.5rem);
+  }
+
+  .sign__who {
     display: flex;
     flex-direction: column;
-    gap: 0.9rem;
-    align-items: flex-start;
-    justify-content: flex-end;
+    gap: 0.35rem;
   }
 
-  .contact__mark {
-    display: grid;
-    place-items: center;
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-sm);
-    border: var(--stroke) solid rgba(244, 239, 227, 0.65);
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-weight: 700;
+  .sign__who .mono {
+    color: color-mix(in srgb, var(--paper) 65%, transparent);
   }
 
-  .contact__loc,
-  .contact__lang {
-    color: rgba(244, 239, 227, 0.72);
-    font-size: 0.95rem;
-    max-width: none;
+  .sign__name {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: clamp(2rem, 5vw, 3.6rem);
+    line-height: 1;
+  }
+
+  .sign__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.25rem 2rem;
+  }
+
+  .sign__actions .link:hover {
+    color: var(--blue-on-ink);
   }
 
   .contact__bar {
-    padding-top: 1.75rem;
-    font-size: 0.85rem;
-    color: rgba(244, 239, 227, 0.55);
-  }
-
-  @media (max-width: 720px) {
-    .contact__inner {
-      grid-template-columns: 1fr;
-    }
-    .contact__meta {
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-    }
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    margin-top: clamp(3rem, 7vw, 5rem);
+    padding-top: 1.25rem;
+    border-top: 1px solid color-mix(in srgb, var(--paper) 25%, transparent);
+    color: color-mix(in srgb, var(--paper) 55%, transparent);
+    font-size: 0.72rem;
   }
 </style>
