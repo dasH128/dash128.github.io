@@ -1,0 +1,148 @@
+---
+import Doodle from "./Doodle.astro";
+import { content, type Lang } from "../i18n/content";
+import { aboutPhoto } from "../lib/aboutPhoto";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = content[lang].about.hero;
+const photo = aboutPhoto("hero");
+const words = t.title.split(" ");
+---
+
+<section class="a-hero">
+  <div class:list={["wrap", "a-hero__grid", { "a-hero__grid--photo": photo }]}>
+    <div class="a-hero__copy">
+      <h1 class="a-hero__title" aria-label={t.title}>
+        {
+          words.map((w, i) => (
+            <span class="word" aria-hidden="true" style={`--i:${i}`}>
+              {w}
+            </span>
+          ))
+        }
+      </h1>
+      <p class="a-hero__sub rise" style="--d: 0.7s">{t.sub}</p>
+      <Doodle variant="underline" width={240} color="var(--blue)" class="a-hero__doodle" />
+    </div>
+
+    {
+      photo && (
+        <figure class="a-hero__photo rise" style="--d: 0.5s">
+          <div class="a-hero__stage" aria-hidden="true" />
+          <img src={photo} alt={t.photoAlt} width="900" height="1200" fetchpriority="high" />
+        </figure>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .a-hero {
+    border-top: 0;
+    padding-block: clamp(3rem, 8vw, 7rem) clamp(3rem, 7vw, 6rem);
+    overflow: clip;
+  }
+
+  .a-hero__grid {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: end;
+  }
+
+  .a-hero__grid--photo {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  }
+
+  .a-hero__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  .a-hero__title {
+    font-size: clamp(3.4rem, 11vw, 10.5rem);
+    line-height: 0.9;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 0.25em;
+  }
+
+  .word {
+    display: inline-block;
+    animation: word-in 0.8s var(--ease-out) both;
+    animation-delay: calc(var(--i) * 0.09s + 0.05s);
+  }
+
+  /* The last word is the point of the sentence. */
+  .word:last-child {
+    color: var(--blue);
+  }
+
+  .a-hero__sub {
+    font-size: 1.25rem;
+    color: var(--ink-soft);
+    max-width: 44ch;
+  }
+
+  .a-hero__photo {
+    position: relative;
+    margin: 0;
+    justify-self: end;
+    width: min(100%, 380px);
+  }
+
+  .a-hero__stage {
+    position: absolute;
+    inset: 18% 8% 0 8%;
+    background: var(--blue);
+    border: var(--rule) solid var(--ink);
+  }
+
+  .a-hero__photo img {
+    position: relative;
+    width: 100%;
+    height: auto;
+    max-height: min(70svh, 560px);
+    object-fit: contain;
+    object-position: bottom;
+  }
+
+  .rise {
+    animation: rise 0.9s var(--ease-out) both;
+    animation-delay: var(--d, 0s);
+  }
+
+  @keyframes word-in {
+    from {
+      opacity: 0;
+      transform: translateY(40%);
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+  }
+
+  @media (max-width: 760px) {
+    .a-hero__grid--photo {
+      grid-template-columns: 1fr;
+    }
+    .a-hero__photo {
+      justify-self: center;
+      width: min(70%, 320px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .word,
+    .rise {
+      animation: none;
+    }
+  }
+</style>

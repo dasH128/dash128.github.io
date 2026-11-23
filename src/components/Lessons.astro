@@ -1,0 +1,69 @@
+---
+import { content, type Lang } from "../i18n/content";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = content[lang].about.lessons;
+---
+
+<section id="lessons">
+  <div class="wrap">
+    <h2 class="section-title">{t.title}</h2>
+
+    <ol class="lessons">
+      {
+        t.items.map((text, i) => (
+          <li class="lesson" data-reveal>
+            <span class="lesson__n mono">{String(i + 1).padStart(3, "0")}</span>
+            <p>{text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .lessons {
+    list-style: none;
+    padding: 0;
+    border-top: var(--rule) solid var(--ink);
+  }
+
+  .lesson {
+    display: grid;
+    grid-template-columns: clamp(3.5rem, 8vw, 6rem) minmax(0, 1fr);
+    gap: 1.25rem;
+    padding-block: clamp(1.25rem, 3vw, 2.25rem);
+    border-bottom: var(--rule) solid var(--ink);
+  }
+
+  .lesson__n {
+    color: var(--blue);
+    font-weight: 500;
+    padding-top: 0.6rem;
+  }
+
+  .lesson p {
+    max-width: 22ch;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: clamp(2rem, 5.4vw, 4.6rem);
+    line-height: 0.98;
+    transition: color 0.25s var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .lesson:hover p {
+      color: var(--blue);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lesson p {
+      transition: none;
+    }
+  }
+</style>

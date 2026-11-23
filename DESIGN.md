@@ -86,6 +86,22 @@ Single-column stack: marquee, sticky nav, hero, experience, projects, stack, edu
 - **Cursor ring:** a lagging 34px ring (68px, filled, over links, buttons and `[data-cursor]`) with `mix-blend-mode: difference`. Mouse only; the native cursor stays.
 - **Intro:** full-screen ink curtain with three words (HOLA/SOY/JORDY or HELLO/I'M/JORDY), about 1.5s, first visit only (`localStorage.introSeen`), `?intro` replays it, any key or click skips it, off with reduced motion, removes itself with a CSS timeline.
 
+## About page
+
+`/{lang}/about/`, reached from the nav ("Sobre mí" / "About") and from a teaser band under the hero. Five scenes, all text in `content.about`:
+
+1. **Opening:** the sentence as a giant Anton headline, the last word in blue. Optional photo.
+2. **Life line:** seven dots (2012 to 2024) on a ruled track. Click or arrow keys pick a stage and its panel shows below. Narrow screens and no-JS render every stage as a plain ruled list (progressive enhancement).
+3. **Lima ↔ Porto:** inline SVG arc that draws itself on entering, the straight-line distance, and the three languages as outlined tags. Optional photo.
+4. **What I build for fun:** three cards with the personal-project covers, linking to their case studies.
+5. **What I carry with me:** numbered lessons (001+) in huge Anton, blue on hover.
+
+Optional photos: drop `hero.(webp|jpg|png)` or `porto.(webp|jpg|png)` in `public/me/about/`. If a file exists at build time it appears, if not the scene renders without it (`src/lib/aboutPhoto.ts`).
+
+Only facts from the CV, LinkedIn or the case studies go in the timeline and cards. The six "lessons" are drafts in Jordy's voice, pending his validation.
+
+Shared utility: `data-reveal` fades an element up once when it enters the viewport (animation with `backwards` fill so hover transforms keep working; content stays visible without JS or with reduced motion).
+
 ## Motion
 
 Entrance (`rise`) on the hero copy, doodles that draw themselves on entering the viewport, hover shifts on rows, the stack scroll focus, the cursor ring, the intro. All of it respects `prefers-reduced-motion`. No scroll-jacking and no parallax.

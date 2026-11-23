@@ -1,0 +1,32 @@
+---
+import Base from "../../layouts/Base.astro";
+import Marquee from "../../components/Marquee.astro";
+import Nav from "../../components/Nav.astro";
+import AboutHero from "../../components/AboutHero.astro";
+import LifeLine from "../../components/LifeLine.astro";
+import Route from "../../components/Route.astro";
+import BuiltForFun from "../../components/BuiltForFun.astro";
+import Lessons from "../../components/Lessons.astro";
+import Contact from "../../components/Contact.astro";
+import { content, langs, type Lang } from "../../i18n/content";
+
+export function getStaticPaths() {
+  return langs.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const { meta } = content[lang].about;
+---
+
+<Base lang={lang} title={meta.title} description={meta.description} path="about/">
+  <Marquee lang={lang} />
+  <Nav lang={lang} page="about" />
+  <main>
+    <AboutHero lang={lang} />
+    <LifeLine lang={lang} />
+    <Route lang={lang} />
+    <BuiltForFun lang={lang} />
+    <Lessons lang={lang} />
+  </main>
+  <Contact lang={lang} />
+</Base>

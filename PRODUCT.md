@@ -31,6 +31,7 @@ Single-developer static site, no backend or CMS. Viewed on desktop and mobile, u
 - Static Astro site, no server-side features.
 - All copy lives in `src/i18n/content.ts`. Real content is shipped; any addition must come from Jordy's CV, LinkedIn, or his own statement, never invented employers, projects, metrics or testimonials.
 - The contract clauses in the contact section are Jordy's voice, drafted by Claude, and still to be validated by him (as is the rest of the copy).
+- The About page timeline and cards use only CV/LinkedIn/case-study facts. The "lessons" list and the personal framing ("Me enganché a los problemas difíciles") are drafts pending Jordy's validation. Still missing from him: the personal "why" behind each career step, things that shaped him (games, films, books), and extra photos (`public/me/about/`).
 - Photo: `public/me/jordy.png` (transparent PNG cutout, 1024x1536).
 - Branding choices made by Claude and open to change: the blue `#2342e8` and the Anton/Geist type pairing.
 

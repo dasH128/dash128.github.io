@@ -1,0 +1,54 @@
+---
+import { content, aboutPath, type Lang } from "../i18n/content";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = content[lang].aboutTeaser;
+---
+
+<section id="about" class="teaser">
+  <div class="wrap teaser__grid">
+    <h2 class="teaser__title">{t.title}</h2>
+    <div class="teaser__side">
+      <p>{t.text}</p>
+      <a class="btn" href={aboutPath(lang)}>{t.cta} →</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .teaser {
+    padding-block: clamp(3rem, 7vw, 6rem);
+  }
+
+  .teaser__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 5vw, 4rem);
+    align-items: end;
+  }
+
+  .teaser__title {
+    font-size: clamp(2.8rem, 7.2vw, 6.25rem);
+  }
+
+  .teaser__side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .teaser__side p {
+    font-size: 1.2rem;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 760px) {
+    .teaser__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

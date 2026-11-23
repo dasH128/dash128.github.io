@@ -1,0 +1,263 @@
+---
+import { content, type Lang } from "../i18n/content";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = content[lang].about.line;
+---
+
+<section id="line" class="line">
+  <div class="wrap">
+    <h2 class="section-title">{t.title}</h2>
+
+    <div class="line__box" data-line>
+      <p class="mono line__hint" aria-hidden="true">{t.hint} ↓</p>
+
+      <div class="line__dots" role="tablist" aria-label={t.listLabel}>
+        {
+          t.items.map((it, i) => (
+            <button
+              type="button"
+              role="tab"
+              class="dot"
+              id={`dot-${i}`}
+              aria-controls={`panel-${i}`}
+              aria-selected="false"
+              tabindex="-1"
+              data-cursor
+            >
+              <span class="dot__year mono">{it.year}</span>
+              <span class="dot__mark" aria-hidden="true" />
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="line__panels">
+        {
+          t.items.map((it, i) => (
+            <article class="panel" role="tabpanel" id={`panel-${i}`} aria-labelledby={`dot-${i}`}>
+              <span class="mono panel__year">{it.year}</span>
+              <h3>{it.title}</h3>
+              <p>{it.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Interactive timeline on wide screens. Without JS, or on narrow screens, every stage is
+  // simply listed one after another.
+  const box = document.querySelector<HTMLElement>("[data-line]");
+  if (box) {
+    const dots = [...box.querySelectorAll<HTMLButtonElement>(".dot")];
+    const panels = [...box.querySelectorAll<HTMLElement>(".panel")];
+    const wide = matchMedia("(min-width: 721px)");
+
+    const select = (i: number, focus = false) => {
+      dots.forEach((d, j) => {
+        d.setAttribute("aria-selected", String(j === i));
+        d.tabIndex = j === i ? 0 : -1;
+      });
+      panels.forEach((p, j) => p.classList.toggle("is-active", j === i));
+      box.style.setProperty("--p", String(i));
+      if (focus) dots[i].focus();
+    };
+
+    dots.forEach((d, i) => {
+      d.addEventListener("click", () => select(i));
+      d.addEventListener("keydown", (e) => {
+        const last = dots.length - 1;
+        const next =
+          e.key === "ArrowRight" || e.key === "ArrowDown" ? Math.min(i + 1, last)
+          : e.key === "ArrowLeft" || e.key === "ArrowUp" ? Math.max(i - 1, 0)
+          : e.key === "Home" ? 0
+          : e.key === "End" ? last
+          : -1;
+        if (next >= 0) {
+          e.preventDefault();
+          select(next, true);
+        }
+      });
+    });
+
+    const apply = () => box.classList.toggle("line--js", wide.matches);
+    wide.addEventListener("change", apply);
+    apply();
+    select(0);
+  }
+</script>
+
+<style>
+  .line__hint {
+    display: none;
+    color: var(--ink-soft);
+    margin-bottom: 1.5rem;
+  }
+
+  .line__dots {
+    display: none;
+  }
+
+  .line__panels {
+    border-top: var(--rule) solid var(--ink);
+  }
+
+  /* Default (no JS or narrow): a plain ruled list. */
+  .panel {
+    display: grid;
+    grid-template-columns: 5rem minmax(0, 1fr);
+    column-gap: 1.5rem;
+    padding-block: 1.5rem;
+    border-bottom: var(--rule) solid var(--ink);
+  }
+
+  .panel__year {
+    grid-row: 1 / span 2;
+    color: var(--blue);
+    font-weight: 500;
+    padding-top: 0.4rem;
+  }
+
+  .panel h3 {
+    font-size: clamp(1.8rem, 6vw, 2.6rem);
+  }
+
+  .panel p {
+    margin-top: 0.5rem;
+    color: var(--ink-soft);
+  }
+
+  /* Interactive mode */
+  .line--js .line__hint {
+    display: block;
+  }
+
+  .line--js .line__dots {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    position: relative;
+    margin-bottom: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .line--js .line__dots::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 11px;
+    height: var(--rule);
+    background: var(--ink);
+  }
+
+  .dot {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0;
+    background: none;
+    border: 0;
+    color: var(--ink-soft);
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+    transition: color 0.2s var(--ease-out);
+  }
+
+  .dot:hover,
+  .dot[aria-selected="true"] {
+    color: var(--ink);
+  }
+
+  .dot[aria-selected="true"] .dot__year {
+    color: var(--blue);
+  }
+
+  .dot__mark {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--ink);
+    border: var(--rule) solid var(--paper);
+    box-shadow: 0 0 0 var(--rule) var(--ink);
+    transition: transform 0.3s var(--ease-out), background 0.3s var(--ease-out);
+  }
+
+  .dot:hover .dot__mark {
+    transform: scale(1.15);
+  }
+
+  .dot[aria-selected="true"] .dot__mark {
+    background: var(--blue);
+    transform: scale(1.4);
+    box-shadow: 0 0 0 var(--rule) var(--blue);
+  }
+
+  .line--js .line__panels {
+    border-top: 0;
+    min-height: 15rem;
+  }
+
+  .line--js .panel {
+    display: none;
+    grid-template-columns: 1fr;
+    border-bottom: 0;
+    padding-block: 0;
+    max-width: 52rem;
+  }
+
+  .line--js .panel.is-active {
+    display: grid;
+    animation: panel-in 0.5s var(--ease-out) both;
+  }
+
+  .line--js .panel__year {
+    grid-row: auto;
+    padding-top: 0;
+    margin-bottom: 0.75rem;
+  }
+
+  .line--js .panel h3 {
+    font-size: clamp(2.6rem, 6vw, 5rem);
+  }
+
+  .line--js .panel p {
+    font-size: 1.2rem;
+    max-width: 52ch;
+    margin-top: 1rem;
+  }
+
+  @keyframes panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+
+  @media (max-width: 520px) {
+    .panel {
+      grid-template-columns: 1fr;
+    }
+    .panel__year {
+      grid-row: auto;
+      padding-top: 0;
+      margin-bottom: 0.4rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .line--js .panel.is-active {
+      animation: none;
+    }
+    .dot__mark {
+      transition: none;
+    }
+  }
+</style>

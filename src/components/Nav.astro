@@ -1,22 +1,30 @@
 ---
-import { content, langs, langPath, type Lang } from "../i18n/content";
+import { content, langs, langPath, aboutPath, type Lang } from "../i18n/content";
 
 interface Props {
   lang: Lang;
+  /** Where the nav is rendered. Section links on other pages point back to the home page. */
+  page?: "home" | "about";
 }
-const { lang } = Astro.props;
+const { lang, page = "home" } = Astro.props;
 const t = content[lang].nav;
+
+const home = langPath(lang);
+const section = (id: string) => (page === "home" ? `#${id}` : `${home}#${id}`);
+// Same page, other language.
+const switchTo = (l: Lang) => (page === "about" ? aboutPath(l) : langPath(l));
 ---
 
 <header class="nav">
   <div class="wrap nav__row">
-    <a href="#top" class="nav__mark" aria-label={t.home}>JR<span>.</span></a>
+    <a href={page === "home" ? "#top" : home} class="nav__mark" aria-label={t.home}>JR<span>.</span></a>
 
     <nav class="nav__links mono" aria-label={t.aria}>
-      <a href="#work">{t.work}</a>
-      <a href="#experience">{t.experience}</a>
-      <a href="#stack">{t.stack}</a>
-      <a href="#education">{t.education}</a>
+      <a href={aboutPath(lang)} aria-current={page === "about" ? "page" : undefined}>{t.about}</a>
+      <a href={section("work")}>{t.work}</a>
+      <a href={section("experience")}>{t.experience}</a>
+      <a href={section("stack")}>{t.stack}</a>
+      <a href={section("education")}>{t.education}</a>
     </nav>
 
     <div class="nav__end">
@@ -26,7 +34,7 @@ const t = content[lang].nav;
             <>
               {i > 0 && <span aria-hidden="true">/</span>}
               <a
-                href={langPath(l)}
+                href={switchTo(l)}
                 data-lang={l}
                 hreflang={l}
                 lang={l}
@@ -74,7 +82,7 @@ const t = content[lang].nav;
 
   .nav__links {
     display: flex;
-    gap: clamp(1rem, 3vw, 2.25rem);
+    gap: clamp(0.8rem, 2.4vw, 2rem);
   }
 
   .nav__links a,
@@ -87,6 +95,14 @@ const t = content[lang].nav;
   .nav__links a:hover,
   .nav__lang a:hover {
     color: var(--ink);
+  }
+
+  .nav__links a[aria-current="page"] {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--blue);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 5px;
   }
 
   .nav__end {
@@ -137,9 +153,18 @@ const t = content[lang].nav;
     }
   }
 
+  .nav__links a {
+    white-space: nowrap;
+  }
+
   @media (max-width: 420px) {
     .nav__cta {
       display: none;
+    }
+    .nav__links {
+      gap: 0.6rem;
+      font-size: 0.68rem;
+      letter-spacing: 0.03em;
     }
   }
 </style>

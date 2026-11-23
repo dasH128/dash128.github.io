@@ -159,6 +159,26 @@ section {
   color: var(--blue);
 }
 
+/* Scroll reveal: elements with data-reveal fade up once when they enter the viewport.
+   Uses an animation with `backwards` fill, so hover transforms keep working afterwards.
+   Content stays visible without JS (the `js` class) and with reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-reveal]:not(.is-in) {
+    opacity: 0;
+  }
+
+  html.js [data-reveal].is-in {
+    animation: reveal 0.8s var(--ease-out) var(--d, 0s) backwards;
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+}
+
 /* Cursor follower (added by script, mouse + motion-OK only) */
 .cursor {
   position: fixed;

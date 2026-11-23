@@ -11,6 +11,10 @@ export function langPath(lang: Lang): string {
   return `${base}/${lang}/`;
 }
 
+export function aboutPath(lang: Lang): string {
+  return `${langPath(lang)}about/`;
+}
+
 /** "2024-07" -> "Jul 2024" / "jul 2024" in the page language. */
 export function formatMonth(iso: string, lang: Lang): string {
   const [y, m] = iso.split("-").map(Number);
@@ -46,9 +50,114 @@ const es: Content = {
       "Busco el problema difícil",
     ],
     intro: ["Hola", "Soy", "Jordy"],
+    aboutTeaser: {
+      title: "Lo que no cabe en el CV.",
+      text: "De Lima a Porto, ocho años de oficio y una costumbre: ir primero por el problema difícil.",
+      cta: "Leer mi historia",
+    },
+    about: {
+      meta: {
+        title: "Sobre mí · Jordy Rojas Aliaga",
+        description:
+          "De Lima a Porto: cómo llegué a ser ingeniero fullstack y mobile, y lo que construyo por gusto.",
+      },
+      hero: {
+        title: "Me enganché a los problemas difíciles.",
+        sub: "Lo que no cabe en el CV: de dónde vengo, por dónde pasé y qué construyo cuando nadie me lo pide.",
+        photoAlt: "Jordy Rojas",
+      },
+      line: {
+        title: "De Lima a Porto, paso a paso.",
+        hint: "Elige un punto",
+        listLabel: "Etapas de mi trayectoria",
+        items: [
+          {
+            year: "2012",
+            title: "Tecsup, Lima",
+            text: "Estudio Redes y Comunicación de Datos hasta 2014.",
+          },
+          {
+            year: "2015",
+            title: "Mi primer trabajo en software",
+            text: "Entro como Analista de Software en la Clínica Médica Climper. Apps móviles, una API REST y bases de datos durante cinco años.",
+          },
+          {
+            year: "2015",
+            title: "Ingeniería de Software",
+            text: "Empiezo la carrera en la UPC mientras trabajo. La termino en 2021.",
+          },
+          {
+            year: "2020",
+            title: "Holinsys",
+            text: "Analista de Ingeniería de Software. Angular e Ionic por delante, Node.js y Express por detrás. Ese año también me certifico en Scrum.",
+          },
+          {
+            year: "2021",
+            title: "ITData Consulting",
+            text: "Full Stack con React dentro de un equipo Scrum. Entrego los proyectos un 10% antes de lo planeado.",
+          },
+          {
+            year: "2022",
+            title: "Motorline, Portugal",
+            text: "Full Stack y Mobile. Flutter, widgets nativos en Android e iOS y una app de escritorio que baja un 20% los errores operativos.",
+          },
+          {
+            year: "2024",
+            title: "NestJS en serio",
+            text: "Tres cursos de NestJS en tres meses y una API de reportes PDF construida por mi cuenta.",
+          },
+        ],
+      },
+      route: {
+        title: "Lima ↔ Porto",
+        text: "Estudié y trabajé en Lima. Hoy vivo y trabajo en Porto.",
+        km: "unos 9.150 km en línea recta",
+        from: "Lima",
+        to: "Porto",
+        tags: ["Español · nativo", "Português · B2", "English · B1"],
+        photoAlt: "Jordy en Porto",
+      },
+      built: {
+        title: "Lo que construyo por gusto.",
+        intro: "Tres proyectos personales que nadie me pidió.",
+        cta: "Ver el caso (en inglés)",
+        items: [
+          {
+            title: "API de reportes PDF",
+            year: "2024",
+            text: "Backend que toco menos en Motorline, así que lo practico aquí.",
+            href: "/projects/pdf-report-api",
+          },
+          {
+            title: "Cinemapedia",
+            year: "2024",
+            text: "Flutter con arquitectura limpia en tres capas y favoritos sin conexión.",
+            href: "/projects/movies-app",
+          },
+          {
+            title: "¿Quién es ese Pokémon?",
+            year: "2021–2026",
+            text: "Uno de mis primeros proyectos serios en Vue 3 y TypeScript. En 2026 volví y lo rediseñé desde cero.",
+            href: "/projects/poke-web",
+          },
+        ],
+      },
+      lessons: {
+        title: "Lo que me llevo.",
+        items: [
+          "Lo difícil primero. Lo fácil se acomoda solo.",
+          "Entregar antes es aprender antes.",
+          "Un arreglo que no evita la repetición solo gana tiempo.",
+          "Cuando el framework no llega, bajo a lo nativo.",
+          "El código limpio es una cortesía con quien lo lea después.",
+          "Los cursos terminan. Los proyectos no.",
+        ],
+      },
+    },
     nav: {
       aria: "Principal",
       home: "Jordy Rojas Aliaga, inicio",
+      about: "Sobre mí",
       work: "Proyectos",
       experience: "Experiencia",
       stack: "Stack",
@@ -233,9 +342,114 @@ const en: Content = {
       "Looking for the hard problem",
     ],
     intro: ["Hello", "I'm", "Jordy"],
+    aboutTeaser: {
+      title: "What doesn't fit on a resume.",
+      text: "From Lima to Porto, eight years of craft and one habit: going for the hard problem first.",
+      cta: "Read my story",
+    },
+    about: {
+      meta: {
+        title: "About · Jordy Rojas Aliaga",
+        description:
+          "From Lima to Porto: how I became a fullstack and mobile engineer, and what I build for fun.",
+      },
+      hero: {
+        title: "I got hooked on hard problems.",
+        sub: "What doesn't fit on a resume: where I come from, what I went through and what I build when nobody asks me to.",
+        photoAlt: "Jordy Rojas",
+      },
+      line: {
+        title: "From Lima to Porto, step by step.",
+        hint: "Pick a dot",
+        listLabel: "Stages of my path",
+        items: [
+          {
+            year: "2012",
+            title: "Tecsup, Lima",
+            text: "I study Networking and Data Communications until 2014.",
+          },
+          {
+            year: "2015",
+            title: "First job in software",
+            text: "I join Clínica Médica Climper as a Software Analyst. Mobile apps, a REST API and databases for five years.",
+          },
+          {
+            year: "2015",
+            title: "Software Engineering",
+            text: "I start the degree at UPC while working. I finish in 2021.",
+          },
+          {
+            year: "2020",
+            title: "Holinsys",
+            text: "Software Engineering Analyst. Angular and Ionic up front, Node.js and Express behind. I also get Scrum certified that year.",
+          },
+          {
+            year: "2021",
+            title: "ITData Consulting",
+            text: "Full Stack with React inside a Scrum team. I deliver projects 10% ahead of plan.",
+          },
+          {
+            year: "2022",
+            title: "Motorline, Portugal",
+            text: "Full Stack and Mobile. Flutter, native widgets on Android and iOS, and a desktop app that cuts operational errors by 20%.",
+          },
+          {
+            year: "2024",
+            title: "NestJS, for real",
+            text: "Three NestJS courses in three months and a PDF report API I built on my own.",
+          },
+        ],
+      },
+      route: {
+        title: "Lima ↔ Porto",
+        text: "I studied and worked in Lima. Today I live and work in Porto.",
+        km: "about 9,150 km as the crow flies",
+        from: "Lima",
+        to: "Porto",
+        tags: ["Español · native", "Português · B2", "English · B1"],
+        photoAlt: "Jordy in Porto",
+      },
+      built: {
+        title: "What I build for fun.",
+        intro: "Three personal projects nobody asked for.",
+        cta: "See the case",
+        items: [
+          {
+            title: "PDF Report Generation API",
+            year: "2024",
+            text: "Backend work I touch less at Motorline, so I practice it here.",
+            href: "/projects/pdf-report-api",
+          },
+          {
+            title: "Cinemapedia",
+            year: "2024",
+            text: "Flutter with a three-layer clean architecture and offline favorites.",
+            href: "/projects/movies-app",
+          },
+          {
+            title: "¿Quién es ese Pokémon?",
+            year: "2021–2026",
+            text: "One of my first serious Vue 3 and TypeScript projects. In 2026 I came back and redesigned it from scratch.",
+            href: "/projects/poke-web",
+          },
+        ],
+      },
+      lessons: {
+        title: "What I carry with me.",
+        items: [
+          "Hard problems first. The easy ones sort themselves out.",
+          "Delivering early means learning early.",
+          "A fix that doesn't prevent the repeat only buys time.",
+          "When the framework runs out, go native.",
+          "Clean code is a courtesy to whoever reads it next.",
+          "Courses end. Projects don't.",
+        ],
+      },
+    },
     nav: {
       aria: "Primary",
       home: "Jordy Rojas Aliaga, home",
+      about: "About",
       work: "Work",
       experience: "Experience",
       stack: "Stack",
@@ -461,9 +675,29 @@ export interface Content {
   meta: { title: string; description: string };
   marquee: string[];
   intro: string[];
+  aboutTeaser: { title: string; text: string; cta: string };
+  about: {
+    meta: { title: string; description: string };
+    hero: { title: string; sub: string; photoAlt: string };
+    line: {
+      title: string;
+      hint: string;
+      listLabel: string;
+      items: { year: string; title: string; text: string }[];
+    };
+    route: { title: string; text: string; km: string; from: string; to: string; tags: string[]; photoAlt: string };
+    built: {
+      title: string;
+      intro: string;
+      cta: string;
+      items: { title: string; year: string; text: string; href: string }[];
+    };
+    lessons: { title: string; items: string[] };
+  };
   nav: {
     aria: string;
     home: string;
+    about: string;
     work: string;
     experience: string;
     stack: string;
