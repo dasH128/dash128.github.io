@@ -1,5 +1,7 @@
 export const langs = ["es", "en"] as const;
 export type Lang = (typeof langs)[number];
+/** Used by "/" when the visitor has no saved choice and no browser language matches. */
+export const defaultLang: Lang = "en";
 
 export const EMAIL = "rojas71421@gmail.com";
 export const LINKEDIN = "https://www.linkedin.com/in/dash128/";
@@ -28,9 +30,9 @@ const certs = [
   { name: "Scrum Fundamentals Certified (SFC)", issuer: "SCRUMstudy", date: "2020-06" },
 ];
 
-export const content = {
-  es: {
+const es: Content = {
     htmlLang: "es",
+    ogLocale: "es_ES",
     meta: {
       title: "Jordy Rojas Aliaga · Ingeniero Fullstack y Mobile",
       description:
@@ -213,10 +215,11 @@ export const content = {
       lang: "Español (nativo) · Português (B2) · English (B1)",
       copyright: "Hecho con Astro.",
     },
-  },
+};
 
-  en: {
+const en: Content = {
     htmlLang: "en",
+    ogLocale: "en_US",
     meta: {
       title: "Jordy Rojas Aliaga · Fullstack & Mobile Engineer",
       description:
@@ -399,10 +402,13 @@ export const content = {
       lang: "Español (native) · Português (B2) · English (B1)",
       copyright: "Built with Astro.",
     },
-  },
-} as const;
+};
 
-export type Content = (typeof content)[Lang];
+/**
+ * One block per language. `Record<Lang, Content>` makes the build fail if a language
+ * listed in `langs` has no block, and `Content` makes it fail if a block misses a key.
+ */
+export const content: Record<Lang, Content> = { es, en };
 
 /** Project covers, keyed by the project's case-study href. Motorline work is private: no cover. */
 export const covers: Record<string, { src: string; width: number; height: number; fit: "cover" | "contain"; alt: Record<Lang, string> }> = {
@@ -442,8 +448,61 @@ export interface ProjectItem {
   title: string;
   context: string;
   detail: string;
-  tags: readonly string[];
+  tags: string[];
   outcome?: string;
   href?: string;
   demo?: string;
+}
+
+/** The full shape of one language's text. Adding a key here forces every language to provide it. */
+export interface Content {
+  htmlLang: string;
+  ogLocale: string;
+  meta: { title: string; description: string };
+  marquee: string[];
+  intro: string[];
+  nav: {
+    aria: string;
+    home: string;
+    work: string;
+    experience: string;
+    stack: string;
+    education: string;
+    cta: string;
+    langLabel: string;
+  };
+  hero: {
+    lineA: string;
+    lineB: string;
+    sub: string;
+    cta: string;
+    secondary: string;
+    photoAlt: string;
+    statsLabel: string;
+    stats: { n: string; l: string }[];
+  };
+  experience: {
+    title: string;
+    roles: { company: string; role: string; place: string; dates: string; detail: string }[];
+  };
+  projects: { title: string; caseStudy: string; demo: string; items: ProjectItem[] };
+  skills: { title: string; groups: { label: string; items: string[] }[] };
+  education: {
+    title: string;
+    studies: string;
+    certs: string;
+    degrees: { degree: string; school: string; place: string; dates: string }[];
+    certifications: { name: string; issuer: string; date: string }[];
+  };
+  contact: {
+    title: string;
+    intro: string;
+    clauses: { h: string; p: string }[];
+    signed: string;
+    cta: string;
+    linkedin: string;
+    loc: string;
+    lang: string;
+    copyright: string;
+  };
 }

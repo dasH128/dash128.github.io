@@ -1,37 +1,54 @@
 ---
-import { langPath } from "../i18n/content";
+import { langs, langPath, defaultLang } from "../i18n/content";
 
-const fallback = langPath("en");
+// Every language in `langs` is picked up here: no per-language code in this file.
+const paths = Object.fromEntries(langs.map((l) => [l, langPath(l)]));
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={defaultLang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
     <title>Jordy Rojas Aliaga</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <noscript><meta http-equiv="refresh" content={`0;url=${fallback}`} /></noscript>
-    <script is:inline define:vars={{ es: langPath("es"), en: langPath("en") }}>
-      // Saved choice first, then the browser language, then English.
-      var lang = "en";
+    <noscript><meta http-equiv="refresh" content={`0;url=${paths[defaultLang]}`} /></noscript>
+    <script is:inline define:vars={{ paths, langs, fallback: defaultLang }}>
+      // Saved choice first, then the browser's language list, then the default.
+      var lang = fallback;
       try {
         var saved = localStorage.getItem("lang");
-        if (saved === "es" || saved === "en") lang = saved;
-        else {
+        if (saved && Object.prototype.hasOwnProperty.call(paths, saved)) {
+          lang = saved;
+        } else {
           var prefs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language];
-          for (var i = 0; i < prefs.length; i++) {
+          outer: for (var i = 0; i < prefs.length; i++) {
             var p = String(prefs[i]).toLowerCase();
-            if (p.indexOf("es") === 0) { lang = "es"; break; }
-            if (p.indexOf("en") === 0) { lang = "en"; break; }
+            for (var j = 0; j < langs.length; j++) {
+              if (p === langs[j] || p.indexOf(langs[j] + "-") === 0) {
+                lang = langs[j];
+                break outer;
+              }
+            }
           }
         }
       } catch (e) {}
-      location.replace((lang === "es" ? es : en) + location.hash);
+      location.replace(paths[lang] + location.hash);
     </script>
   </head>
   <body>
-    <p><a href={langPath("en")}>English</a> · <a href={langPath("es")}>Español</a></p>
+    <p>
+      {
+        langs.map((l, i) => (
+          <>
+            {i > 0 && " · "}
+            <a href={paths[l]} hreflang={l}>
+              {l.toUpperCase()}
+            </a>
+          </>
+        ))
+      }
+    </p>
   </body>
 </html>
