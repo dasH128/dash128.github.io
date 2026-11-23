@@ -187,6 +187,11 @@ const t = content[lang].hero;
     animation-delay: var(--d, 0s);
   }
 
+  /* While the intro curtain is up, hold the entrance until it lifts. */
+  :global(html.intro) .rise {
+    animation-delay: calc(var(--d, 0s) + 1.1s);
+  }
+
   @keyframes rise {
     from {
       opacity: 0;

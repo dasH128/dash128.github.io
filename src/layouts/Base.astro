@@ -1,5 +1,6 @@
 ---
 import "../styles/site.css";
+import Intro from "../components/Intro.astro";
 import { content, langs, langPath, type Lang } from "../i18n/content";
 
 interface Props {
@@ -29,6 +30,18 @@ const site = Astro.site ? Astro.site.origin : "";
     <link rel="alternate" hreflang="x-default" href={`${site}${import.meta.env.BASE_URL}`} />
     <link rel="canonical" href={`${site}${langPath(lang)}`} />
 
+    <script is:inline>
+      // Intro plays once per browser (or on demand with ?intro), never with reduced motion.
+      try {
+        var calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var forced = location.search.indexOf("intro") > -1;
+        if (!calm && (forced || !localStorage.getItem("introSeen"))) {
+          document.documentElement.classList.add("intro");
+          localStorage.setItem("introSeen", "1");
+        }
+      } catch (e) {}
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -37,7 +50,58 @@ const site = Astro.site ? Astro.site.origin : "";
     />
   </head>
   <body>
+    <Intro lang={lang} />
     <slot />
+
+    <script>
+      // Any key or click skips the intro.
+      const root = document.documentElement;
+      if (root.classList.contains("intro")) {
+        const skip = () => root.classList.remove("intro");
+        addEventListener("keydown", skip, { once: true });
+        addEventListener("pointerdown", skip, { once: true });
+        setTimeout(skip, 1600);
+      }
+
+      // Cursor follower: a lagging ring on top of the normal cursor (mouse only).
+      const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
+      const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (fine && !calm) {
+        const ring = document.createElement("div");
+        ring.className = "cursor";
+        ring.setAttribute("aria-hidden", "true");
+        document.body.appendChild(ring);
+
+        let x = 0, y = 0, tx = 0, ty = 0, on = false;
+        addEventListener(
+          "pointermove",
+          (e) => {
+            tx = e.clientX;
+            ty = e.clientY;
+            if (!on) {
+              x = tx;
+              y = ty;
+              on = true;
+              ring.classList.add("is-on");
+            }
+            const hot = (e.target as Element | null)?.closest("a, button, [data-cursor]");
+            ring.classList.toggle("is-big", !!hot);
+          },
+          { passive: true },
+        );
+        document.documentElement.addEventListener("mouseleave", () => {
+          on = false;
+          ring.classList.remove("is-on");
+        });
+        const loop = () => {
+          x += (tx - x) * 0.18;
+          y += (ty - y) * 0.18;
+          ring.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+          requestAnimationFrame(loop);
+        };
+        loop();
+      }
+    </script>
 
     <script>
       // Remember the language the visitor picked, so "/" can send them back to it.

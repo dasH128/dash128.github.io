@@ -1,0 +1,86 @@
+---
+import { content, type Lang } from "../i18n/content";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const words = content[lang].intro;
+---
+
+<!--
+  Short curtain intro. Hidden unless the inline script in <head> adds `intro` to <html>
+  (first visit, or ?intro in the URL, never with reduced motion). It removes itself with a
+  pure CSS timeline, so a failing script can't leave it stuck on screen.
+-->
+<div class="intro" aria-hidden="true">
+  {words.map((w, i) => <span style={`--i:${i}`}>{w}</span>)}
+</div>
+
+<style>
+  .intro {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    place-items: center;
+    background: var(--ink);
+    overflow: hidden;
+  }
+
+  :global(html.intro) .intro {
+    display: grid;
+    animation: curtain 0.45s var(--ease-out) 1.05s forwards;
+  }
+
+  .intro span {
+    grid-area: 1 / 1;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: clamp(5rem, 22vw, 20rem);
+    line-height: 0.9;
+    color: var(--paper);
+    opacity: 0;
+    animation: word 0.34s var(--ease-out) both;
+    animation-delay: calc(var(--i) * 0.33s);
+  }
+
+  .intro span:last-child {
+    color: var(--blue-on-ink);
+    animation-name: word-stay;
+    animation-duration: 0.4s;
+  }
+
+  @keyframes word {
+    0% {
+      opacity: 0;
+      transform: translateY(28%);
+    }
+    22%,
+    80% {
+      opacity: 1;
+      transform: none;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes word-stay {
+    from {
+      opacity: 0;
+      transform: translateY(28%);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes curtain {
+    to {
+      transform: translateY(-100%);
+      visibility: hidden;
+    }
+  }
+</style>

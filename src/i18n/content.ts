@@ -43,6 +43,7 @@ export const content = {
       "ES · PT · EN",
       "Busco el problema difícil",
     ],
+    intro: ["Hola", "Soy", "Jordy"],
     nav: {
       aria: "Principal",
       home: "Jordy Rojas Aliaga, inicio",
@@ -228,6 +229,7 @@ export const content = {
       "ES · PT · EN",
       "Looking for the hard problem",
     ],
+    intro: ["Hello", "I'm", "Jordy"],
     nav: {
       aria: "Primary",
       home: "Jordy Rojas Aliaga, home",

@@ -18,7 +18,7 @@ const items = t.items as readonly ProjectItem[];
         items.map((p, i) => {
           const cover = p.href ? covers[p.href] : undefined;
           return (
-          <li class="proj__row">
+          <li class="proj__row" data-cursor>
             <span class="proj__n mono">{String(i + 1).padStart(2, "0")}</span>
             <div class="proj__head">
               <h3>{p.title}</h3>
