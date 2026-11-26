@@ -1,5 +1,5 @@
 ---
-import { content, covers, type Lang, type ProjectItem } from "../i18n/content";
+import { content, collages, COLLAGE_SIZE, type Lang, type ProjectItem } from "../i18n/content";
 
 interface Props {
   lang: Lang;
@@ -16,16 +16,23 @@ const items = t.items as readonly ProjectItem[];
     <ol class="proj">
       {
         items.map((p, i) => {
-          const cover = p.href ? covers[p.href] : undefined;
+          const collage = p.collage ? collages[p.collage] : undefined;
           return (
           <li class="proj__row" data-cursor>
             <span class="proj__n mono">{String(i + 1).padStart(2, "0")}</span>
             <div class="proj__head">
               <h3>{p.title}</h3>
               <span class="mono proj__ctx">{p.context}</span>
-              {cover && (
-                <figure class={`proj__cover proj__cover--${cover.fit}`}>
-                  <img src={cover.src} alt={cover.alt[lang]} width={cover.width} height={cover.height} loading="lazy" decoding="async" />
+              {collage && (
+                <figure class="proj__collage">
+                  <img
+                    src={collage.src}
+                    alt={collage.alt[lang]}
+                    width={COLLAGE_SIZE.width}
+                    height={COLLAGE_SIZE.height}
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </figure>
               )}
             </div>
@@ -99,31 +106,24 @@ const items = t.items as readonly ProjectItem[];
     color: var(--ink-soft);
   }
 
-  .proj__cover {
+  /* Illustrated collage card: a slight tilt that straightens on hover (first piece of the
+     softer, more playful visual language; see DESIGN.md). */
+  .proj__collage {
     margin: 0.75rem 0 0;
-    width: min(100%, 440px);
-    aspect-ratio: 16 / 10;
-    border: var(--rule) solid var(--ink);
-    background: var(--blue);
-    box-shadow: 6px 6px 0 var(--ink);
-    overflow: hidden;
-    transition: box-shadow 0.3s var(--ease-out), transform 0.3s var(--ease-out);
+    width: min(100%, 250px);
+    transform: rotate(-2deg);
+    transition: transform 0.5s var(--ease-out);
   }
 
-  .proj__cover img {
+  .proj__row:nth-child(even) .proj__collage {
+    transform: rotate(2deg);
+  }
+
+  .proj__collage img {
     width: 100%;
-    height: 100%;
-  }
-
-  .proj__cover--cover img {
-    object-fit: cover;
-    object-position: top;
-  }
-
-  /* Portrait screenshots: show the whole thing, framed like a poster. */
-  .proj__cover--contain img {
-    object-fit: contain;
-    padding-top: 1.1rem;
+    height: auto;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
   }
 
   .proj__body {
@@ -178,9 +178,8 @@ const items = t.items as readonly ProjectItem[];
     .proj__row:hover .proj__body p {
       color: color-mix(in srgb, var(--paper) 72%, transparent);
     }
-    .proj__row:hover .proj__cover {
-      box-shadow: 6px 6px 0 var(--blue-on-ink);
-      transform: translate(-2px, -2px);
+    .proj__row:hover .proj__collage {
+      transform: rotate(0deg) scale(1.03);
     }
     .proj__row:hover .proj__outcome {
       background: var(--blue-on-ink);
@@ -202,7 +201,8 @@ const items = t.items as readonly ProjectItem[];
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .proj__row {
+    .proj__row,
+    .proj__collage {
       transition: none;
     }
   }

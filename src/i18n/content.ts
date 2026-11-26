@@ -5,6 +5,7 @@ export const defaultLang: Lang = "en";
 
 export const EMAIL = "rojas71421@gmail.com";
 export const LINKEDIN = "https://www.linkedin.com/in/dash128/";
+export const GITHUB = "https://github.com/dasH128";
 
 export function langPath(lang: Lang): string {
   const base = import.meta.env.BASE_URL.replace(/\/$/, "");
@@ -164,6 +165,9 @@ const es: Content = {
       education: "Estudios",
       cta: "Hablemos",
       langLabel: "Idioma",
+      menuOpen: "Abrir menú",
+      menuClose: "Cerrar menú",
+      clock: "Porto",
     },
     hero: {
       lineA: "No busco trabajo.",
@@ -223,6 +227,7 @@ const es: Content = {
       items: [
         {
           title: "Integración móvil nativa",
+          collage: "widgets",
           context: "Motorline · 2022–Actualidad",
           detail:
             "Una app móvil en Flutter ampliada con widgets nativos de Android e iOS. Cierra la brecha entre el framework y la plataforma para una experiencia más fluida.",
@@ -230,6 +235,7 @@ const es: Content = {
         },
         {
           title: "Monitoreo de producción y control de calidad",
+          collage: "monitor",
           context: "Motorline · 2022–Actualidad",
           detail:
             "Una plataforma de escritorio en Flutter que sigue en tiempo real la eficiencia de las tareas de producción y sincroniza datos entre sistemas. Los operarios ven el problema antes de que sea un defecto.",
@@ -238,6 +244,7 @@ const es: Content = {
         },
         {
           title: "API de reportes PDF",
+          collage: "pdf",
           context: "Proyecto personal · 2024",
           detail:
             "Una API en NestJS que convierte datos de Prisma y PostgreSQL en reportes PDF bajo demanda: facturas, certificados, tablas de países y paneles con gráficos SVG. Sin motor de plantillas.",
@@ -246,6 +253,7 @@ const es: Content = {
         },
         {
           title: "Cinemapedia",
+          collage: "cinema",
           context: "Proyecto personal · 2024",
           detail:
             "Una app Flutter para explorar y buscar películas de TMDB, con reparto y sinopsis en cada detalle, favoritos sin conexión con Isar y tema claro u oscuro con 15 colores de acento.",
@@ -254,6 +262,7 @@ const es: Content = {
         },
         {
           title: "¿Quién es ese Pokémon?",
+          collage: "poke",
           context: "Proyecto personal · 2021–2026",
           detail:
             "Un juego de trivia en Vue 3 y TypeScript sobre PokeAPI. Adivina el Pokémon por su silueta antes de que se acaben el tiempo y los corazones, con tres niveles y tabla de récords local.",
@@ -320,6 +329,12 @@ const es: Content = {
       signed: "Firmado,",
       cta: "Firmar por email",
       linkedin: "LinkedIn",
+      github: "GitHub",
+      lead: "Antes de la letra pequeña, escríbeme a",
+      copyHint: "Clic para copiar",
+      copied: "Copiado. Hablamos pronto.",
+      copyFailed: "Seleccionado. Pulsa Cmd o Ctrl + C.",
+      phoneAlt: "Un teléfono antiguo de disco sonando",
       loc: "Porto, Portugal",
       lang: "Español (nativo) · Português (B2) · English (B1)",
       copyright: "Hecho con Astro.",
@@ -456,6 +471,9 @@ const en: Content = {
       education: "Education",
       cta: "Let's talk",
       langLabel: "Language",
+      menuOpen: "Open menu",
+      menuClose: "Close menu",
+      clock: "Porto",
     },
     hero: {
       lineA: "I'm not looking for a job.",
@@ -515,6 +533,7 @@ const en: Content = {
       items: [
         {
           title: "Native Mobile Integration",
+          collage: "widgets",
           context: "Motorline · 2022–Present",
           detail:
             "A Flutter mobile app extended with native Android and iOS widgets. Closes the gap between the framework and the platform for a smoother experience.",
@@ -522,6 +541,7 @@ const en: Content = {
         },
         {
           title: "Production Monitoring & Quality Control",
+          collage: "monitor",
           context: "Motorline · 2022–Present",
           detail:
             "A Flutter desktop platform that tracks production-task efficiency in real time and syncs data across systems. Operators see the problem before it becomes a defect.",
@@ -530,6 +550,7 @@ const en: Content = {
         },
         {
           title: "PDF Report Generation API",
+          collage: "pdf",
           context: "Personal project · 2024",
           detail:
             "A NestJS API that turns Prisma and PostgreSQL data into PDF reports on demand: invoices, certificates, country tables and dashboards with embedded SVG charts. No templating engine.",
@@ -538,6 +559,7 @@ const en: Content = {
         },
         {
           title: "Cinemapedia",
+          collage: "cinema",
           context: "Personal project · 2024",
           detail:
             "A Flutter app for browsing and searching TMDB movies, with cast and synopsis on every detail page, offline favorites via Isar, and a light or dark theme with 15 accent colors.",
@@ -546,6 +568,7 @@ const en: Content = {
         },
         {
           title: "¿Quién es ese Pokémon?",
+          collage: "poke",
           context: "Personal project · 2021–2026",
           detail:
             "A Vue 3 and TypeScript trivia game on PokeAPI. Guess the Pokémon from its silhouette before the clock and your hearts run out, with three difficulty tiers and a local high-score board.",
@@ -612,6 +635,12 @@ const en: Content = {
       signed: "Signed,",
       cta: "Sign by email",
       linkedin: "LinkedIn",
+      github: "GitHub",
+      lead: "Before the fine print, write to me at",
+      copyHint: "Click to copy",
+      copied: "Copied. Talk soon.",
+      copyFailed: "Selected. Press Cmd or Ctrl + C.",
+      phoneAlt: "A vintage rotary phone ringing",
       loc: "Porto, Portugal",
       lang: "Español (native) · Português (B2) · English (B1)",
       copyright: "Built with Astro.",
@@ -658,8 +687,53 @@ export const covers: Record<string, { src: string; width: number; height: number
   },
 };
 
+/**
+ * Illustrated collage per project (638x800 JPG). Unlike `covers`, these exist for every
+ * project, including the private Motorline work that has no public screenshots.
+ */
+export const collages = {
+  widgets: {
+    src: "/projects/collages/widgets.jpg",
+    alt: {
+      es: "Collage: widgets saliendo de un móvil",
+      en: "Collage: widgets popping out of a phone",
+    },
+  },
+  monitor: {
+    src: "/projects/collages/monitor.jpg",
+    alt: {
+      es: "Collage: un capataz delante de manómetros",
+      en: "Collage: a factory foreman in front of pressure gauges",
+    },
+  },
+  pdf: {
+    src: "/projects/collages/pdf.jpg",
+    alt: {
+      es: "Collage: una mecanógrafa de los años 50 rodeada de informes impresos",
+      en: "Collage: a 1950s typist surrounded by printed reports",
+    },
+  },
+  cinema: {
+    src: "/projects/collages/cinema.jpg",
+    alt: {
+      es: "Collage: una mujer con un móvil y una tira de película",
+      en: "Collage: a woman holding a phone and a strip of film",
+    },
+  },
+  poke: {
+    src: "/projects/collages/poke.jpg",
+    alt: {
+      es: "Collage: un niño estudiando una silueta misteriosa",
+      en: "Collage: a kid studying a mysterious silhouette",
+    },
+  },
+} as const satisfies Record<string, { src: string; alt: Record<Lang, string> }>;
+export type CollageKey = keyof typeof collages;
+export const COLLAGE_SIZE = { width: 638, height: 800 } as const;
+
 export interface ProjectItem {
   title: string;
+  collage?: CollageKey;
   context: string;
   detail: string;
   tags: string[];
@@ -704,6 +778,10 @@ export interface Content {
     education: string;
     cta: string;
     langLabel: string;
+    menuOpen: string;
+    menuClose: string;
+    /** Label for the live Porto clock. */
+    clock: string;
   };
   hero: {
     lineA: string;
@@ -735,6 +813,13 @@ export interface Content {
     signed: string;
     cta: string;
     linkedin: string;
+    github: string;
+    /** Line above the copyable email. */
+    lead: string;
+    copyHint: string;
+    copied: string;
+    copyFailed: string;
+    phoneAlt: string;
     loc: string;
     lang: string;
     copyright: string;

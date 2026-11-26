@@ -9,10 +9,14 @@
   --blue: #2342e8;
   --blue-on-ink: #8a99ff;
   --rule: 2px;
+  --radius-card: 6px;
+  --shadow-card: 0 28px 48px -28px rgba(20, 19, 15, 0.55);
 
   --font-display: "Anton", Impact, "Arial Narrow", sans-serif;
   --font-body: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  /* Handwriting accent: logo, quotes and one-line asides only. Never body copy. */
+  --font-hand: "Nothing You Could Do", "Segoe Script", cursive;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --gutter: clamp(1.25rem, 4vw, 3rem);

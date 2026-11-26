@@ -32,6 +32,17 @@ spacing:
 
 # Design System: Jordy Rojas Aliaga — Portfolio
 
+## Direction change in progress (decided 2026-11-26)
+
+The system is moving toward the softer, more playful prototype in `resource/portfolio/`: illustrated collages, rounded cards and pills, soft shadows, a handwriting accent font (`Nothing You Could Do`), tilted cards, and a Lima ↔ Porto narrative. Where this section conflicts with the rules below ("square corners", "hard-offset shadows only", "no pills"), this section wins, and the older rule is updated when the piece it governs is migrated. It is done piece by piece, not all at once.
+
+Constraints that do NOT change: one blue accent (the prototype's green Portugal stamp is out), all copy in `content.ts` for every language in `langs` (today `es` and `en`), no scroll-jacking, no page-transition curtain on every click, intro only on first visit and skippable.
+
+Migrated so far:
+- Nav (`Nav.astro`): handwritten `jordy.` logo (`--font-hand`), links in one outlined pill with a sliding blue underline, segmented ES/EN pill (current language filled ink), blue pill CTA, decorative Porto clock from 1100px. Under 860px: burger plus a full-screen blue menu (hidden with `visibility`, rest of the page `inert` while open, Escape closes and returns focus, page scroll locked). Labels live in `content.nav` (`menuOpen`, `menuClose`, `clock`).
+- Contact (`Contact.astro`): opens with the rotary-phone sticker (`public/contact/phone.png`, rings on hover) and the email as a big Anton button that copies on click (toast; falls back to selecting the text if the clipboard is blocked). LinkedIn and GitHub as outlined pills. Then the contract (unchanged copy), and the handwritten signature plus a solid "Sign by email" pill (`mailto:`) closes it. The phone is decoration only: no phone number is published and no copy invites a call. New strings live in `content.contact` (`lead`, `copyHint`, `copied`, `copyFailed`, `phoneAlt`, `github`); `GITHUB` is exported next to `LINKEDIN`.
+- Project collages (`collages` in `content.ts`, files in `public/projects/collages/`): tilted card, `--radius-card`, `--shadow-card`. Shown in the Projects list for all five projects.
+
 ## Overview
 
 **Creative North Star: "The Hard Problem"**
@@ -78,11 +89,11 @@ Single-column stack: marquee, sticky nav, hero, experience, projects, stack, edu
 - **Button (`.btn`, `.pill` on case pages):** blue fill, white text, 2px ink border, `5px 5px 0 ink` shadow. Hover moves up-left and grows the shadow, active presses in. Variant `.btn--paper` for dark surfaces.
 - **Link (`.link`):** underlined 2px, turns blue on hover.
 - **Marquee:** ink bar, mono text, 38s linear loop, static with reduced motion.
-- **Nav:** sticky, paper, 2px bottom rule. Mono links, `ES / EN` switch with the current language underlined in blue, bordered "Hablemos / Let's talk" button.
+- **Nav:** sticky, paper, 2px bottom rule. See "Migrated so far" for the current pill-based design (this line predates it).
 - **Stats:** three huge numerals between ink rules. The last one is blue.
 - **Project row:** big title, mono context, description, outcome chip (blue), mono tags. On hover (pointer devices) the row inverts to ink. Projects with public screenshots show a cover: 16:10 frame, blue ground, ink border, hard shadow.
 - **Stack list:** outline text that fills as each group crosses the middle of the screen. Progressive enhancement, filled by default.
-- **Contact contract:** ink section, four numbered clauses, signature with a doodle underline, paper button with a blue offset shadow.
+- **Contact contract:** ink section. See "Migrated so far" for the current order (phone and copyable email, then four numbered clauses, then handwritten signature). This line predates it.
 - **Cursor ring:** a lagging 34px ring (68px, filled, over links, buttons and `[data-cursor]`) with `mix-blend-mode: difference`. Mouse only; the native cursor stays.
 - **Intro:** full-screen ink curtain with three words (HOLA/SOY/JORDY or HELLO/I'M/JORDY), about 1.5s, first visit only (`localStorage.introSeen`), `?intro` replays it, any key or click skips it, off with reduced motion, removes itself with a CSS timeline.
 
