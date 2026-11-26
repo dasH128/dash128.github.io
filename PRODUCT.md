@@ -24,7 +24,7 @@ Confident and a little cheeky. The site does not beg for a job. Its stance is "B
 
 ## Operating Context
 
-Single-developer static site, no backend or CMS. Viewed on desktop and mobile, usually as a first impression before a resume or LinkedIn/GitHub profile. Bilingual: Spanish and English with equal weight, with a language switch. Case-study pages are English only for now.
+Single-developer static site, no backend or CMS. Viewed on desktop and mobile, usually as a first impression before a resume or LinkedIn/GitHub profile. Bilingual: Spanish and English with equal weight, with a language switch. Every project has a detail page in both languages.
 
 ## Capabilities and Constraints
 
@@ -46,7 +46,7 @@ Single-developer static site, no backend or CMS. Viewed on desktop and mobile, u
 Supplied by Jordy via CV (`cv_jordy.pdf`) and LinkedIn export (`linkedin_profile.pdf`), and shipped on the homepage:
 
 - **Experience** (reverse chronological): Motorline, Full Stack & Mobile Developer, Portugal, Jul 2022–Present; ITData Consulting, Full Stack Developer, Peru, May 2021–Feb 2022; Holinsys, Software Engineering Analyst, Peru, Feb 2020–Feb 2021; Clínica Médica Climper, Software Analyst, Peru, Jan 2015–Feb 2020.
-- **Projects**: two Motorline projects (native Android/iOS widget integration in a Flutter app; a Flutter desktop production-monitoring/quality-control platform, 20% fewer operational errors) and three personal projects with case studies (PDF report API in NestJS, Cinemapedia in Flutter, ¿Quién es ese Pokémon? in Vue 3).
+- **Projects**: two Motorline projects (native Android/iOS widget integration in a Flutter app; a Flutter desktop production-monitoring/quality-control platform, 20% fewer operational errors) and three personal projects (PDF report API in NestJS, Cinemapedia in Flutter, ¿Quién es ese Pokémon? in Vue 3). All five have a detail page (`src/i18n/projects.ts`); only the personal ones have the technical "Under the hood" layer, the Motorline pages say the screens are under NDA. Jordy confirmed that all the text in the project pages is true, including the "result" lines taken from the prototype.
 - **Claims used in copy**: 8+ years shipping software, 4 companies in 2 countries, 20% fewer operational errors (Motorline), projects delivered 10% faster than planned (ITData).
 - **Stack**: Dart, Kotlin, TypeScript, Python; Flutter, React Native, React, Angular, Vue, NestJS, Express; MongoDB, PostgreSQL, Firebase, Supabase; REST, GraphQL, push notifications, Google Maps/geolocation; SOLID, Clean Code, Git, Docker, Android Studio, Xcode.
 - **Contact**: email (rojas71421@gmail.com) and LinkedIn (linkedin.com/in/dash128). Phone number deliberately withheld.

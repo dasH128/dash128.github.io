@@ -1,5 +1,5 @@
 ---
-import { content, covers, type Lang } from "../i18n/content";
+import { content, covers, projectPath, type Lang } from "../i18n/content";
 
 interface Props {
   lang: Lang;
@@ -16,7 +16,7 @@ const t = content[lang].about.built;
     <ul class="built__grid">
       {
         t.items.map((it, i) => {
-          const cover = covers[it.href];
+          const cover = covers[it.slug];
           return (
             <li class="card" data-cursor data-reveal style={`--d:${i * 0.12}s`}>
               {cover && (
@@ -35,7 +35,7 @@ const t = content[lang].about.built;
                 <span class="mono card__year">{it.year}</span>
                 <h3>{it.title}</h3>
                 <p>{it.text}</p>
-                <a class="link" href={it.href}>
+                <a class="link" href={projectPath(lang, it.slug)}>
                   {t.cta} →
                 </a>
               </div>

@@ -1,5 +1,5 @@
 ---
-import { content, collages, COLLAGE_SIZE, type Lang, type ProjectItem } from "../i18n/content";
+import { content, collages, COLLAGE_SIZE, projectPath, type Lang, type ProjectItem } from "../i18n/content";
 
 interface Props {
   lang: Lang;
@@ -44,20 +44,16 @@ const items = t.items as readonly ProjectItem[];
                     <li>{tag}</li>
                   ))}
                 </ul>
-                {(p.href || p.demo) && (
-                  <div class="proj__links">
-                    {p.href && (
-                      <a class="link" href={p.href}>
-                        {t.caseStudy} →
-                      </a>
-                    )}
-                    {p.demo && (
-                      <a class="link" href={p.demo} target="_blank" rel="noopener">
-                        {t.demo} ↗
-                      </a>
-                    )}
-                  </div>
-                )}
+                <div class="proj__links">
+                  <a class="link" href={projectPath(lang, p.slug)}>
+                    {t.caseStudy} →
+                  </a>
+                  {p.demo && (
+                    <a class="link" href={p.demo} target="_blank" rel="noopener">
+                      {t.demo} ↗
+                    </a>
+                  )}
+                </div>
               </div>
             </li>
           );

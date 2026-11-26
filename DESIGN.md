@@ -45,6 +45,7 @@ Migrated so far:
 - Experience title is now the stance line, with a one-line sub ("Four companies, two countries and one habit: shipping.").
 - Rhythm pass: `--rule` is 1.5px; the global top rule on `section` is gone and vertical padding grew, so About and Home breathe like the prototype. `AboutTeaser` sits on `--paper-dim`. New `Quote.astro` right after the hero: the keyboard rule in handwriting that writes itself on entering the viewport, plus scattered zigzags (about 58% of the viewport tall; plain visible text without JS or with reduced motion). Copy in `content.quote`. The phrase is Jordy's own (confirmed 2026-11-26).
 - Intro (`Intro.astro`): giant words are windows (an SVG mask over an ink screen) onto drifting pictures: "Del Perú" (Lima), "Al mundo" (Italia, Suiza, Irlanda, Portugal, each with a caption), then "Apps / APIs / Que funcionan" over three retro illustrations, a `01 / 03` counter, and an ending on "JORDY" with the black-and-white cut-out photo before the curtain lifts. About 3.5 s plus the 0.8 s lift. No library: Web Animations plus one SVG `<text>`; on screens under 760px multi-word text is split into one line per word. Images (`public/intro/`, about 1.6 MB with the photo) are requested only when the intro plays, so returning visitors download nothing; blue shows through the letters until an image is ready. Any key, any click or the "Skip intro" button ends it. The intro (not a timer) removes `intro` from `<html>`, which starts the hero's entrance (`animation-play-state: paused` while it is up); a 7 s failsafe in `<head>` removes it anyway. All words and captions are in `content.intro` (es and en). Careful in scripts: `html` also carries the class `intro`, so select `div.intro`.
+- Project pages (`ProjectDetail.astro`, route `src/pages/[lang]/projects/[slug].astro`): one template for all five projects, two layers. Layer 1 for everyone: back link, "02 of 05 · client", giant blue Anton title, handwriting tagline, the tilted collage, a four-cell meta strip (year, client, role, stack), the big number when there is one (−20%), then the three chapters (The challenge, What I built, The result) with the tags and links; projects under NDA say so and point to the contact. Layer 2 "Under the hood" only for the three with public code and screens: blocks of text, layer tables, a code sample and real screenshots, on a darker paper. Ends with a blue "Next project" band that loops through the five, then the normal contact footer. Same nav as the rest of the site, with the ES/EN switch staying on the same project. No parallax, no page-transition curtain, real URLs (no hash routing).
 - Project collages (`collages` in `content.ts`, files in `public/projects/collages/`): tilted card, `--radius-card`, `--shadow-card`. They no longer sit inside each row (that made the list 2,600 px, 3.4 screens). With a mouse, the row gets a blue panel that wipes up from its bottom edge (a little wider than the column), the title nudges 1 rem right, the outcome chip inverts to white, and one floating collage follows the cursor, centred on it and kept inside the window, only while over a row; it is decorative (`aria-hidden`), the five pictures are fetched shortly before the list scrolls into view, and with reduced motion it follows without lag. On touch screens (`hover: none`) each row shows a small tilted thumbnail next to the title instead. The list is about 1,300 px (1.4 screens).
 
 ## Overview
@@ -86,7 +87,7 @@ Single-column stack: marquee, sticky nav, hero, experience, projects, stack, edu
 
 - **Hero:** 12-col grid. Copy spans columns 1-9 and the photo 8-12, so the headline can overlap the photo column slightly. Stacks under 700px. The subtitle is capped to 77% of the copy column so it never runs under the photo.
 - **Lists (experience, projects, stack, education):** ruled rows. Experience and projects are `3.5rem | 1.1fr | 1fr` and stack on narrow screens.
-- **Case studies:** single column, one `block` per heading.
+- **Project pages:** see "Migrated so far" (one template for all five projects).
 
 ## Components
 
@@ -108,7 +109,7 @@ Single-column stack: marquee, sticky nav, hero, experience, projects, stack, edu
 1. **Opening:** the sentence as a giant Anton headline, the last word in blue. Optional photo.
 2. **Life line:** seven dots (2012 to 2024) on a ruled track. Click or arrow keys pick a stage and its panel shows below. Narrow screens and no-JS render every stage as a plain ruled list (progressive enhancement).
 3. **Lima ↔ Porto:** inline SVG arc that draws itself on entering, the straight-line distance, and the three languages as outlined tags. Optional photo.
-4. **What I build for fun:** three cards with the personal-project covers, linking to their case studies.
+4. **What I build for fun:** three cards with the personal-project covers, linking to their project pages.
 5. **What I carry with me:** numbered lessons (001+) in huge Anton, blue on hover.
 
 Optional photos: drop `hero.(webp|jpg|png)` or `porto.(webp|jpg|png)` in `public/me/about/`. If a file exists at build time it appears, if not the scene renders without it (`src/lib/aboutPhoto.ts`).
@@ -126,7 +127,7 @@ Entrance (`rise`) on the hero copy, doodles that draw themselves on entering the
 - Languages are listed once in `langs` (`src/i18n/content.ts`). `content` is `Record<Lang, Content>`, and `Content` is an interface, so a missing key or a language without a text block is a type error (checked with `tsc`, not by `astro build`).
 - Routes: `/es/` and `/en/` from `src/pages/[lang]/index.astro`. `/` is a client-side redirect: saved choice, then browser languages, then `defaultLang`.
 - To add a language: add it to `langs`, write its `Content` block (including `ogLocale`) and its alt texts in `covers`. Nothing else is language-specific.
-- Case-study pages (`/projects/*`) are English only for now and use `layouts/CaseStudy.astro`.
+- Project pages are `/{lang}/projects/{slug}/` in every language. Their copy is in `src/i18n/projects.ts` (one typed `ProjectDetail` per project, a `text` block per language), the shared labels in `content.projectPage`. The old `/projects/{slug}` URLs (English only) redirect to `/en/projects/{slug}/` (see `redirects` in `astro.config.mjs`). To add a language, add its `text` block to every project and its `projectPage` labels.
 
 ## Do's and Don'ts
 

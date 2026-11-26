@@ -1,18 +1,21 @@
 ---
-import { content, langs, langPath, aboutPath, type Lang } from "../i18n/content";
+import { content, langs, langPath, aboutPath, projectPath, type Lang } from "../i18n/content";
 
 interface Props {
   lang: Lang;
   /** Where the nav is rendered. Section links on other pages point back to the home page. */
-  page?: "home" | "about";
+  page?: "home" | "about" | "project";
+  /** Slug of the project, when `page` is "project" (so the language switch stays on it). */
+  slug?: string;
 }
-const { lang, page = "home" } = Astro.props;
+const { lang, page = "home", slug } = Astro.props;
 const t = content[lang].nav;
 
 const home = langPath(lang);
 const section = (id: string) => (page === "home" ? `#${id}` : `${home}#${id}`);
 // Same page, other language.
-const switchTo = (l: Lang) => (page === "about" ? aboutPath(l) : langPath(l));
+const switchTo = (l: Lang) =>
+  page === "about" ? aboutPath(l) : page === "project" && slug ? projectPath(l, slug) : langPath(l);
 
 // Same order as the sections on the home page (see pages/[lang]/index.astro).
 const links = [

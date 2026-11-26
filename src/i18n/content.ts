@@ -16,6 +16,11 @@ export function aboutPath(lang: Lang): string {
   return `${langPath(lang)}about/`;
 }
 
+/** Detail page of one project (see `i18n/projects.ts`). */
+export function projectPath(lang: Lang, slug: string): string {
+  return `${langPath(lang)}projects/${slug}/`;
+}
+
 /** "2024-07" -> "Jul 2024" / "jul 2024" in the page language. */
 export function formatMonth(iso: string, lang: Lang): string {
   const [y, m] = iso.split("-").map(Number);
@@ -137,25 +142,25 @@ const es: Content = {
       built: {
         title: "Lo que construyo por gusto.",
         intro: "Tres proyectos personales que nadie me pidió.",
-        cta: "Ver el caso (en inglés)",
+        cta: "Ver el caso",
         items: [
           {
             title: "API de reportes PDF",
             year: "2024",
             text: "Backend que toco menos en Motorline, así que lo practico aquí.",
-            href: "/projects/pdf-report-api",
+            slug: "pdf-report-api",
           },
           {
             title: "Cinemapedia",
             year: "2024",
             text: "Flutter con arquitectura limpia en tres capas y favoritos sin conexión.",
-            href: "/projects/movies-app",
+            slug: "movies-app",
           },
           {
             title: "¿Quién es ese Pokémon?",
             year: "2021–2026",
             text: "Uno de mis primeros proyectos serios en Vue 3 y TypeScript. En 2026 volví y lo rediseñé desde cero.",
-            href: "/projects/poke-web",
+            slug: "poke-web",
           },
         ],
       },
@@ -245,12 +250,13 @@ const es: Content = {
     },
     projects: {
       title: "Sistemas lanzados bajo presión.",
-      caseStudy: "Leer el caso (en inglés)",
+      caseStudy: "Ver el proyecto",
       demo: "Probar la demo",
       items: [
         {
           title: "Integración móvil nativa",
           collage: "widgets",
+          slug: "native-mobile-integration",
           context: "Motorline · 2022–Actualidad",
           detail:
             "Una app móvil en Flutter ampliada con widgets nativos de Android e iOS. Cierra la brecha entre el framework y la plataforma para una experiencia más fluida.",
@@ -259,6 +265,7 @@ const es: Content = {
         {
           title: "Monitoreo de producción y control de calidad",
           collage: "monitor",
+          slug: "production-monitoring",
           context: "Motorline · 2022–Actualidad",
           detail:
             "Una plataforma de escritorio en Flutter que sigue en tiempo real la eficiencia de las tareas de producción y sincroniza datos entre sistemas. Los operarios ven el problema antes de que sea un defecto.",
@@ -272,7 +279,7 @@ const es: Content = {
           detail:
             "Una API en NestJS que convierte datos de Prisma y PostgreSQL en reportes PDF bajo demanda: facturas, certificados, tablas de países y paneles con gráficos SVG. Sin motor de plantillas.",
           tags: ["NestJS", "Prisma", "PostgreSQL", "PDFKit"],
-          href: "/projects/pdf-report-api",
+          slug: "pdf-report-api",
         },
         {
           title: "Cinemapedia",
@@ -281,7 +288,7 @@ const es: Content = {
           detail:
             "Una app Flutter para explorar y buscar películas de TMDB, con reparto y sinopsis en cada detalle, favoritos sin conexión con Isar y tema claro u oscuro con 15 colores de acento.",
           tags: ["Flutter", "Riverpod", "Isar", "TMDB API"],
-          href: "/projects/movies-app",
+          slug: "movies-app",
         },
         {
           title: "¿Quién es ese Pokémon?",
@@ -290,7 +297,7 @@ const es: Content = {
           detail:
             "Un juego de trivia en Vue 3 y TypeScript sobre PokeAPI. Adivina el Pokémon por su silueta antes de que se acaben el tiempo y los corazones, con tres niveles y tabla de récords local.",
           tags: ["Vue 3", "TypeScript", "PokeAPI", "Axios"],
-          href: "/projects/poke-web",
+          slug: "poke-web",
           demo: "https://pokigame.netlify.app/",
         },
       ],
@@ -327,6 +334,24 @@ const es: Content = {
         },
       ],
       certifications: certs,
+    },
+    projectPage: {
+      back: "← Todos los proyectos",
+      of: "de",
+      year: "Año",
+      client: "Cliente",
+      role: "Rol",
+      stack: "Tecnologías",
+      challenge: "El reto",
+      built: "Lo que construí",
+      result: "El resultado",
+      underHood: "Bajo el capó",
+      underHoodSub: "Para quien quiere ver cómo está hecho por dentro.",
+      next: "Siguiente proyecto",
+      github: "Ver el código",
+      demo: "Probar la demo",
+      nda: "Las pantallas están bajo NDA.",
+      ndaCta: "Escríbeme y te lo cuento",
     },
     contact: {
       title: "Términos y condiciones de contratarme",
@@ -472,19 +497,19 @@ const en: Content = {
             title: "PDF Report Generation API",
             year: "2024",
             text: "Backend work I touch less at Motorline, so I practice it here.",
-            href: "/projects/pdf-report-api",
+            slug: "pdf-report-api",
           },
           {
             title: "Cinemapedia",
             year: "2024",
             text: "Flutter with a three-layer clean architecture and offline favorites.",
-            href: "/projects/movies-app",
+            slug: "movies-app",
           },
           {
             title: "¿Quién es ese Pokémon?",
             year: "2021–2026",
             text: "One of my first serious Vue 3 and TypeScript projects. In 2026 I came back and redesigned it from scratch.",
-            href: "/projects/poke-web",
+            slug: "poke-web",
           },
         ],
       },
@@ -574,12 +599,13 @@ const en: Content = {
     },
     projects: {
       title: "Systems shipped under pressure.",
-      caseStudy: "Read the case study",
+      caseStudy: "View the project",
       demo: "Try the live demo",
       items: [
         {
           title: "Native Mobile Integration",
           collage: "widgets",
+          slug: "native-mobile-integration",
           context: "Motorline · 2022–Present",
           detail:
             "A Flutter mobile app extended with native Android and iOS widgets. Closes the gap between the framework and the platform for a smoother experience.",
@@ -588,6 +614,7 @@ const en: Content = {
         {
           title: "Production Monitoring & Quality Control",
           collage: "monitor",
+          slug: "production-monitoring",
           context: "Motorline · 2022–Present",
           detail:
             "A Flutter desktop platform that tracks production-task efficiency in real time and syncs data across systems. Operators see the problem before it becomes a defect.",
@@ -601,7 +628,7 @@ const en: Content = {
           detail:
             "A NestJS API that turns Prisma and PostgreSQL data into PDF reports on demand: invoices, certificates, country tables and dashboards with embedded SVG charts. No templating engine.",
           tags: ["NestJS", "Prisma", "PostgreSQL", "PDFKit"],
-          href: "/projects/pdf-report-api",
+          slug: "pdf-report-api",
         },
         {
           title: "Cinemapedia",
@@ -610,7 +637,7 @@ const en: Content = {
           detail:
             "A Flutter app for browsing and searching TMDB movies, with cast and synopsis on every detail page, offline favorites via Isar, and a light or dark theme with 15 accent colors.",
           tags: ["Flutter", "Riverpod", "Isar", "TMDB API"],
-          href: "/projects/movies-app",
+          slug: "movies-app",
         },
         {
           title: "¿Quién es ese Pokémon?",
@@ -619,7 +646,7 @@ const en: Content = {
           detail:
             "A Vue 3 and TypeScript trivia game on PokeAPI. Guess the Pokémon from its silhouette before the clock and your hearts run out, with three difficulty tiers and a local high-score board.",
           tags: ["Vue 3", "TypeScript", "PokeAPI", "Axios"],
-          href: "/projects/poke-web",
+          slug: "poke-web",
           demo: "https://pokigame.netlify.app/",
         },
       ],
@@ -656,6 +683,24 @@ const en: Content = {
         },
       ],
       certifications: certs,
+    },
+    projectPage: {
+      back: "← All projects",
+      of: "of",
+      year: "Year",
+      client: "Client",
+      role: "Role",
+      stack: "Stack",
+      challenge: "The challenge",
+      built: "What I built",
+      result: "The result",
+      underHood: "Under the hood",
+      underHoodSub: "For anyone who wants to see how it is built inside.",
+      next: "Next project",
+      github: "View the source",
+      demo: "Try the live demo",
+      nda: "Screens are under NDA.",
+      ndaCta: "Write to me and I'll tell you more",
     },
     contact: {
       title: "Terms and conditions of hiring me",
@@ -699,9 +744,9 @@ const en: Content = {
  */
 export const content: Record<Lang, Content> = { es, en };
 
-/** Project covers, keyed by the project's case-study href. Motorline work is private: no cover. */
+/** Screenshot covers (About page cards), keyed by project slug. Motorline work is private: no cover. */
 export const covers: Record<string, { src: string; width: number; height: number; fit: "cover" | "contain"; alt: Record<Lang, string> }> = {
-  "/projects/pdf-report-api": {
+  "pdf-report-api": {
     src: "/projects/pdf-report-api/html-report.png",
     width: 848,
     height: 1200,
@@ -711,7 +756,7 @@ export const covers: Record<string, { src: string; width: number; height: number
       en: "PDF page generated by the API with headings, nested lists and formatted text",
     },
   },
-  "/projects/movies-app": {
+  "movies-app": {
     src: "/projects/movies-app/dark-home.jpg",
     width: 322,
     height: 700,
@@ -721,7 +766,7 @@ export const covers: Record<string, { src: string; width: number; height: number
       en: "Cinemapedia home screen in dark mode, with a carousel and movies now in theaters",
     },
   },
-  "/projects/poke-web": {
+  "poke-web": {
     src: "/projects/poke-web/game.png",
     width: 1280,
     height: 800,
@@ -780,11 +825,12 @@ export const COLLAGE_SIZE = { width: 638, height: 800 } as const;
 export interface ProjectItem {
   title: string;
   collage?: CollageKey;
+  /** Slug of the project's detail page, see `i18n/projects.ts`. */
+  slug: string;
   context: string;
   detail: string;
   tags: string[];
   outcome?: string;
-  href?: string;
   demo?: string;
 }
 
@@ -819,7 +865,7 @@ export interface Content {
       title: string;
       intro: string;
       cta: string;
-      items: { title: string; year: string; text: string; href: string }[];
+      items: { title: string; year: string; text: string; slug: string }[];
     };
     lessons: { title: string; items: string[] };
   };
@@ -862,6 +908,25 @@ export interface Content {
     roles: { company: string; role: string; place: string; dates: string; detail: string }[];
   };
   projects: { title: string; caseStudy: string; demo: string; items: ProjectItem[] };
+  /** Labels shared by every project detail page (the project texts are in `i18n/projects.ts`). */
+  projectPage: {
+    back: string;
+    of: string;
+    year: string;
+    client: string;
+    role: string;
+    stack: string;
+    challenge: string;
+    built: string;
+    result: string;
+    underHood: string;
+    underHoodSub: string;
+    next: string;
+    github: string;
+    demo: string;
+    nda: string;
+    ndaCta: string;
+  };
   skills: { title: string; groups: { label: string; items: string[] }[] };
   education: {
     title: string;
