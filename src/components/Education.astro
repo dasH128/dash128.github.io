@@ -10,50 +10,46 @@ const t = content[lang].education;
 
 <section id="education">
   <div class="wrap">
-    <h2 class="section-title">{t.title}</h2>
+    <h2 class="section-title edu__title">{t.title}</h2>
 
-    <div class="edu">
-      <div class="edu__col">
-        <h3 class="mono edu__label">{t.studies}</h3>
-        <ul class="edu__list">
-          {
-            t.degrees.map((e) => (
-              <li>
-                <strong>{e.degree}</strong>
-                <span>
-                  {e.school} · {e.place}
-                </span>
-                <span class="mono">{e.dates}</span>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
+    <h3 class="mono edu__label">{t.studies}</h3>
+    <ul class="degrees">
+      {
+        t.degrees.map((e) => (
+          <li class="degree">
+            <span class="degree__dates">{e.dates}</span>
+            <div class="degree__body">
+              <strong>{e.degree}</strong>
+              <span>
+                {e.school} · {e.place}
+              </span>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
 
-      <div class="edu__col">
-        <h3 class="mono edu__label">{t.certs}</h3>
-        <ul class="edu__list">
-          {
-            t.certifications.map((c) => (
-              <li>
-                <strong>{c.name}</strong>
-                <span>
-                  {c.issuer} · {formatMonth(c.date, lang)}
-                </span>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </div>
+    <h3 class="mono edu__label edu__label--certs">{t.certs}</h3>
+    <ul class="certs">
+      {
+        t.certifications.map((c) => (
+          <li class="cert">
+            <strong>{c.name}</strong>
+            <span class="cert__issuer">{c.issuer}</span>
+            <span class="mono cert__date">{formatMonth(c.date, lang)}</span>
+          </li>
+        ))
+      }
+    </ul>
   </div>
 </section>
 
 <style>
-  .edu {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(2.5rem, 5vw, 4.5rem);
+  /* The headline is long; it leads in, it does not shout over two degrees and seven courses. */
+  .edu__title {
+    font-size: clamp(2.2rem, 5.4vw, 4.6rem);
+    max-width: 22ch;
+    margin-bottom: clamp(2rem, 5vw, 3.5rem);
   }
 
   .edu__label {
@@ -64,38 +60,91 @@ const t = content[lang].education;
     padding-bottom: 0.9rem;
   }
 
-  .edu__list {
+  .edu__label--certs {
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .degrees,
+  .certs {
     list-style: none;
     padding: 0;
     border-top: var(--rule) solid var(--ink);
   }
 
-  .edu__list li {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-    padding-block: 1rem;
+  /* Degrees: the years lead, in Anton and blue, like the rows of Experience. */
+  .degree {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: 1rem var(--gutter);
+    align-items: baseline;
+    padding-block: clamp(1rem, 2vw, 1.4rem);
     border-bottom: var(--rule) solid var(--ink);
   }
 
-  .edu__list strong {
+  .degree__dates {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: clamp(1.7rem, 3vw, 2.5rem);
+    line-height: 1;
+    color: var(--blue);
+  }
+
+  .degree__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .degree__body strong {
     font-weight: 600;
-    font-size: 1.05rem;
+    font-size: clamp(1.1rem, 1.7vw, 1.35rem);
+    line-height: 1.3;
+  }
+
+  .degree__body span {
+    color: var(--ink-soft);
+  }
+
+  /* Certifications: a compact table, one line each. */
+  .cert {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr) 6.5rem;
+    gap: 0.25rem var(--gutter);
+    align-items: baseline;
+    padding-block: 0.75rem;
+    border-bottom: var(--rule) solid var(--ink);
+  }
+
+  .cert strong {
+    font-weight: 600;
     line-height: 1.35;
   }
 
-  .edu__list span {
+  .cert__issuer {
     color: var(--ink-soft);
     font-size: 0.92rem;
   }
 
-  .edu__list .mono {
-    font-size: 0.78rem;
+  .cert__date {
+    color: var(--ink-soft);
+    text-align: right;
   }
 
   @media (max-width: 780px) {
-    .edu {
+    .degree {
       grid-template-columns: 1fr;
+      gap: 0.4rem;
+    }
+
+    .cert {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+    .cert strong {
+      grid-column: 1 / -1;
+    }
+    .cert__date {
+      text-align: left;
+      order: 3;
     }
   }
 </style>

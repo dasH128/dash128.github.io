@@ -30,24 +30,51 @@ const t = content[lang].skills;
 </section>
 
 <script>
-  // Scroll focus: the group crossing the middle of the screen fills in, the rest stay outlined.
+  // Scroll focus: only the row closest to the middle of the screen is lit, the rest are dimmed.
+  // Without JS or with reduced motion every row stays lit.
   const root = document.querySelector<HTMLElement>("[data-skills]");
-  const rows = document.querySelectorAll<HTMLElement>("[data-skills-row]");
+  const rows = [...document.querySelectorAll<HTMLElement>("[data-skills-row]")];
   const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  if (root && rows.length && "IntersectionObserver" in window && !calm) {
+  if (root && rows.length && !calm) {
     root.classList.add("skills--focus");
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) e.target.classList.toggle("is-active", e.isIntersecting);
-      },
-      { rootMargin: "-42% 0px -42% 0px" },
-    );
-    rows.forEach((r) => io.observe(r));
+    let queued = false;
+
+    const update = () => {
+      queued = false;
+      const mid = innerHeight / 2;
+      let best: HTMLElement | null = null;
+      let bestD = Infinity;
+      for (const r of rows) {
+        const b = r.getBoundingClientRect();
+        const d = Math.abs(b.top + b.height / 2 - mid);
+        if (d < bestD) {
+          bestD = d;
+          best = r;
+        }
+      }
+      // Rows far from the middle (the list is off screen) stay dimmed.
+      rows.forEach((r) => r.classList.toggle("is-active", r === best && bestD < innerHeight * 0.4));
+    };
+
+    const queue = () => {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    };
+    addEventListener("scroll", queue, { passive: true });
+    addEventListener("resize", queue);
+    update();
   }
 </script>
 
 <style>
+  /* A darker paper marks the rhythm: the stack is a different beat from the sections around it. */
+  #stack {
+    background: var(--paper-dim);
+  }
+
   .skills {
     border-top: var(--rule) solid var(--ink);
   }
@@ -67,6 +94,8 @@ const t = content[lang].skills;
 
   .skills__label {
     color: var(--ink-soft);
+    font-size: 0.85rem;
+    transition: color 0.3s var(--ease-out);
   }
 
   .skills__items {
@@ -82,33 +111,28 @@ const t = content[lang].skills;
     text-transform: uppercase;
     font-size: clamp(1.6rem, 3.2vw, 2.5rem);
     line-height: 1.15;
-    transition: color 0.2s var(--ease-out);
+    transition: color 0.35s var(--ease-out);
   }
 
   .skills__items li:hover {
     color: var(--blue);
   }
 
-  @supports (-webkit-text-stroke: 1px #000) {
-    .skills--focus .skills__items li {
-      color: transparent;
-      -webkit-text-stroke: 1.5px var(--ink);
-      transition: color 0.45s var(--ease-out), -webkit-text-stroke-color 0.45s var(--ease-out);
-    }
+  /* Focus mode: dimmed rows stay readable (ink-soft keeps its contrast), the lit one is full ink. */
+  .skills--focus .skills__items li {
+    color: var(--ink-soft);
+  }
 
-    .skills--focus .is-active .skills__items li {
-      color: var(--ink);
-      -webkit-text-stroke-color: transparent;
-    }
+  .skills--focus .is-active .skills__items li {
+    color: var(--ink);
+  }
 
-    .skills--focus .skills__items li:hover {
-      color: var(--blue);
-      -webkit-text-stroke-color: var(--blue);
-    }
+  .skills--focus .is-active .skills__label {
+    color: var(--blue);
+  }
 
-    .skills--focus .is-active .skills__label {
-      color: var(--blue);
-    }
+  .skills--focus .skills__items li:hover {
+    color: var(--blue);
   }
 
   @media (max-width: 700px) {
@@ -119,7 +143,8 @@ const t = content[lang].skills;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .skills__items li {
+    .skills__items li,
+    .skills__label {
       transition: none;
     }
   }
