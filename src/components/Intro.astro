@@ -5,16 +5,60 @@ interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
-const words = content[lang].intro;
+const t = content[lang].intro;
+const upper = (s: string) => s.toLocaleUpperCase(lang);
+
+// The story, beat by beat. `d` is seconds on screen, `n` moves the counter. A beat without
+// `word` keeps the previous word, one without `cap` shows no caption.
+const beats = [
+  { img: "peru", d: 0.55, n: 1, word: t.words.peru, cap: t.captions.peru },
+  { img: "italia", d: 0.26, n: 2, word: t.words.world, cap: t.captions.italy },
+  { img: "suiza", d: 0.26, cap: t.captions.switzerland },
+  { img: "irlanda", d: 0.26, cap: t.captions.ireland },
+  { img: "portugal", d: 0.4, cap: t.captions.portugal },
+  { img: "tech1", d: 0.26, n: 3, word: t.words.apps },
+  { img: "tech2", d: 0.26, word: t.words.apis },
+  { img: "tech3", d: 0.4, word: t.words.works },
+].map((b) => ({
+  ...b,
+  src: `/intro/${b.img}.jpg`,
+  word: b.word ? upper(b.word) : undefined,
+  cap: b.cap ? upper(b.cap) : undefined,
+}));
 ---
 
 <!--
-  Short curtain intro. Hidden unless the inline script in <head> adds `intro` to <html>
-  (first visit, or ?intro in the URL, never with reduced motion). It removes itself with a
-  pure CSS timeline, so a failing script can't leave it stuck on screen.
+  First-visit intro. Hidden unless the inline script in <head> adds `intro` to <html>
+  (first visit, or ?intro in the URL, never with reduced motion). Giant words are windows
+  (an SVG mask) onto moving images; it ends on the name and the photo, then the curtain lifts.
+  The images are only requested when it plays, so returning visitors download nothing.
+  A failsafe in <head> removes `intro` after a few seconds, so a failing script can't leave
+  the screen black.
 -->
-<div class="intro" aria-hidden="true">
-  {words.map((w, i) => <span style={`--i:${i}`}>{w}</span>)}
+<div class="intro" role="presentation" data-beats={JSON.stringify(beats)} data-lang={lang}>
+  <div class="intro__bg" aria-hidden="true"></div>
+
+  <svg class="intro__mask" aria-hidden="true">
+    <defs>
+      <mask id="intro-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+        <rect width="100%" height="100%" fill="#fff"></rect>
+        <text class="intro__word" text-anchor="middle"></text>
+      </mask>
+    </defs>
+    <rect class="intro__shade" width="100%" height="100%" mask="url(#intro-mask)"></rect>
+  </svg>
+
+  <p class="intro__cap mono" aria-hidden="true"></p>
+
+  <div class="intro__final" aria-hidden="true">
+    <span class="intro__name">{t.final}</span>
+  </div>
+  <img class="intro__me" src="/intro/jordy.png" alt="" width="667" height="1000" loading="lazy" decoding="async" />
+
+  <p class="intro__count mono" aria-hidden="true">
+    <span class="intro__label">{upper(t.counter)} · </span><b class="intro__n">01</b> / 03
+  </p>
+  <button class="intro__skip mono" type="button">{t.skip}</button>
 </div>
 
 <style>
@@ -23,64 +67,327 @@ const words = content[lang].intro;
     position: fixed;
     inset: 0;
     z-index: 100;
-    place-items: center;
     background: var(--ink);
     overflow: hidden;
   }
 
-  :global(html.intro) .intro {
-    display: grid;
-    animation: curtain 0.45s var(--ease-out) 1.05s forwards;
+  :global(html.intro) .intro,
+  .intro.is-leaving {
+    display: block;
   }
 
-  .intro span {
-    grid-area: 1 / 1;
+  /* No scrolling behind the intro. */
+  :global(html.intro) {
+    overflow: hidden;
+  }
+
+  /* Blue shows through the letters until an image is ready. */
+  .intro__bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: var(--blue);
+  }
+
+  .intro__bg :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    visibility: hidden;
+    will-change: transform;
+  }
+
+  .intro__mask {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .intro__shade {
+    fill: var(--ink);
+  }
+
+  .intro__word {
+    font-family: var(--font-display);
+    fill: #000;
+  }
+
+  .intro__cap {
+    position: absolute;
+    left: var(--gutter);
+    top: var(--gutter);
+    z-index: 3;
+    margin: 0;
+    max-width: none;
+    padding: 0.5em 0.8em;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: clamp(0.8rem, 1.4vw, 1.15rem);
+    opacity: 0;
+  }
+
+  .intro__final {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+  }
+
+  .intro__name {
     font-family: var(--font-display);
     text-transform: uppercase;
-    font-size: clamp(5rem, 22vw, 20rem);
-    line-height: 0.9;
-    color: var(--paper);
-    opacity: 0;
-    animation: word 0.34s var(--ease-out) both;
-    animation-delay: calc(var(--i) * 0.33s);
-  }
-
-  .intro span:last-child {
+    font-size: clamp(5rem, 26vw, 30rem);
+    line-height: 0.8;
     color: var(--blue-on-ink);
-    animation-name: word-stay;
-    animation-duration: 0.4s;
+    opacity: 0;
   }
 
-  @keyframes word {
-    0% {
-      opacity: 0;
-      transform: translateY(28%);
+  /* Same black-and-white cut-out as the hero, so the photo hands over cleanly. */
+  .intro__me {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 4;
+    margin-inline: auto;
+    height: min(82svh, 720px);
+    width: auto;
+    opacity: 0;
+    pointer-events: none;
+    filter: grayscale(1) contrast(1.08) drop-shadow(0 0 40px rgba(0, 0, 0, 0.6));
+  }
+
+  .intro__count {
+    position: absolute;
+    left: var(--gutter);
+    bottom: var(--gutter);
+    z-index: 3;
+    margin: 0;
+    max-width: none;
+    color: var(--paper);
+    opacity: 0.65;
+  }
+
+  /* On phones the counter keeps only its numbers, so it never meets the skip button. */
+  @media (max-width: 700px) {
+    .intro__label {
+      display: none;
     }
-    22%,
-    80% {
-      opacity: 1;
-      transform: none;
-    }
-    100% {
-      opacity: 0;
+    .intro__cap {
+      max-width: calc(100% - 2 * var(--gutter));
     }
   }
 
-  @keyframes word-stay {
-    from {
-      opacity: 0;
-      transform: translateY(28%);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
+  .intro__skip {
+    position: absolute;
+    right: var(--gutter);
+    bottom: var(--gutter);
+    z-index: 5;
+    padding: 0.65em 1.1em;
+    border: 1.5px solid color-mix(in srgb, var(--paper) 55%, transparent);
+    border-radius: 99px;
+    background: transparent;
+    color: var(--paper);
+    cursor: pointer;
+    transition: background 0.2s var(--ease-out), color 0.2s var(--ease-out);
   }
 
-  @keyframes curtain {
-    to {
-      transform: translateY(-100%);
-      visibility: hidden;
-    }
+  .intro__skip:hover {
+    background: var(--paper);
+    color: var(--ink);
   }
 </style>
+
+<script>
+  interface Beat {
+    img: string;
+    src: string;
+    d: number;
+    n?: number;
+    word?: string;
+    cap?: string;
+  }
+
+  const root = document.documentElement;
+  // `div.intro`: the flag class `intro` also sits on <html>, which must not be matched here.
+  const intro = document.querySelector<HTMLElement>("div.intro");
+
+  if (intro && root.classList.contains("intro")) {
+    const beats: Beat[] = JSON.parse(intro.dataset.beats ?? "[]");
+    const bg = intro.querySelector<HTMLElement>(".intro__bg")!;
+    const word = intro.querySelector<SVGTextElement>(".intro__word")!;
+    const cap = intro.querySelector<HTMLElement>(".intro__cap")!;
+    const count = intro.querySelector<HTMLElement>(".intro__count")!;
+    const num = intro.querySelector<HTMLElement>(".intro__n")!;
+    const name = intro.querySelector<HTMLElement>(".intro__name")!;
+    const me = intro.querySelector<HTMLElement>(".intro__me")!;
+    const skip = intro.querySelector<HTMLElement>(".intro__skip")!;
+
+    const EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
+    const timers = new Set<number>();
+    let capAnim: Animation | null = null;
+    let left = false;
+
+    const later = (fn: () => void, ms: number) => {
+      const id = window.setTimeout(() => {
+        timers.delete(id);
+        fn();
+      }, ms);
+      timers.add(id);
+    };
+    const play = (el: Element, frames: Keyframe[], opts: KeyframeAnimationOptions) =>
+      el.animate(frames, { fill: "forwards", ...opts });
+
+    // One <img> per distinct picture, stacked. Swapping is just toggling visibility, so there
+    // is never a frame without an image.
+    const imgs = new Map<string, HTMLImageElement>();
+    for (const b of beats) {
+      if (imgs.has(b.img)) continue;
+      const im = new Image();
+      im.alt = "";
+      im.decoding = "async";
+      im.src = b.src;
+      bg.appendChild(im);
+      imgs.set(b.img, im);
+    }
+    let shown: HTMLImageElement | null = null;
+
+    // Lay the word out as large as fits, centred, in the SVG mask. On narrow screens a
+    // multi-word text is split into one line per word, so it can be much bigger.
+    const NS = "http://www.w3.org/2000/svg";
+    const setWord = (text: string) => {
+      const W = innerWidth;
+      const H = innerHeight;
+      const lines = W < 760 ? text.split(" ") : [text];
+      const gap = 0.95;
+      let size = Math.min((H * 0.58) / (1 + (lines.length - 1) * gap), W * 0.5);
+
+      const lay = () => {
+        word.setAttribute("font-size", String(size));
+        word.textContent = "";
+        const top = H / 2 - ((lines.length - 1) * size * gap) / 2 + size * 0.3;
+        lines.forEach((line, i) => {
+          const ts = document.createElementNS(NS, "tspan");
+          ts.textContent = line;
+          ts.setAttribute("x", String(W / 2));
+          ts.setAttribute("y", String(top + i * size * gap));
+          word.appendChild(ts);
+        });
+      };
+      lay();
+      const width = word.getBBox().width;
+      if (width > W * 0.9) {
+        size *= (W * 0.9) / width;
+        lay();
+      }
+
+      play(
+        word,
+        [
+          { transform: `translateY(${size * 0.5}px)`, opacity: 0.35 },
+          { transform: "translateY(0)", opacity: 1 },
+        ],
+        { duration: 250, easing: EASE },
+      );
+    };
+
+    const show = (b: Beat) => {
+      if (b.word) setWord(b.word);
+      if (b.n) num.textContent = String(b.n).padStart(2, "0");
+
+      const next = imgs.get(b.img)!;
+      if (shown) shown.style.visibility = "hidden";
+      next.style.visibility = "visible";
+      shown = next;
+      // Every picture keeps drifting: a slow zoom-out, a slide and a small tilt.
+      const dir = Math.random() < 0.5 ? -1 : 1;
+      play(
+        next,
+        [
+          { transform: `scale(1.38) translateX(${-4 * dir}%) rotate(${-2 * dir}deg)` },
+          { transform: `scale(1.1) translateX(${4 * dir}%) rotate(${dir}deg)` },
+        ],
+        { duration: 1800, easing: "linear" },
+      );
+
+      // Cancelling returns the caption to its base style (hidden).
+      capAnim?.cancel();
+      capAnim = null;
+      if (b.cap) {
+        cap.textContent = b.cap;
+        capAnim = play(cap, [{ opacity: 0, transform: "translateY(8px)" }, { opacity: 1, transform: "none" }], {
+          duration: 150,
+        });
+      }
+    };
+
+    // Ends on the name and the photo over a plain ink screen.
+    const finale = () => {
+      word.textContent = "";
+      play(cap, [{ opacity: 0 }], { duration: 120 });
+      play(count, [{ opacity: 0 }], { duration: 200 });
+      play(
+        name,
+        [
+          { opacity: 1, transform: "translateY(70%) scale(0.9)" },
+          { opacity: 1, transform: "none" },
+        ],
+        { duration: 550, easing: EASE },
+      );
+      play(
+        me,
+        [
+          { opacity: 1, transform: "translateY(100%)" },
+          { opacity: 1, transform: "none" },
+        ],
+        { duration: 700, easing: EASE, delay: 80 },
+      );
+    };
+
+    // Lift the curtain. Removing `intro` from <html> is what starts the hero's entrance.
+    const leave = () => {
+      if (left) return;
+      left = true;
+      timers.forEach(clearTimeout);
+      removeEventListener("keydown", leave);
+      removeEventListener("pointerdown", leave);
+      intro.classList.add("is-leaving");
+      root.classList.remove("intro");
+      const lift = intro.animate([{ clipPath: "inset(0 0 0 0)" }, { clipPath: "inset(0 0 100% 0)" }], {
+        duration: 800,
+        easing: "cubic-bezier(0.76, 0, 0.24, 1)",
+        fill: "forwards",
+      });
+      lift.finished.then(() => intro.remove()).catch(() => intro.remove());
+    };
+
+    addEventListener("keydown", leave);
+    addEventListener("pointerdown", leave);
+    skip.addEventListener("click", leave);
+
+    (async () => {
+      // Wait (briefly) for the display font and the first picture, so the first frame is right.
+      const first = imgs.get(beats[0]?.img ?? "");
+      await Promise.race([
+        Promise.all([document.fonts.load("100px Anton"), first?.decode().catch(() => {})]),
+        new Promise((r) => setTimeout(r, 1500)),
+      ]);
+      if (left) return;
+
+      let t = 0;
+      for (const b of beats) {
+        later(() => show(b), t);
+        t += b.d * 1000;
+      }
+      later(finale, t);
+      later(leave, t + 800);
+    })();
+  }
+</script>

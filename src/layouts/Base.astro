@@ -53,6 +53,10 @@ const canonical = home ? `${langPath(lang)}${path}` : Astro.url.pathname;
         if (isHome && !calm && (forced || !localStorage.getItem("introSeen"))) {
           document.documentElement.classList.add("intro");
           localStorage.setItem("introSeen", "1");
+          // Failsafe: whatever happens, the intro never keeps the page hidden for long.
+          setTimeout(function () {
+            document.documentElement.classList.remove("intro");
+          }, 7000);
         }
       } catch (e) {}
     </script>
@@ -69,15 +73,6 @@ const canonical = home ? `${langPath(lang)}${path}` : Astro.url.pathname;
     <slot />
 
     <script>
-      // Any key or click skips the intro.
-      const root = document.documentElement;
-      if (root.classList.contains("intro")) {
-        const skip = () => root.classList.remove("intro");
-        addEventListener("keydown", skip, { once: true });
-        addEventListener("pointerdown", skip, { once: true });
-        setTimeout(skip, 1600);
-      }
-
       // Cursor follower: a lagging ring on top of the normal cursor (mouse only).
       const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
       const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;

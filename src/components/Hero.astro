@@ -289,10 +289,11 @@ const t = content[lang].hero;
     animation-delay: var(--d, 0s);
   }
 
-  /* While the intro curtain is up, hold the entrance until it lifts. */
+  /* While the intro is up, hold the entrance. It starts from zero when the curtain lifts
+     (the intro removes `intro` from <html>), whatever the intro's length. */
   :global(html.intro) .rise,
   :global(html.intro) .scribble path {
-    animation-delay: calc(var(--d, 0s) + 1.1s);
+    animation-play-state: paused;
   }
 
   @keyframes rise {

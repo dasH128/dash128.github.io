@@ -50,7 +50,19 @@ const es: Content = {
       "ES · PT · EN",
       "Programando desde 2015",
     ],
-    intro: ["Hola", "Soy", "Jordy"],
+    intro: {
+      words: { peru: "Del Perú", world: "Al mundo", apps: "Apps", apis: "APIs", works: "Que funcionan" },
+      captions: {
+        peru: "Lima, Perú · donde empezó todo",
+        italy: "Italia",
+        switzerland: "Suiza",
+        ireland: "Irlanda",
+        portugal: "Portugal · desde 2022",
+      },
+      counter: "Del Perú ✈ al mundo",
+      final: "Jordy",
+      skip: "Saltar intro →",
+    },
     quote: {
       lines: ["“lánzalo el viernes,", "duerme tranquilo el sábado,", "sigue funcionando el lunes.”"],
       by: "regla n.º 1 de mi teclado",
@@ -367,7 +379,19 @@ const en: Content = {
       "ES · PT · EN",
       "Coding since 2015",
     ],
-    intro: ["Hello", "I'm", "Jordy"],
+    intro: {
+      words: { peru: "From Peru", world: "To the world", apps: "Apps", apis: "APIs", works: "That work" },
+      captions: {
+        peru: "Lima, Peru · where it all started",
+        italy: "Italy",
+        switzerland: "Switzerland",
+        ireland: "Ireland",
+        portugal: "Portugal · since 2022",
+      },
+      counter: "From Peru ✈ to the world",
+      final: "Jordy",
+      skip: "Skip intro →",
+    },
     quote: {
       lines: ["“ship it on Friday,", "sleep well on Saturday,", "still working on Monday.”"],
       by: "rule no. 1 of my keyboard",
@@ -770,7 +794,14 @@ export interface Content {
   ogLocale: string;
   meta: { title: string; description: string };
   marquee: string[];
-  intro: string[];
+  /** First-visit intro: giant words as windows onto moving images. */
+  intro: {
+    words: { peru: string; world: string; apps: string; apis: string; works: string };
+    captions: { peru: string; italy: string; switzerland: string; ireland: string; portugal: string };
+    counter: string;
+    final: string;
+    skip: string;
+  };
   /** A breather between the hero and the rest, in handwriting. */
   quote: { lines: string[]; by: string };
   aboutTeaser: { title: string; text: string; cta: string };
