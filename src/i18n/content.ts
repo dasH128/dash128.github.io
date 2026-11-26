@@ -352,6 +352,12 @@ const es: Content = {
       demo: "Probar la demo",
       nda: "Las pantallas están bajo NDA.",
       ndaCta: "Escríbeme y te lo cuento",
+      copy: "Copiar",
+      copied: "Copiado",
+      copyKeys: "Cmd/Ctrl + C",
+      copyAria: "Copiar el código",
+      copiedStatus: "Código copiado.",
+      codeOf: "Código de",
     },
     contact: {
       title: "Términos y condiciones de contratarme",
@@ -701,6 +707,12 @@ const en: Content = {
       demo: "Try the live demo",
       nda: "Screens are under NDA.",
       ndaCta: "Write to me and I'll tell you more",
+      copy: "Copy",
+      copied: "Copied",
+      copyKeys: "Cmd/Ctrl + C",
+      copyAria: "Copy the code",
+      copiedStatus: "Code copied.",
+      codeOf: "Code of",
     },
     contact: {
       title: "Terms and conditions of hiring me",
@@ -926,6 +938,14 @@ export interface Content {
     demo: string;
     nda: string;
     ndaCta: string;
+    /** Code block: button labels and the screen-reader messages. */
+    copy: string;
+    copied: string;
+    /** Shown on the button when the clipboard is blocked and the code was selected instead. */
+    copyKeys: string;
+    copyAria: string;
+    copiedStatus: string;
+    codeOf: string;
   };
   skills: { title: string; groups: { label: string; items: string[] }[] };
   education: {

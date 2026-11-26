@@ -1,0 +1,281 @@
+---
+import { tokenizeCode } from "../lib/highlight";
+import type { CodeSnippet } from "../i18n/projects";
+
+interface Props {
+  code: CodeSnippet;
+  ui: { copy: string; copied: string; copyKeys: string; copyAria: string; copiedStatus: string; codeOf: string };
+}
+const { code, ui } = Astro.props;
+
+// Coloured at build time: the page ships plain text with inline colours, no highlighter.
+const lines = await tokenizeCode(code.text, code.grammar, code.wrap);
+
+// The only markup the captions use: `code`. Escape everything else.
+const rich = (s: string) =>
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/`([^`]+)`/g, "<code>$1</code>");
+---
+
+<figure class="code" data-copied={ui.copied} data-copy={ui.copy} data-keys={ui.copyKeys} data-status-text={ui.copiedStatus}>
+  <div class="code__bar">
+    <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="chip chip--file">{code.file}</span>
+    <span class="chip chip--lang">{code.label}</span>
+    <button class="code__copy" type="button" aria-label={ui.copyAria}>{ui.copy}</button>
+  </div>
+
+  <div class="code__scroll" tabindex="0" role="region" aria-label={`${ui.codeOf} ${code.file}`}>
+    <pre><code>{lines.map((tokens, i) => {
+      const note = code.notes?.[i + 1];
+      return (
+        <span class:list={["line", { "is-hl": !!note }]}><span class="no" aria-hidden="true">{i + 1}</span><span class="src">{tokens.map((t) => t.color || t.italic ? <span style={`${t.color ? `color:${t.color};` : ""}${t.italic ? "font-style:italic" : ""}`}>{t.text}</span> : t.text)}</span>{note && <span class="annot" aria-hidden="true">{note}</span>}</span>
+      );
+    })}</code></pre>
+  </div>
+
+  <figcaption class="code__foot" set:html={rich(code.caption)} />
+  <span class="sr-only" role="status" aria-live="polite" data-status></span>
+</figure>
+
+<style>
+  .code {
+    --code-bg: color-mix(in srgb, var(--blue) 10%, var(--ink));
+    margin: 0.25rem 0 0;
+    border-radius: 12px;
+    background: var(--code-bg);
+    color: #e9e7ef;
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+  }
+
+  /* Header: the three window dots, file, language and copy. */
+  .code__bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.55rem 0.65rem;
+    padding: 0.95rem 1.1rem 0.35rem;
+  }
+
+  .dots {
+    display: inline-flex;
+    gap: 0.5rem;
+    margin-right: 0.55rem;
+  }
+
+  .dots i {
+    display: block;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+  }
+  .dots i:nth-child(1) {
+    background: #ff5f57;
+  }
+  .dots i:nth-child(2) {
+    background: #febc2e;
+  }
+  .dots i:nth-child(3) {
+    background: #28c840;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3em 0.8em;
+    border-radius: 99px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+  }
+
+  .chip--file {
+    border: 1.5px solid color-mix(in srgb, var(--paper) 28%, transparent);
+    color: var(--paper);
+  }
+
+  .chip--lang {
+    background: var(--blue-on-ink);
+    color: var(--ink);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .code__copy {
+    margin-left: auto;
+    padding: 0.35em 0.9em;
+    border-radius: 99px;
+    border: 1.5px solid color-mix(in srgb, var(--paper) 40%, transparent);
+    background: transparent;
+    color: var(--paper);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s var(--ease-out), color 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
+  }
+
+  .code__copy:hover {
+    background: var(--paper);
+    color: var(--ink);
+    border-color: var(--paper);
+  }
+
+  .code__copy.is-done {
+    background: var(--blue-on-ink);
+    border-color: var(--blue-on-ink);
+    color: var(--ink);
+  }
+
+  .code :focus-visible {
+    outline-color: var(--blue-on-ink);
+  }
+
+  /* Body: dim line numbers, key lines with a band and a handwritten note. */
+  .code__scroll {
+    overflow-x: auto;
+    padding-block: 0.7rem 1.1rem;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--paper) 35%, transparent) transparent;
+  }
+
+  .code pre {
+    margin: 0;
+    min-width: max-content;
+    /* Only .src keeps literal spaces; whitespace between lines must not become blank lines. */
+    white-space: normal;
+    font-family: var(--font-mono);
+    font-size: 0.86rem;
+    line-height: 1.8;
+    tab-size: 2;
+  }
+
+  .code pre code {
+    display: block;
+    background: none;
+    padding: 0;
+    font-size: inherit;
+  }
+
+  .line {
+    display: grid;
+    grid-template-columns: 3.4rem minmax(0, 1fr) auto;
+    align-items: baseline;
+    padding-right: 1.25rem;
+  }
+
+  .no {
+    padding-right: 1.1rem;
+    text-align: right;
+    color: color-mix(in srgb, var(--paper) 30%, transparent);
+    user-select: none;
+  }
+
+  .src {
+    white-space: pre;
+  }
+
+  .line.is-hl {
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--blue-on-ink) 22%, transparent),
+      color-mix(in srgb, var(--blue-on-ink) 4%, transparent)
+    );
+    box-shadow: inset 3px 0 0 var(--blue-on-ink);
+  }
+
+  .line.is-hl .no {
+    color: var(--blue-on-ink);
+  }
+
+  .annot {
+    padding-left: 2.2rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-hand);
+    font-size: 1.05rem;
+    line-height: 1;
+    color: var(--blue-on-ink);
+    white-space: nowrap;
+    rotate: -2deg;
+  }
+
+  /* A small hand-drawn arrow pointing at the line (decorative). */
+  .annot::before {
+    content: "";
+    width: 34px;
+    height: 14px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 14' fill='none' stroke='%238a99ff' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M38 7C28 2 16 12 4 7M10 2 4 7l6 5'/%3E%3C/svg%3E")
+      no-repeat center / contain;
+  }
+
+  /* Footer: the explanation lives inside the window. */
+  .code__foot {
+    padding: 0.95rem 1.25rem 1.1rem;
+    border-top: 1.5px solid color-mix(in srgb, var(--paper) 10%, transparent);
+    color: color-mix(in srgb, var(--paper) 78%, transparent);
+    font-size: 0.92rem;
+  }
+
+  .code .code__foot :global(code) {
+    font-family: var(--font-mono);
+    background: color-mix(in srgb, var(--paper) 12%, transparent);
+    color: var(--paper);
+    padding: 0.1em 0.4em;
+    font-size: 0.86em;
+  }
+
+  /* Small screens: no margin notes (the footer already explains), tighter numbers. */
+  @media (max-width: 900px) {
+    .annot {
+      display: none;
+    }
+    .line {
+      grid-template-columns: 2.6rem minmax(0, 1fr);
+    }
+    .no {
+      padding-right: 0.7rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .code__copy {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  // Copy button: copies the code only (no line numbers or notes).
+  document.addEventListener("click", async (e) => {
+    const btn = (e.target as Element).closest<HTMLButtonElement>(".code__copy");
+    if (!btn) return;
+    const fig = btn.closest<HTMLElement>(".code")!;
+    const status = fig.querySelector<HTMLElement>("[data-status]")!;
+    const code = fig.querySelector<HTMLElement>("pre code")!;
+    const text = [...fig.querySelectorAll(".src")].map((el) => el.textContent ?? "").join("\n");
+
+    let label = fig.dataset.copied ?? "";
+    try {
+      await navigator.clipboard.writeText(text);
+      status.textContent = fig.dataset.statusText ?? "";
+      btn.classList.add("is-done");
+    } catch {
+      // Clipboard blocked: select the code so Cmd/Ctrl+C works.
+      const range = document.createRange();
+      range.selectNodeContents(code);
+      const sel = getSelection();
+      sel?.removeAllRanges();
+      sel?.addRange(range);
+      label = fig.dataset.keys ?? "";
+      status.textContent = label;
+    }
+    btn.textContent = label;
+    setTimeout(() => {
+      btn.textContent = fig.dataset.copy ?? "";
+      btn.classList.remove("is-done");
+    }, 1800);
+  });
+</script>

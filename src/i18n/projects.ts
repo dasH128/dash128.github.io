@@ -4,10 +4,28 @@
    add claims, metrics or employers that are not already supplied. */
 
 import type { CollageKey, Lang } from "./content";
+import type { Grammar, Wrap } from "../lib/highlight";
 
 export interface Shot {
   src: string;
   alt: string;
+  caption: string;
+}
+
+/** A code sample, shown as an editor window (see components/CodeBlock.astro). */
+export interface CodeSnippet {
+  text: string;
+  /** File name in the header. */
+  file: string;
+  /** Language label in the header. */
+  label: string;
+  /** Grammar used to colour it. */
+  grammar: Grammar;
+  /** Invisible wrapper for fragments that are a method or object member, not a whole file. */
+  wrap?: Wrap;
+  /** Margin notes by 1-based line number; those lines are highlighted. Short paraphrases of the caption. */
+  notes?: Record<number, string>;
+  /** Explanation shown in the footer of the window. Backticks become <code>. */
   caption: string;
 }
 
@@ -16,7 +34,7 @@ export interface TechBlock {
   h: string;
   p?: string[];
   rows?: { base: string; summary: string }[];
-  code?: { text: string; caption: string };
+  code?: CodeSnippet;
   shots?: Shot[];
 }
 
@@ -106,6 +124,10 @@ const pokeCode = `usarAyuda() {
   this.ayudasRestantes--
   this.ayudaUsadaEnPregunta = true
 }`;
+
+const pdfSnippet = { text: pdfCode, file: "store-reports.service.ts", label: "TypeScript", grammar: "typescript", wrap: "class" } as const;
+const cinemaSnippet = { text: cinemaCode, file: "movies_provider.dart", label: "Dart", grammar: "dart" } as const;
+const pokeSnippet = { text: pokeCode, file: "PokemonPage.vue", label: "Vue", grammar: "javascript", wrap: "object" } as const;
 
 /* ------------------------------------------------------------------ projects */
 
@@ -242,7 +264,8 @@ export const projects: ProjectDetail[] = [
               },
             ],
             code: {
-              text: pdfCode,
+              ...pdfSnippet,
+              notes: { 2: "groupBy de Prisma", 9: "SQL directo" },
               caption:
                 "`store-reports.service.ts`: mezcla un `groupBy` de Prisma con un join en SQL directo y entrega ambos conjuntos de datos a una función que construye el reporte.",
             },
@@ -326,7 +349,8 @@ export const projects: ProjectDetail[] = [
               },
             ],
             code: {
-              text: pdfCode,
+              ...pdfSnippet,
+              notes: { 2: "Prisma groupBy", 9: "raw SQL" },
               caption:
                 "`store-reports.service.ts`: mixing a Prisma `groupBy` with a raw SQL join, then handing both datasets to a report builder function.",
             },
@@ -420,7 +444,8 @@ export const projects: ProjectDetail[] = [
               },
             ],
             code: {
-              text: cinemaCode,
+              ...cinemaSnippet,
+              notes: { 3: "lo único que cambia entre listas" },
               caption:
                 "`movies_provider.dart`: el mismo patrón de paginación con `StateNotifier` sostiene las cuatro listas de inicio; solo cambia la función de carga con la que se construye cada una.",
             },
@@ -527,7 +552,8 @@ export const projects: ProjectDetail[] = [
               },
             ],
             code: {
-              text: cinemaCode,
+              ...cinemaSnippet,
+              notes: { 3: "the only thing that changes per list" },
               caption:
                 "`movies_provider.dart`: the same `StateNotifier` pagination pattern backs all four home lists; only the fetch callback each one is built with changes.",
             },
@@ -653,7 +679,8 @@ export const projects: ProjectDetail[] = [
               },
             ],
             code: {
-              text: pokeCode,
+              ...pokeSnippet,
+              notes: { 8: "se vuelven a mezclar" },
               caption:
                 "`PokemonPage.vue`: usar una ayuda conserva el Pokémon correcto y un señuelo al azar, y los vuelve a mezclar para que la posición en pantalla no delate la respuesta.",
             },
@@ -738,7 +765,8 @@ export const projects: ProjectDetail[] = [
               },
             ],
             code: {
-              text: pokeCode,
+              ...pokeSnippet,
+              notes: { 8: "reshuffled" },
               caption:
                 "`PokemonPage.vue`: using a hint keeps the correct Pokémon and one random decoy, then reshuffles the two so the answer’s position on screen doesn’t give it away.",
             },

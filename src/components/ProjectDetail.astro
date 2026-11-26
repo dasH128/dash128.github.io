@@ -1,6 +1,7 @@
 ---
 import { content, collages, COLLAGE_SIZE, langPath, projectPath, type Lang } from "../i18n/content";
 import { projectBySlug, projectNav } from "../i18n/projects";
+import CodeBlock from "./CodeBlock.astro";
 
 interface Props {
   lang: Lang;
@@ -149,12 +150,7 @@ const rich = (s: string) =>
                   </div>
                 )}
 
-                {b.code && (
-                  <>
-                    <pre class="code"><code>{b.code.text}</code></pre>
-                    <p class="code__caption" set:html={rich(b.code.caption)} />
-                  </>
-                )}
+                {b.code && <CodeBlock code={b.code} ui={ui} />}
               </div>
 
               {b.shots && (
@@ -444,30 +440,6 @@ const rich = (s: string) =>
   }
 
   .row p {
-    color: var(--ink-soft);
-  }
-
-  .code {
-    margin: 0.25rem 0 0;
-    padding: 1.4rem 1.5rem;
-    background: var(--ink);
-    color: var(--paper);
-    border-radius: var(--radius-card);
-    box-shadow: var(--shadow-card);
-    overflow-x: auto;
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    line-height: 1.6;
-  }
-
-  .code code {
-    background: none;
-    padding: 0;
-    font-size: inherit;
-  }
-
-  .code__caption {
-    font-size: 0.92rem;
     color: var(--ink-soft);
   }
 
