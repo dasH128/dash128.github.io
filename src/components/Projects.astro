@@ -18,52 +18,57 @@ const items = t.items as readonly ProjectItem[];
         items.map((p, i) => {
           const collage = p.collage ? collages[p.collage] : undefined;
           return (
-          <li class="proj__row" data-cursor>
-            <span class="proj__n mono">{String(i + 1).padStart(2, "0")}</span>
-            <div class="proj__head">
-              <h3>{p.title}</h3>
-              <span class="mono proj__ctx">{p.context}</span>
-              {collage && (
-                <figure class="proj__collage">
-                  <img
-                    src={collage.src}
-                    alt={collage.alt[lang]}
-                    width={COLLAGE_SIZE.width}
-                    height={COLLAGE_SIZE.height}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </figure>
-              )}
-            </div>
-            <div class="proj__body">
-              <p>{p.detail}</p>
-              {p.outcome && <p class="proj__outcome">{p.outcome}</p>}
-              <ul class="proj__tags mono">
-                {p.tags.map((tag) => (
-                  <li>{tag}</li>
-                ))}
-              </ul>
-              {(p.href || p.demo) && (
-                <div class="proj__links">
-                  {p.href && (
-                    <a class="link" href={p.href}>
-                      {t.caseStudy} →
-                    </a>
-                  )}
-                  {p.demo && (
-                    <a class="link" href={p.demo} target="_blank" rel="noopener">
-                      {t.demo} ↗
-                    </a>
-                  )}
-                </div>
-              )}
-            </div>
-          </li>
+            <li class="proj__row" data-cursor data-collage={collage?.src}>
+              <span class="proj__n mono">{String(i + 1).padStart(2, "0")}</span>
+              <div class="proj__head">
+                <h3>{p.title}</h3>
+                <span class="mono proj__ctx">{p.context}</span>
+                {collage && (
+                  <figure class="proj__thumb">
+                    <img
+                      src={collage.src}
+                      alt={collage.alt[lang]}
+                      width={COLLAGE_SIZE.width}
+                      height={COLLAGE_SIZE.height}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </figure>
+                )}
+              </div>
+              <div class="proj__body">
+                <p>{p.detail}</p>
+                {p.outcome && <p class="proj__outcome">{p.outcome}</p>}
+                <ul class="proj__tags mono">
+                  {p.tags.map((tag) => (
+                    <li>{tag}</li>
+                  ))}
+                </ul>
+                {(p.href || p.demo) && (
+                  <div class="proj__links">
+                    {p.href && (
+                      <a class="link" href={p.href}>
+                        {t.caseStudy} →
+                      </a>
+                    )}
+                    {p.demo && (
+                      <a class="link" href={p.demo} target="_blank" rel="noopener">
+                        {t.demo} ↗
+                      </a>
+                    )}
+                  </div>
+                )}
+              </div>
+            </li>
           );
         })
       }
     </ol>
+  </div>
+
+  <!-- The floating preview (mouse only). Decorative, so hidden from assistive tech. -->
+  <div class="proj-preview" aria-hidden="true">
+    <img alt="" width={COLLAGE_SIZE.width} height={COLLAGE_SIZE.height} />
   </div>
 </section>
 
@@ -80,7 +85,9 @@ const items = t.items as readonly ProjectItem[];
     gap: 1.5rem;
     padding: clamp(1.75rem, 3.5vw, 2.75rem) 0;
     border-bottom: var(--rule) solid var(--ink);
-    transition: background 0.3s var(--ease-out), color 0.3s var(--ease-out), padding 0.4s var(--ease-out);
+    position: relative;
+    isolation: isolate;
+    transition: color 0.3s var(--ease-out);
   }
 
   .proj__row:last-child {
@@ -106,20 +113,13 @@ const items = t.items as readonly ProjectItem[];
     color: var(--ink-soft);
   }
 
-  /* Illustrated collage card: a slight tilt that straightens on hover (first piece of the
-     softer, more playful visual language; see DESIGN.md). */
-  .proj__collage {
-    margin: 0.75rem 0 0;
-    width: min(100%, 250px);
-    transform: rotate(-2deg);
-    transition: transform 0.5s var(--ease-out);
+  /* Thumbnail: only where there is no hover (phones, tablets). */
+  .proj__thumb {
+    display: none;
+    margin: 0;
   }
 
-  .proj__row:nth-child(even) .proj__collage {
-    transform: rotate(2deg);
-  }
-
-  .proj__collage img {
+  .proj__thumb img {
     width: 100%;
     height: auto;
     border-radius: var(--radius-card);
@@ -167,26 +167,99 @@ const items = t.items as readonly ProjectItem[];
     gap: 0.5rem 1.5rem;
   }
 
-  @media (hover: hover) {
+  /* Floating preview, positioned by the script. */
+  .proj-preview {
+    display: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .proj-preview {
+      display: block;
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 30;
+      width: clamp(180px, 15vw, 230px);
+      pointer-events: none;
+      opacity: 0;
+      scale: 0.7;
+      rotate: -4deg;
+      transition: opacity 0.25s var(--ease-out), scale 0.45s var(--ease-out);
+    }
+
+    .proj-preview.is-on {
+      opacity: 1;
+      scale: 1;
+    }
+
+    .proj-preview img {
+      width: 100%;
+      height: auto;
+      border-radius: var(--radius-card);
+      box-shadow: 0 30px 60px -22px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Blue panel that wipes up from the bottom edge, a little wider than the column. */
+    .proj__row::before {
+      content: "";
+      position: absolute;
+      inset: 0 calc(var(--gutter) * -1);
+      z-index: -1;
+      background: var(--blue);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.5s var(--ease-out);
+    }
+    .proj__row:hover::before {
+      transform: scaleY(1);
+    }
+
+    .proj__head h3 {
+      transition: transform 0.5s var(--ease-out);
+    }
     .proj__row:hover {
-      background: var(--ink);
-      color: var(--paper);
-      padding-inline: 1rem;
+      color: #fff;
+    }
+    .proj__row:hover .proj__head h3 {
+      transform: translateX(1rem);
     }
     .proj__row:hover .proj__n,
     .proj__row:hover .proj__ctx,
     .proj__row:hover .proj__body p {
-      color: color-mix(in srgb, var(--paper) 72%, transparent);
-    }
-    .proj__row:hover .proj__collage {
-      transform: rotate(0deg) scale(1.03);
+      color: color-mix(in srgb, #fff 86%, transparent);
     }
     .proj__row:hover .proj__outcome {
-      background: var(--blue-on-ink);
-      color: var(--ink) !important;
+      background: #fff;
+      color: var(--blue) !important;
     }
     .proj__row:hover .link:hover {
-      color: var(--blue-on-ink);
+      color: var(--ink);
+    }
+  }
+
+  @media (hover: none) {
+    .proj__head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) clamp(72px, 22vw, 96px);
+      grid-template-areas:
+        "title thumb"
+        "ctx thumb";
+      column-gap: 1rem;
+      align-items: start;
+    }
+    .proj__head h3 {
+      grid-area: title;
+    }
+    .proj__ctx {
+      grid-area: ctx;
+    }
+    .proj__thumb {
+      display: block;
+      grid-area: thumb;
+      rotate: -3deg;
+    }
+    .proj__row:nth-child(even) .proj__thumb {
+      rotate: 3deg;
     }
   }
 
@@ -202,8 +275,81 @@ const items = t.items as readonly ProjectItem[];
 
   @media (prefers-reduced-motion: reduce) {
     .proj__row,
-    .proj__collage {
+    .proj__row::before,
+    .proj__head h3,
+    .proj-preview {
       transition: none;
     }
   }
 </style>
+
+<script>
+  // Floating collage that follows the cursor while it is over a project row (mouse only).
+  const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const section = document.querySelector<HTMLElement>("#work");
+  const box = section?.querySelector<HTMLElement>(".proj-preview");
+  const img = box?.querySelector("img");
+  const rows = section ? [...section.querySelectorAll<HTMLElement>(".proj__row[data-collage]")] : [];
+
+  if (fine && section && box && img && rows.length) {
+    // Fetch the pictures a little before the list scrolls into view, so the first hover
+    // never shows a blank frame. Nothing is downloaded on touch devices.
+    const warm = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        rows.forEach((r) => (new Image().src = r.dataset.collage!));
+        warm.disconnect();
+      },
+      { rootMargin: "400px 0px" },
+    );
+    warm.observe(section);
+
+    let tx = 0,
+      ty = 0,
+      x = 0,
+      y = 0,
+      running = false;
+
+    // Centred on the cursor (a touch above its middle), kept inside the window.
+    const place = () => {
+      const w = box.offsetWidth;
+      const h = box.offsetHeight;
+      const left = Math.min(Math.max(x - w / 2, 8), innerWidth - w - 8);
+      const top = Math.min(Math.max(y - h * 0.45, 8), innerHeight - h - 8);
+      box.style.transform = `translate3d(${Math.round(left)}px, ${Math.round(top)}px, 0)`;
+    };
+
+    const loop = () => {
+      x += (tx - x) * (calm ? 1 : 0.16);
+      y += (ty - y) * (calm ? 1 : 0.16);
+      place();
+      running = box.classList.contains("is-on");
+      if (running) requestAnimationFrame(loop);
+    };
+
+    addEventListener(
+      "pointermove",
+      (e) => {
+        tx = e.clientX;
+        ty = e.clientY;
+      },
+      { passive: true },
+    );
+
+    rows.forEach((row) => {
+      row.addEventListener("pointerenter", (e) => {
+        tx = x = e.clientX;
+        ty = y = e.clientY;
+        img.src = row.dataset.collage!;
+        place();
+        box.classList.add("is-on");
+        if (!running) {
+          running = true;
+          requestAnimationFrame(loop);
+        }
+      });
+      row.addEventListener("pointerleave", () => box.classList.remove("is-on"));
+    });
+  }
+</script>
