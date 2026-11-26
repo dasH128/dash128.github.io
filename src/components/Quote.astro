@@ -1,0 +1,158 @@
+---
+import { content, type Lang } from "../i18n/content";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = content[lang].quote;
+
+// Hand-drawn zigzags scattered around the text: [left %, top %].
+const squiggles = [
+  [6, 14], [14, 62], [22, 30], [8, 86], [86, 12], [92, 48], [80, 80], [70, 24], [30, 90], [60, 92], [50, 8], [95, 90],
+];
+---
+
+<section class="quote">
+  <div class="quote__squiggles" aria-hidden="true">
+    {
+      squiggles.map(([x, y], i) => (
+        <svg
+          class="squiggle"
+          viewBox="0 0 34 20"
+          style={`left:${x}%;top:${y}%;--r:${(i * 37) % 60 - 30}deg;--i:${i}`}
+        >
+          <path d="M2 14 L8 4 L13 15 L19 5 L24 15 L31 6"></path>
+        </svg>
+      ))
+    }
+  </div>
+
+  <blockquote class="quote__body" data-quote>
+    <p class="quote__text">
+      {t.lines.map((line, i) => <span class="quote__line" style={`--i:${i}`}>{line}</span>)}
+    </p>
+    <footer class="quote__by" style={`--i:${t.lines.length}`}>{t.by}</footer>
+  </blockquote>
+</section>
+
+<style>
+  .quote {
+    position: relative;
+    min-height: clamp(26rem, 58vh, 38rem);
+    display: grid;
+    place-items: center;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .quote__body {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    padding-inline: var(--gutter);
+  }
+
+  .quote__text {
+    max-width: none;
+    font-family: var(--font-hand);
+    font-size: clamp(1.9rem, 5vw, 4.6rem);
+    line-height: 1.3;
+    color: var(--blue);
+  }
+
+  .quote__line {
+    display: block;
+  }
+
+  .quote__by {
+    margin-top: 1.75rem;
+    font-family: var(--font-hand);
+    font-size: clamp(1.25rem, 2.2vw, 2rem);
+    color: var(--ink);
+  }
+
+  /* A short hand-drawn dash before the attribution (decorative). */
+  .quote__by::before {
+    content: "";
+    display: inline-block;
+    width: 2.2rem;
+    height: 2px;
+    margin-right: 0.7rem;
+    vertical-align: middle;
+    background: currentColor;
+  }
+
+  .quote__squiggles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .squiggle {
+    position: absolute;
+    width: 34px;
+    height: 20px;
+    overflow: visible;
+    rotate: var(--r);
+  }
+
+  .squiggle path {
+    fill: none;
+    stroke: var(--blue);
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+
+  /* Text writes itself left to right once, and the squiggles pop in. Without JS or with
+     reduced motion everything is simply visible. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html.js) .quote__line,
+    :global(html.js) .quote__by {
+      clip-path: inset(0 100% 0 0);
+    }
+
+    :global(html.js) .squiggle {
+      opacity: 0;
+      scale: 0.2;
+    }
+
+    :global(html.js) .quote.is-in .quote__line,
+    :global(html.js) .quote.is-in .quote__by {
+      clip-path: inset(0 0 0 0);
+      transition: clip-path 1.5s ease-in-out calc(var(--i) * 1.1s + 0.2s);
+    }
+
+    :global(html.js) .quote.is-in .squiggle {
+      opacity: 1;
+      scale: 1;
+      transition: opacity 0.5s calc(var(--i) * 0.06s), scale 0.7s var(--ease-out) calc(var(--i) * 0.06s);
+    }
+  }
+
+  @media (max-width: 700px) {
+    .squiggle:nth-child(n + 8) {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const section = document.querySelector<HTMLElement>(".quote");
+  if (section) {
+    if (!("IntersectionObserver" in window)) {
+      section.classList.add("is-in");
+    } else {
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            section.classList.add("is-in");
+            io.disconnect();
+          }
+        },
+        { threshold: 0.35 },
+      );
+      io.observe(section);
+    }
+  }
+</script>

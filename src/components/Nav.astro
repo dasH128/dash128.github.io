@@ -14,12 +14,13 @@ const section = (id: string) => (page === "home" ? `#${id}` : `${home}#${id}`);
 // Same page, other language.
 const switchTo = (l: Lang) => (page === "about" ? aboutPath(l) : langPath(l));
 
+// Same order as the sections on the home page (see pages/[lang]/index.astro).
 const links = [
   { href: aboutPath(lang), label: t.about, current: page === "about" },
-  { href: section("work"), label: t.work },
-  { href: section("experience"), label: t.experience },
-  { href: section("stack"), label: t.stack },
-  { href: section("education"), label: t.education },
+  { href: section("experience"), label: t.experience, id: "experience" },
+  { href: section("work"), label: t.work, id: "work" },
+  { href: section("stack"), label: t.stack, id: "stack" },
+  { href: section("education"), label: t.education, id: "education" },
 ];
 ---
 
@@ -28,7 +29,13 @@ const links = [
     <a href={page === "home" ? "#top" : home} class="nav__mark" aria-label={t.home}>jordy<span>.</span></a>
 
     <nav class="nav__links mono" aria-label={t.aria}>
-      {links.map((l) => <a href={l.href} aria-current={l.current ? "page" : undefined}>{l.label}</a>)}
+      {
+        links.map((l) => (
+          <a href={l.href} aria-current={l.current ? "page" : undefined} data-section={page === "home" ? l.id : undefined}>
+            {l.label}
+          </a>
+        ))
+      }
     </nav>
 
     <div class="nav__end">
@@ -72,7 +79,7 @@ const links = [
       {
         links.map((l, i) => (
           <li>
-            <a href={l.href} aria-current={l.current ? "page" : undefined}>
+            <a href={l.href} aria-current={l.current ? "page" : undefined} data-section={page === "home" ? l.id : undefined}>
               <span class="mono" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
               {l.label}
             </a>
@@ -156,12 +163,12 @@ const links = [
   }
 
   .nav__links a:hover::after,
-  .nav__links a[aria-current="page"]::after {
+  .nav__links a[aria-current]::after {
     transform: scaleX(1);
     transform-origin: left;
   }
 
-  .nav__links a[aria-current="page"] {
+  .nav__links a[aria-current] {
     color: var(--blue);
   }
 
@@ -323,7 +330,7 @@ const links = [
       opacity: 0.75;
     }
 
-    .menu ol a[aria-current="page"] {
+    .menu ol a[aria-current] {
       text-decoration: underline;
       text-decoration-thickness: 3px;
       text-underline-offset: 6px;
@@ -415,6 +422,37 @@ const links = [
     matchMedia("(min-width: 861px)").addEventListener("change", (e) => {
       if (e.matches) setOpen(false);
     });
+  }
+
+  // Scroll-spy: on the home page, mark the link of the section under the middle of the
+  // viewport. `aria-current="location"` is the right value for "where you are on this page".
+  const spy = [...document.querySelectorAll<HTMLAnchorElement>("[data-nav] a[data-section]")];
+  if (spy.length) {
+    const sections = [...new Set(spy.map((a) => a.dataset.section!))]
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => !!el);
+    let queued = false;
+    const update = () => {
+      queued = false;
+      const line = innerHeight * 0.4;
+      const current = sections.find((el) => {
+        const r = el.getBoundingClientRect();
+        return r.top <= line && r.bottom > line;
+      });
+      spy.forEach((a) => {
+        if (current && a.dataset.section === current.id) a.setAttribute("aria-current", "location");
+        else a.removeAttribute("aria-current");
+      });
+    };
+    const queue = () => {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    };
+    addEventListener("scroll", queue, { passive: true });
+    addEventListener("resize", queue);
+    update();
   }
 
   // Live Porto clock (decorative, hidden from assistive tech).

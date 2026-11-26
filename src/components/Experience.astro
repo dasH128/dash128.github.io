@@ -10,7 +10,8 @@ const t = content[lang].experience;
 
 <section id="experience">
   <div class="wrap">
-    <h2 class="section-title">{t.title}</h2>
+    <h2 class="section-title exp__title">{t.title}</h2>
+    <p class="exp__sub">{t.sub}</p>
 
     <ol class="exp">
       {
@@ -35,6 +36,16 @@ const t = content[lang].experience;
 </section>
 
 <style>
+  .exp__title {
+    margin-bottom: 1.25rem;
+  }
+
+  .exp__sub {
+    font-size: 1.25rem;
+    color: var(--ink-soft);
+    margin-bottom: clamp(2.5rem, 6vw, 5rem);
+  }
+
   .exp {
     list-style: none;
     padding: 0;

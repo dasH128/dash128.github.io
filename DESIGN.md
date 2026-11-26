@@ -27,7 +27,7 @@ rounded:
 spacing:
   section: "clamp(4rem, 9vw, 8rem)"
   gutter: "clamp(1.25rem, 4vw, 3rem)"
-  rule: "2px"
+  rule: "1.5px"
 ---
 
 # Design System: Jordy Rojas Aliaga — Portfolio
@@ -39,15 +39,18 @@ The system is moving toward the softer, more playful prototype in `resource/port
 Constraints that do NOT change: one blue accent (the prototype's green Portugal stamp is out), all copy in `content.ts` for every language in `langs` (today `es` and `en`), no scroll-jacking, no page-transition curtain on every click, intro only on first visit and skippable.
 
 Migrated so far:
-- Nav (`Nav.astro`): handwritten `jordy.` logo (`--font-hand`), links in one outlined pill with a sliding blue underline, segmented ES/EN pill (current language filled ink), blue pill CTA, decorative Porto clock from 1100px. Under 860px: burger plus a full-screen blue menu (hidden with `visibility`, rest of the page `inert` while open, Escape closes and returns focus, page scroll locked). Labels live in `content.nav` (`menuOpen`, `menuClose`, `clock`).
+- Nav (`Nav.astro`): handwritten `jordy.` logo (`--font-hand`), links in one outlined pill with a sliding blue underline, segmented ES/EN pill (current language filled ink), blue pill CTA, decorative Porto clock from 1100px. On the home page a scroll-spy marks the link of the section under 40% of the viewport with `aria-current="location"` (same blue + underline as the current page); About keeps `aria-current="page"`. Under 860px: burger plus a full-screen blue menu (hidden with `visibility`, rest of the page `inert` while open, Escape closes and returns focus, page scroll locked). Labels live in `content.nav` (`menuOpen`, `menuClose`, `clock`).
 - Contact (`Contact.astro`): opens with the rotary-phone sticker (`public/contact/phone.png`, rings on hover) and the email as a big Anton button that copies on click (toast; falls back to selecting the text if the clipboard is blocked). LinkedIn and GitHub as outlined pills. Then the contract (unchanged copy), and the handwritten signature plus a solid "Sign by email" pill (`mailto:`) closes it. The phone is decoration only: no phone number is published and no copy invites a call. New strings live in `content.contact` (`lead`, `copyHint`, `copied`, `copyFailed`, `phoneAlt`, `github`); `GITHUB` is exported next to `LINKEDIN`.
+- Hero (`Hero.astro`): says who he is, not the stance. Giant Anton words "¡Hola! / Soy / Jordy" around a black-and-white cut-out photo with a paper outline and four hand-drawn blue lines that draw themselves; role line in mono, two pills (Lima ✈ Porto, years), a line that types rotating phrases (static first phrase without JS or with reduced motion). The real `h1` is `sr-only`; the big words are decorative. Below: one-sentence proof, a pill "See my work" button and "Write to me" link, then the three stats. Under 820px it stacks. `.btn` is now a blue pill site-wide (also used by the About teaser); `.btn--paper` was removed. Copy in `content.hero`.
+- Experience title is now the stance line, with a one-line sub ("Four companies, two countries and one habit: shipping.").
+- Rhythm pass: `--rule` is 1.5px; the global top rule on `section` is gone and vertical padding grew, so About and Home breathe like the prototype. `AboutTeaser` sits on `--paper-dim`. New `Quote.astro` right after the hero: the keyboard rule in handwriting that writes itself on entering the viewport, plus scattered zigzags (about 58% of the viewport tall; plain visible text without JS or with reduced motion). Copy in `content.quote`. The phrase is Jordy's own (confirmed 2026-11-26).
 - Project collages (`collages` in `content.ts`, files in `public/projects/collages/`): tilted card, `--radius-card`, `--shadow-card`. Shown in the Projects list for all five projects.
 
 ## Overview
 
 **Creative North Star: "The Hard Problem"**
 
-The site says one thing and says it loudly: "No busco trabajo. Busco el problema difícil." Everything serves that confidence. Type does the heavy lifting (huge, condensed, uppercase), color is rationed to a single azulejo blue (a nod to Porto), and structure comes from 2px ink rules, not boxes or shadows-as-depth.
+The site's stance is "Busco el problema difícil." (figurative: easy work does not interest him, challenges do). It lives in the Experience section, not the hero. Everything serves that confidence. Type does the heavy lifting (huge, condensed, uppercase), color is rationed to a single azulejo blue (a nod to Porto), and structure comes from space, background changes and thin ink rules inside lists, not boxes.
 
 Inspiration is worksruthi.com: personality from oversized type, one brand color and a few theatrical moments. Palette, voice and content are Jordy's own; do not drift toward that site's red or Impact-on-black look.
 
@@ -78,7 +81,7 @@ Inspiration is worksruthi.com: personality from oversized type, one brand color 
 
 ## Layout
 
-Single-column stack: marquee, sticky nav, hero, experience, projects, stack, education, contact (dark). `.wrap` is `min(1240px, 100% - 2 * gutter)`. Sections are separated by a 2px ink top rule.
+Single-column stack: marquee, sticky nav, hero, experience, projects, stack, education, contact (dark). `.wrap` is `min(1240px, 100% - 2 * gutter)`. Sections are separated by space (`clamp(5rem, 11vw, 10rem)` of vertical padding) and, where a beat is needed, a background change (paper-dim, blue, ink). No rule between sections.
 
 - **Hero:** 12-col grid. Copy spans columns 1-9 and the photo 8-12, so the headline can overlap the photo column slightly. Stacks under 700px. The subtitle is capped to 77% of the copy column so it never runs under the photo.
 - **Lists (experience, projects, stack, education):** ruled rows. Experience and projects are `3.5rem | 1.1fr | 1fr` and stack on narrow screens.
@@ -90,7 +93,7 @@ Single-column stack: marquee, sticky nav, hero, experience, projects, stack, edu
 - **Link (`.link`):** underlined 2px, turns blue on hover.
 - **Marquee:** ink bar, mono text, 38s linear loop, static with reduced motion.
 - **Nav:** sticky, paper, 2px bottom rule. See "Migrated so far" for the current pill-based design (this line predates it).
-- **Stats:** three huge numerals between ink rules. The last one is blue.
+- **Stats:** three huge numerals, each with one thin ink rule above it and space between them (no boxed grid). The last one is blue.
 - **Project row:** big title, mono context, description, outcome chip (blue), mono tags. On hover (pointer devices) the row inverts to ink. Projects with public screenshots show a cover: 16:10 frame, blue ground, ink border, hard shadow.
 - **Stack list:** outline text that fills as each group crosses the middle of the screen. Progressive enhancement, filled by default.
 - **Contact contract:** ink section. See "Migrated so far" for the current order (phone and copyable email, then four numbered clauses, then handwritten signature). This line predates it.
@@ -129,7 +132,7 @@ Entrance (`rise`) on the hero copy, doodles that draw themselves on entering the
 **Do**
 - Keep headings in Anton uppercase and let scale carry the hierarchy.
 - Use blue for emphasis and `blue-on-ink` on dark.
-- Use 2px ink rules and hard-offset shadows.
+- Use thin (1.5px) ink rules only to order lists, and space or background to separate sections.
 - Pass user-visible text through `content.ts`, never hardcode it in a component.
 - Add `data-cursor` to any new large interactive surface that isn't a link or button.
 

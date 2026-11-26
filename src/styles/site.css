@@ -8,7 +8,8 @@
   --ink-soft: #5a564c;
   --blue: #2342e8;
   --blue-on-ink: #8a99ff;
-  --rule: 2px;
+  /* Thin rules only inside lists (experience, projects, ...). Sections are separated by space and background, not lines. */
+  --rule: 1.5px;
   --radius-card: 6px;
   --shadow-card: 0 28px 48px -28px rgba(20, 19, 15, 0.55);
 
@@ -95,6 +96,15 @@ p {
   margin-inline: auto;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .mono {
   font-family: var(--font-mono);
   font-size: 0.78rem;
@@ -103,8 +113,7 @@ p {
 }
 
 section {
-  padding-block: clamp(4rem, 9vw, 8rem);
-  border-top: var(--rule) solid var(--ink);
+  padding-block: clamp(5rem, 11vw, 10rem);
 }
 
 .section-title {
@@ -113,42 +122,31 @@ section {
   margin-bottom: clamp(2.5rem, 6vw, 5rem);
 }
 
-/* Buttons: flat, hard offset shadow */
+/* Buttons: pills. Solid blue, darkens to ink on hover. */
 .btn {
   display: inline-flex;
   align-items: center;
   gap: 0.6em;
-  padding: 0.95em 1.5em;
+  padding: 0.85em 1.5em;
   background: var(--blue);
   color: #fff;
-  border: var(--rule) solid var(--ink);
-  box-shadow: 5px 5px 0 var(--ink);
+  border: 1.5px solid var(--blue);
+  border-radius: 99px;
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 1rem;
   text-decoration: none;
-  transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
+  transition: background 0.2s var(--ease-out), border-color 0.2s var(--ease-out), transform 0.2s var(--ease-out);
 }
 
 .btn:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 7px 7px 0 var(--ink);
+  background: var(--ink);
+  border-color: var(--ink);
+  transform: translateY(-2px);
 }
 
 .btn:active {
-  transform: translate(3px, 3px);
-  box-shadow: 2px 2px 0 var(--ink);
-}
-
-.btn--paper {
-  background: var(--paper);
-  color: var(--ink);
-  border-color: var(--paper);
-  box-shadow: 5px 5px 0 var(--blue-on-ink);
-}
-
-.btn--paper:hover {
-  box-shadow: 7px 7px 0 var(--blue-on-ink);
+  transform: translateY(0);
 }
 
 .link {

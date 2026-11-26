@@ -41,16 +41,20 @@ const es: Content = {
     meta: {
       title: "Jordy Rojas Aliaga · Ingeniero Fullstack y Mobile",
       description:
-        "Jordy Rojas Aliaga, ingeniero fullstack y mobile en Porto. 8+ años lanzando producto web y móvil en Portugal y Perú. No busca trabajo: busca el problema difícil.",
+        "Jordy Rojas Aliaga, ingeniero fullstack y mobile en Porto. 8+ años lanzando producto web y móvil en Portugal y Perú. Le interesan los problemas difíciles, no los fáciles.",
     },
     marquee: [
       "Porto ↔ Lima",
       "Flutter + NestJS",
       "8+ años lanzando software",
       "ES · PT · EN",
-      "Busco el problema difícil",
+      "Programando desde 2015",
     ],
     intro: ["Hola", "Soy", "Jordy"],
+    quote: {
+      lines: ["“lánzalo el viernes,", "duerme tranquilo el sábado,", "sigue funcionando el lunes.”"],
+      by: "regla n.º 1 de mi teclado",
+    },
     aboutTeaser: {
       title: "Lo que no cabe en el CV.",
       text: "De Lima a Porto, ocho años de oficio y una costumbre: ir primero por el problema difícil.",
@@ -170,11 +174,17 @@ const es: Content = {
       clock: "Porto",
     },
     hero: {
-      lineA: "No busco trabajo.",
-      lineB: "Busco el problema difícil.",
-      sub: "Soy Jordy Rojas, ingeniero fullstack y mobile en Porto. Flutter, NestJS y 8+ años lanzando producto entre Perú y Portugal. Si alguien ya resolvió tu problema, no me necesitas. Si no, cuéntamelo.",
-      cta: "Cuéntame el problema",
-      secondary: "Ver proyectos",
+      h1: "Jordy Rojas Aliaga, ingeniero fullstack y mobile de Lima, ahora en Porto",
+      hello: "¡Hola!",
+      soy: "Soy",
+      name: "Jordy",
+      role: "Ingeniero fullstack y mobile · Porto, PT",
+      pillRoute: "🇵🇪 Lima ✈ 🇵🇹 Porto",
+      pillYears: "+8 años creando software",
+      typed: ["jordy rojas aliaga", "de Lima, Perú", "ahora en Porto", "Flutter y NestJS", "programando desde 2015"],
+      sub: "Flutter, NestJS y más de 8 años lanzando producto entre Perú y Portugal. Lideré una app de escritorio dentro de una fábrica real.",
+      cta: "Ver proyectos",
+      secondary: "Escríbeme",
       photoAlt: "Jordy Rojas sonriendo, con gorro de pescador y las manos en los bolsillos",
       statsLabel: "Cifras de mi trayectoria",
       stats: [
@@ -184,7 +194,8 @@ const es: Content = {
       ],
     },
     experience: {
-      title: "Cuatro empresas. Una costumbre: entregar.",
+      title: "Busco el problema difícil.",
+      sub: "Cuatro empresas, dos países y una costumbre: entregar.",
       roles: [
         {
           company: "Motorline",
@@ -347,16 +358,20 @@ const en: Content = {
     meta: {
       title: "Jordy Rojas Aliaga · Fullstack & Mobile Engineer",
       description:
-        "Jordy Rojas Aliaga, fullstack and mobile engineer in Porto. 8+ years shipping web and mobile products across Portugal and Peru. Not looking for a job: looking for the hard problem.",
+        "Jordy Rojas Aliaga, fullstack and mobile engineer in Porto. 8+ years shipping web and mobile products across Portugal and Peru. Drawn to hard problems, not easy ones.",
     },
     marquee: [
       "Porto ↔ Lima",
       "Flutter + NestJS",
       "8+ years shipping software",
       "ES · PT · EN",
-      "Looking for the hard problem",
+      "Coding since 2015",
     ],
     intro: ["Hello", "I'm", "Jordy"],
+    quote: {
+      lines: ["“ship it on Friday,", "sleep well on Saturday,", "still working on Monday.”"],
+      by: "rule no. 1 of my keyboard",
+    },
     aboutTeaser: {
       title: "What doesn't fit on a resume.",
       text: "From Lima to Porto, eight years of craft and one habit: going for the hard problem first.",
@@ -476,11 +491,17 @@ const en: Content = {
       clock: "Porto",
     },
     hero: {
-      lineA: "I'm not looking for a job.",
-      lineB: "I'm looking for the hard problem.",
-      sub: "I'm Jordy Rojas, a fullstack and mobile engineer in Porto. Flutter, NestJS and 8+ years shipping product between Peru and Portugal. If someone already solved your problem, you don't need me. If not, tell me about it.",
-      cta: "Tell me the problem",
-      secondary: "See the work",
+      h1: "Jordy Rojas Aliaga, fullstack and mobile engineer from Lima, now in Porto",
+      hello: "Hi!",
+      soy: "I'm",
+      name: "Jordy",
+      role: "Fullstack & mobile engineer · Porto, PT",
+      pillRoute: "🇵🇪 Lima ✈ 🇵🇹 Porto",
+      pillYears: "8+ years building software",
+      typed: ["jordy rojas aliaga", "from Lima, Peru", "now in Porto", "Flutter & NestJS", "coding since 2015"],
+      sub: "Flutter, NestJS and 8+ years shipping product between Peru and Portugal. I led a desktop app inside a real factory.",
+      cta: "See my work",
+      secondary: "Write to me",
       photoAlt: "Jordy Rojas smiling, wearing a bucket hat with hands in pockets",
       statsLabel: "Career numbers",
       stats: [
@@ -490,7 +511,8 @@ const en: Content = {
       ],
     },
     experience: {
-      title: "Four companies. One habit: shipping.",
+      title: "I look for the hard problem.",
+      sub: "Four companies, two countries and one habit: shipping.",
       roles: [
         {
           company: "Motorline",
@@ -749,6 +771,8 @@ export interface Content {
   meta: { title: string; description: string };
   marquee: string[];
   intro: string[];
+  /** A breather between the hero and the rest, in handwriting. */
+  quote: { lines: string[]; by: string };
   aboutTeaser: { title: string; text: string; cta: string };
   about: {
     meta: { title: string; description: string };
@@ -784,8 +808,16 @@ export interface Content {
     clock: string;
   };
   hero: {
-    lineA: string;
-    lineB: string;
+    /** Real, accessible heading. The big words on screen are decorative. */
+    h1: string;
+    hello: string;
+    soy: string;
+    name: string;
+    role: string;
+    pillRoute: string;
+    pillYears: string;
+    /** Phrases the hero types out in turn. The first one is the static fallback. */
+    typed: string[];
     sub: string;
     cta: string;
     secondary: string;
@@ -795,6 +827,7 @@ export interface Content {
   };
   experience: {
     title: string;
+    sub: string;
     roles: { company: string; role: string; place: string; dates: string; detail: string }[];
   };
   projects: { title: string; caseStudy: string; demo: string; items: ProjectItem[] };
