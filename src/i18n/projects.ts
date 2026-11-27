@@ -223,7 +223,7 @@ export const projects: ProjectDetail[] = [
         title: "API de reportes PDF",
         tagline: "Entran datos, salen documentos impecables.",
         description:
-          "Una API en NestJS y Prisma que convierte registros de la base de datos en reportes PDF bajo demanda: facturas, certificados, tablas y paneles con gráficos integrados.",
+          "API en NestJS y Prisma que genera reportes PDF bajo demanda: facturas, certificados, tablas y paneles con gráficos.",
         client: "Proyecto personal",
         role: "Ingeniero backend",
         year: "2024",
@@ -403,7 +403,7 @@ export const projects: ProjectDetail[] = [
         title: "Cinemapedia",
         tagline: "Una guía de bolsillo de lo que está en cartelera.",
         description:
-          "Una app Flutter para descubrir películas: estrenos, populares y próximas de TMDB, con búsqueda, reparto y sinopsis en cada detalle y favoritos sin conexión con Isar.",
+          "App Flutter para descubrir películas con datos de TMDB: búsqueda, reparto y sinopsis, y favoritos sin conexión con Isar.",
         client: "Proyecto personal",
         role: "Ingeniero móvil",
         year: "2024",
@@ -513,7 +513,7 @@ export const projects: ProjectDetail[] = [
         title: "Cinemapedia",
         tagline: "A pocket guide to what’s showing in theaters.",
         description:
-          "A Flutter mobile app for discovering movies: now playing, popular, and upcoming titles from TMDB, with debounced search, cast and synopsis on every detail page, and favorites persisted offline with Isar.",
+          "Flutter app to discover movies with TMDB data: search, cast and synopsis, and favorites saved offline with Isar.",
         client: "Personal project",
         role: "Mobile engineer",
         year: "2024",
@@ -632,7 +632,7 @@ export const projects: ProjectDetail[] = [
         title: "¿Quién es ese Pokémon?",
         tagline: "Adivina la silueta. Supera el ranking.",
         description:
-          "Un juego de trivia en Vue 3 y TypeScript sobre PokeAPI: adivina el Pokémon por su silueta antes de que se acaben el tiempo y los corazones, con tres niveles de dificultad y un ranking local.",
+          "Juego de trivia en Vue 3 y TypeScript sobre PokeAPI: adivina el Pokémon por su silueta antes de que se acaben el tiempo y los corazones.",
         client: "Proyecto personal",
         role: "Ingeniero frontend",
         year: "2021–2026",
@@ -718,7 +718,7 @@ export const projects: ProjectDetail[] = [
         title: "¿Quién es ese Pokémon?",
         tagline: "Guess the silhouette. Beat the leaderboard.",
         description:
-          "A Vue 3 + TypeScript trivia game built on PokeAPI: guess the Pokémon from its silhouette before the clock and your hearts run out, across three difficulty tiers with a local high-score board.",
+          "Vue 3 + TypeScript trivia game on PokeAPI: guess the Pokémon from its silhouette before the clock and your hearts run out.",
         client: "Personal project",
         role: "Frontend engineer",
         year: "2021–2026",

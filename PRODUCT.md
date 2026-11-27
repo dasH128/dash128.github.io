@@ -20,7 +20,7 @@ A personal portfolio for Jordy Rojas Aliaga, a fullstack and mobile software eng
 
 ## Positioning
 
-Confident and a little cheeky. The site does not beg for a job. Its stance is "Busco el problema difícil." (EN: "I look for the hard problem."), meant figuratively: Jordy is open to work, but easy work does not interest him, hard problems and challenges do. It is NOT a claim that he is not looking for work. The old two-line version ("No busco trabajo. Busco el problema difícil.") was retired from the hero because a quick reader can take it literally. Personality comes from oversized condensed type, one azulejo blue, a first-visit intro, hand-drawn doodles, and a contact section written as "Terms and conditions of hiring me". Humor is meant to convey confidence, not to joke around.
+Confident and a little cheeky. The site does not beg for a job. Its stance is "No busco trabajo. Busco el problema difícil." (EN: "I'm not looking for a job. I'm looking for the hard problem."), meant figuratively: Jordy is open to work, but easy work does not interest him, hard problems and challenges do. It is NOT a claim that he is not looking for work. It lives in the Experience section, not in the hero, because a quick reader can take it literally in the first screen; the sentence under it and the figures in the rows disprove that reading. Personality comes from oversized condensed type, one azulejo blue, a first-visit intro, hand-drawn doodles, and a contact section written as "Terms and conditions of hiring me". Humor is meant to convey confidence, not to joke around.
 
 ## Operating Context
 
@@ -39,7 +39,7 @@ Single-developer static site, no backend or CMS. Viewed on desktop and mobile, u
 
 - Name: Jordy Rojas Aliaga.
 - Visual inspiration (not to be copied): worksruthi.com, for its personality through type and a single brand color. This site keeps its own palette, voice and content.
-- Stance line: "Busco el problema difícil." Lives in the Experience section title (paid off by contract clause 4 in Contact), not in the hero. The hero says who he is: "¡Hola! Soy Jordy", role, Lima ✈ Porto. "Tu CV como contrato" stays as the contact concept.
+- Stance line: "No busco trabajo. Busco el problema difícil." (full sentence, restored on 2026-11-27 after having been shortened). Lives in the Experience section title (paid off by contract clause 4 in Contact), not in the hero. The hero says who he is: "¡Hola! Soy Jordy", role, Lima ✈ Porto. "Tu CV como contrato" stays as the contact concept.
 
 ## Evidence on Hand
 

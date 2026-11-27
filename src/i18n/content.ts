@@ -7,6 +7,14 @@ export const EMAIL = "rojas71421@gmail.com";
 export const LINKEDIN = "https://www.linkedin.com/in/dash128/";
 export const GITHUB = "https://github.com/dasH128";
 
+/** The root URL redirects by language with JavaScript, but chats and social networks do not run
+    scripts: they read this, so it has to work for any reader, hence both languages. */
+export const rootMeta = {
+  title: "Jordy Rojas Aliaga · Fullstack & Mobile Engineer",
+  description: "Ingeniero fullstack y mobile en Porto · Fullstack & mobile engineer in Porto. Flutter, NestJS.",
+  ogAlt: "Jordy Rojas Aliaga, fullstack & mobile engineer, Lima to Porto",
+};
+
 export function langPath(lang: Lang): string {
   const base = import.meta.env.BASE_URL.replace(/\/$/, "");
   return `${base}/${lang}/`;
@@ -45,8 +53,11 @@ const es: Content = {
     ogLocale: "es_ES",
     meta: {
       title: "Jordy Rojas Aliaga · Ingeniero Fullstack y Mobile",
+      // Short on purpose: chats and social networks cut long descriptions.
       description:
-        "Jordy Rojas Aliaga, ingeniero fullstack y mobile en Porto. 8+ años lanzando producto web y móvil en Portugal y Perú. Le interesan los problemas difíciles, no los fáciles.",
+        "Ingeniero fullstack y mobile en Porto. 8+ años lanzando producto entre Perú y Portugal. Flutter, NestJS y problemas difíciles.",
+      jobTitle: "Ingeniero fullstack y mobile",
+      ogAlt: "Jordy Rojas Aliaga, ingeniero fullstack y mobile, de Lima a Porto",
     },
     marquee: [
       "Porto ↔ Lima",
@@ -211,7 +222,7 @@ const es: Content = {
       ],
     },
     experience: {
-      title: "Busco el problema difícil.",
+      title: "No busco trabajo. Busco el problema difícil.",
       sub: "Cuatro empresas, dos países y una costumbre: entregar.",
       roles: [
         {
@@ -400,8 +411,11 @@ const en: Content = {
     ogLocale: "en_US",
     meta: {
       title: "Jordy Rojas Aliaga · Fullstack & Mobile Engineer",
+      // Short on purpose: chats and social networks cut long descriptions.
       description:
-        "Jordy Rojas Aliaga, fullstack and mobile engineer in Porto. 8+ years shipping web and mobile products across Portugal and Peru. Drawn to hard problems, not easy ones.",
+        "Fullstack and mobile engineer in Porto. 8+ years shipping product between Peru and Portugal. Flutter, NestJS and hard problems.",
+      jobTitle: "Fullstack and mobile engineer",
+      ogAlt: "Jordy Rojas Aliaga, fullstack and mobile engineer, from Lima to Porto",
     },
     marquee: [
       "Porto ↔ Lima",
@@ -566,7 +580,7 @@ const en: Content = {
       ],
     },
     experience: {
-      title: "I look for the hard problem.",
+      title: "I'm not looking for a job. I'm looking for the hard problem.",
       sub: "Four companies, two countries and one habit: shipping.",
       roles: [
         {
@@ -850,7 +864,14 @@ export interface ProjectItem {
 export interface Content {
   htmlLang: string;
   ogLocale: string;
-  meta: { title: string; description: string };
+  meta: {
+    title: string;
+    description: string;
+    /** For the structured data (schema.org Person). */
+    jobTitle: string;
+    /** Alt text of the share image. */
+    ogAlt: string;
+  };
   marquee: string[];
   /** First-visit intro: giant words as windows onto moving images. */
   intro: {
