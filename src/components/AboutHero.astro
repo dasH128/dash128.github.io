@@ -1,127 +1,211 @@
 ---
-import Doodle from "./Doodle.astro";
 import { content, type Lang } from "../i18n/content";
-import { aboutPhoto } from "../lib/aboutPhoto";
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
 const t = content[lang].about.hero;
-const photo = aboutPhoto("hero");
-const words = t.title.split(" ");
 ---
 
 <section class="a-hero">
-  <div class:list={["wrap", "a-hero__grid", { "a-hero__grid--photo": photo }]}>
+  <div class="wrap a-hero__grid">
     <div class="a-hero__copy">
-      <h1 class="a-hero__title" aria-label={t.title}>
-        {
-          words.map((w, i) => (
-            <span class="word" aria-hidden="true" style={`--i:${i}`}>
-              {w}
-            </span>
-          ))
-        }
-      </h1>
-      <p class="a-hero__sub rise" style="--d: 0.7s">{t.sub}</p>
-      <Doodle variant="underline" width={240} color="var(--blue)" class="a-hero__doodle" />
+      <p class="a-hero__label mono rise" style="--d: 0s">{t.label}</p>
+      <h1 class="a-hero__title rise" style="--d: 0.1s">{t.title.before} <em>{t.title.accent}</em></h1>
+      <p class="a-hero__lead rise" style="--d: 0.3s">{t.lead}</p>
+      <p class="a-hero__lead a-hero__lead--soft rise" style="--d: 0.4s">{t.lead2}</p>
+      <ul class="a-hero__chips rise" style="--d: 0.5s">
+        {t.chips.map((c, i) => <li class:list={["chip", { "chip--blue": i === t.chips.length - 1 }]}>{c}</li>)}
+      </ul>
     </div>
 
-    {
-      photo && (
-        <figure class="a-hero__photo rise" style="--d: 0.5s">
-          <div class="a-hero__stage" aria-hidden="true" />
-          <img src={photo} alt={t.photoAlt} width="900" height="1200" fetchpriority="high" />
-        </figure>
-      )
-    }
+    <figure class="a-hero__photo rise" style="--d: 0.35s">
+      <div class="frame">
+        <span class="tape" aria-hidden="true"></span>
+        <img src="/me/about/hero.webp" alt={t.photoAlt} width="1122" height="1402" fetchpriority="high" />
+        <figcaption class="mono"><span>{t.caption}</span></figcaption>
+      </div>
+      <span class="sticker sticker--a chip">{t.stickerBorn}</span>
+      <span class="sticker sticker--b chip chip--blue">{t.stickerLiving}</span>
+      <p class="note" aria-hidden="true">
+        {t.note}
+        <svg viewBox="0 0 56 34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M2 4 C 22 4, 40 10, 50 28"></path>
+          <path d="M42 26 L50 29 L52 20"></path>
+        </svg>
+      </p>
+    </figure>
   </div>
 </section>
 
 <style>
   .a-hero {
-    border-top: 0;
-    padding-block: clamp(3rem, 8vw, 7rem) clamp(3rem, 7vw, 6rem);
-    overflow: clip;
+    padding-block: clamp(2.5rem, 6vw, 5rem) clamp(4rem, 8vw, 7rem);
+    overflow-x: clip;
   }
 
   .a-hero__grid {
     display: grid;
-    gap: clamp(2rem, 5vw, 4rem);
-    align-items: end;
-  }
-
-  .a-hero__grid--photo {
-    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2vw, 2rem);
+    align-items: center;
   }
 
   .a-hero__copy {
-    display: flex;
-    flex-direction: column;
-    gap: 1.75rem;
+    grid-column: 1 / 8;
+    position: relative;
+    z-index: 2;
+  }
+
+  .a-hero__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--blue);
+    margin-bottom: 1.6rem;
+  }
+  .a-hero__label::before {
+    content: "";
+    width: 2.2rem;
+    height: var(--rule);
+    background: var(--blue);
   }
 
   .a-hero__title {
-    font-size: clamp(3.4rem, 11vw, 10.5rem);
-    line-height: 0.9;
-    display: flex;
-    flex-wrap: wrap;
-    column-gap: 0.25em;
+    font-size: clamp(3.4rem, 8.2vw, 8rem);
+    line-height: 0.94;
+    margin-bottom: 2rem;
   }
-
-  .word {
-    display: inline-block;
-    animation: word-in 0.8s var(--ease-out) both;
-    animation-delay: calc(var(--i) * 0.09s + 0.05s);
-  }
-
-  /* The last word is the point of the sentence. */
-  .word:last-child {
+  .a-hero__title em {
+    font-style: normal;
     color: var(--blue);
   }
 
-  .a-hero__sub {
-    font-size: 1.25rem;
+  .a-hero__lead {
+    font-size: clamp(1.15rem, 1.6vw, 1.45rem);
+    line-height: 1.45;
+    max-width: 34em;
+  }
+  .a-hero__lead--soft {
+    margin-top: 1rem;
     color: var(--ink-soft);
-    max-width: 44ch;
+    font-size: 1.1rem;
+  }
+
+  .a-hero__chips {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 2rem 0 0;
+  }
+
+  .chip {
+    display: inline-flex;
+    gap: 0.45rem;
+    align-items: center;
+    border: var(--rule) solid var(--ink);
+    border-radius: 99px;
+    padding: 0.35rem 0.9rem;
+    background: var(--paper);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .chip--blue {
+    background: var(--blue);
+    color: #fff;
+    border-color: var(--blue);
   }
 
   .a-hero__photo {
+    grid-column: 8 / 13;
     position: relative;
     margin: 0;
     justify-self: end;
-    width: min(100%, 380px);
+    width: 100%;
+    max-width: 390px;
   }
 
-  .a-hero__stage {
-    position: absolute;
-    inset: 18% 8% 0 8%;
-    background: var(--blue);
-    border: var(--rule) solid var(--ink);
-  }
-
-  .a-hero__photo img {
+  .frame {
     position: relative;
+    transform: rotate(2.2deg);
+    background: #fff;
+    padding: 12px 12px 52px;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    transition: transform 0.6s var(--ease-out);
+  }
+  .frame:hover {
+    transform: rotate(0);
+  }
+  .frame img {
     width: 100%;
     height: auto;
-    max-height: min(70svh, 560px);
-    object-fit: contain;
-    object-position: bottom;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 3px;
+  }
+  .frame figcaption {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 14px;
+    color: var(--ink-soft);
+  }
+  .tape {
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    width: 120px;
+    height: 34px;
+    transform: translateX(-50%) rotate(-3deg);
+    background: rgba(35, 66, 232, 0.78);
+    mix-blend-mode: multiply;
+  }
+
+  .sticker {
+    position: absolute;
+    z-index: 3;
+  }
+  .sticker--a {
+    left: -16%;
+    top: 18%;
+    transform: rotate(-7deg);
+  }
+  .sticker--b {
+    right: -12%;
+    bottom: 24%;
+    transform: rotate(5deg);
+  }
+  .note {
+    position: absolute;
+    z-index: 3;
+    left: -56%;
+    bottom: 3%;
+    width: 12.5rem;
+    font-family: var(--font-hand);
+    font-size: 1.25rem;
+    line-height: 1.25;
+    color: var(--blue);
+    transform: rotate(-4deg);
+  }
+  .note svg {
+    display: block;
+    margin: 0.2rem 0 0 70%;
+    width: 56px;
+    height: 34px;
+    overflow: visible;
   }
 
   .rise {
     animation: rise 0.9s var(--ease-out) both;
     animation-delay: var(--d, 0s);
   }
-
-  @keyframes word-in {
-    from {
-      opacity: 0;
-      transform: translateY(40%);
-    }
-  }
-
   @keyframes rise {
     from {
       opacity: 0;
@@ -129,20 +213,37 @@ const words = t.title.split(" ");
     }
   }
 
-  @media (max-width: 760px) {
-    .a-hero__grid--photo {
+  @media (max-width: 900px) {
+    .a-hero__grid {
       grid-template-columns: 1fr;
+    }
+    .a-hero__copy,
+    .a-hero__photo {
+      grid-column: 1;
     }
     .a-hero__photo {
       justify-self: center;
-      width: min(70%, 320px);
+      margin-top: 3.5rem;
+      max-width: 340px;
+    }
+    .note {
+      left: -4%;
+      bottom: -2.6rem;
+    }
+    .sticker--a {
+      left: -3%;
+    }
+    .sticker--b {
+      right: -3%;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .word,
     .rise {
       animation: none;
+    }
+    .frame {
+      transition: none;
     }
   }
 </style>

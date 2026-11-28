@@ -1,0 +1,262 @@
+---
+import { content, YEARS_IN_CODE, type Lang } from "../i18n/content";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = content[lang].about.bento;
+---
+
+<section class="bento" aria-label={t.aria}>
+  <div class="wrap bento__grid">
+    <div class="tile t-route" data-reveal>
+      <span class="mono">{t.route.label}</span>
+      <div>
+        <span class="city">{t.route.from}</span>
+        <svg viewBox="0 0 300 90" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M10 10 C 90 100, 210 100, 285 70"></path>
+          <text x="270" y="82" transform="rotate(-20 280 74)">✈</text>
+        </svg>
+        <span class="city city--b">{t.route.to}</span>
+      </div>
+      <span class="mono">{t.route.km}</span>
+    </div>
+
+    <div class="tile t-years" data-reveal style="--d: 0.08s">
+      <span class="mono">{t.years.label}</span>
+      <b>{YEARS_IN_CODE}<i>+</i></b>
+      <span class="mono">{t.years.caption}</span>
+    </div>
+
+    <div class="tile t-lang" data-reveal style="--d: 0.16s">
+      <span class="mono">{t.langs.label}</span>
+      <div>
+        {
+          t.langs.items.map((l) => (
+            <div class="row">
+              <b>{l.word}</b>
+              <div class="bar" aria-hidden="true">
+                <i style={`--w:${l.pct}%`} />
+              </div>
+              <small>{l.level}</small>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="tile t-role" data-reveal style="--d: 0.08s">
+      <span class="mono">{t.role.label}</span>
+      <h2>{t.role.title} <span class="blue">{t.role.accent}</span></h2>
+      <span class="mono blue">{t.role.where}</span>
+    </div>
+
+    <div class="tile t-edu" data-reveal style="--d: 0.16s">
+      <span class="mono">{t.edu.label}</span>
+      <b>{t.edu.big}</b>
+      <p><strong>{t.edu.degree}</strong>{t.edu.detail}</p>
+    </div>
+
+    <div class="tile t-name" data-reveal>
+      <span class="mono">{t.name.label}</span>
+      <span class="sig">{t.name.signature}</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .bento {
+    padding-block: 0 clamp(4rem, 8vw, 7rem);
+  }
+  .bento__grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: clamp(0.8rem, 1.6vw, 1.4rem);
+  }
+  .tile {
+    position: relative;
+    overflow: hidden;
+    border-radius: 14px;
+    padding: clamp(1.2rem, 2vw, 1.8rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.2rem;
+    min-height: 210px;
+    transition: transform 0.5s var(--ease-out);
+  }
+  @media (hover: hover) {
+    .tile:hover {
+      transform: rotate(0) !important;
+    }
+  }
+  .tile > .mono {
+    opacity: 0.8;
+  }
+
+  .t-route {
+    grid-column: 1 / 6;
+    grid-row: 1 / 3;
+    min-height: 440px;
+    background: var(--blue);
+    color: #fff;
+    transform: rotate(-1deg);
+  }
+  .city {
+    display: block;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: clamp(4.2rem, 9vw, 8.4rem);
+    line-height: 0.94;
+  }
+  .city--b {
+    text-align: right;
+  }
+  .t-route svg {
+    width: 100%;
+    height: 90px;
+    margin: -0.3rem 0;
+    overflow: visible;
+  }
+  .t-route svg path {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2;
+    stroke-dasharray: 3 9;
+    stroke-linecap: round;
+  }
+  .t-route svg text {
+    font-size: 26px;
+    fill: #fff;
+  }
+
+  .t-years {
+    grid-column: 6 / 9;
+    background: var(--ink);
+    color: var(--paper);
+    transform: rotate(1.2deg);
+  }
+  .t-years b {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(5.5rem, 10vw, 9rem);
+    line-height: 0.85;
+  }
+  .t-years b i {
+    font-style: normal;
+    color: var(--blue-on-ink);
+  }
+
+  .t-lang {
+    grid-column: 9 / 13;
+    background: var(--paper-dim);
+    border: var(--rule) solid var(--ink);
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 4.6rem 1fr;
+    gap: 0.2rem 0.9rem;
+    align-items: center;
+    margin-top: 0.7rem;
+  }
+  .row b {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.9rem;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+  .bar {
+    height: 8px;
+    border-radius: 99px;
+    background: rgba(20, 19, 15, 0.12);
+    overflow: hidden;
+  }
+  .bar i {
+    display: block;
+    height: 100%;
+    width: var(--w);
+    background: var(--blue);
+    border-radius: 99px;
+  }
+  .row small {
+    grid-column: 2;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .t-role {
+    grid-column: 6 / 9;
+    background: var(--paper);
+    border: var(--rule) solid var(--ink);
+    transform: rotate(-1deg);
+  }
+  .t-role h2 {
+    font-size: clamp(2.2rem, 3.6vw, 3.3rem);
+  }
+
+  .t-edu {
+    grid-column: 9 / 13;
+    background: #fff;
+    transform: rotate(1deg);
+    box-shadow: var(--shadow-card);
+  }
+  .t-edu b {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(4.4rem, 8vw, 7rem);
+    line-height: 0.85;
+    color: var(--blue);
+  }
+  .t-edu p {
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  .t-name {
+    grid-column: 1 / 13;
+    background: var(--paper-dim);
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    min-height: 0;
+  }
+  .sig {
+    font-family: var(--font-hand);
+    font-size: clamp(2.4rem, 5.4vw, 4.8rem);
+    line-height: 1.1;
+    color: var(--blue);
+    transform: rotate(-1.5deg);
+  }
+
+  @media (max-width: 980px) {
+    .t-route {
+      grid-column: 1 / 13;
+      grid-row: auto;
+      min-height: 0;
+    }
+    .t-years,
+    .t-role {
+      grid-column: 1 / 7;
+    }
+    .t-lang,
+    .t-edu {
+      grid-column: 1 / 13;
+    }
+  }
+  @media (max-width: 560px) {
+    .t-years,
+    .t-role {
+      grid-column: 1 / 13;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tile {
+      transition: none;
+    }
+  }
+</style>

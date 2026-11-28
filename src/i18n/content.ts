@@ -100,100 +100,109 @@ const es: Content = {
       meta: {
         title: "Sobre mí · Jordy Rojas Aliaga",
         description:
-          "De Lima a Porto: cómo llegué a ser ingeniero fullstack y mobile, y lo que construyo por gusto.",
+          "Ingeniero fullstack y mobile, de Lima a Porto: cómo pasé de configurar sistemas a crear, y lo que no cabe en el CV.",
       },
       hero: {
-        title: "Me enganché a los problemas difíciles.",
-        sub: "Lo que no cabe en el CV: de dónde vengo, por dónde pasé y qué construyo cuando nadie me lo pide.",
-        photoAlt: "Jordy Rojas",
+        label: "Sobre mí",
+        title: { before: "Sin miedo al", accent: "éxito." },
+        lead: "Soy Jordy, ingeniero full stack y mobile. Nací en Lima, estudié redes antes que software y desde julio de 2022 vivo en Porto, donde trabajo en Motorline.",
+        lead2: "Lo que más me gusta es convertir una idea en algo que funciona de verdad.",
+        chips: [`${YEARS_IN_CODE}+ años`, "Full Stack y Mobile"],
+        photoAlt:
+          "Jordy sentado en unas escaleras de hormigón al sol, con gorro de pescador y zapatillas, mirando hacia un lado con media sonrisa",
+        caption: "Jordy",
+        stickerBorn: "🇵🇪 Nacido en Lima",
+        stickerLiving: "🇵🇹 Creando en Porto",
+        note: `${YEARS_IN_CODE}+ años de oficio y lo que viene.`,
       },
-      line: {
-        title: "De Lima a Porto, paso a paso.",
-        hint: "Elige un punto",
-        listLabel: "Etapas de mi trayectoria",
-        items: [
-          {
-            year: "2012",
-            title: "Tecsup, Lima",
-            text: "Estudio Redes y Comunicación de Datos hasta 2014.",
-          },
-          {
-            year: "2015",
-            title: "Mi primer trabajo en software",
-            text: "Entro como Analista de Software en la Clínica Médica Climper. Apps móviles, una API REST y bases de datos durante cinco años.",
-          },
-          {
-            year: "2015",
-            title: "Ingeniería de Software",
-            text: "Empiezo la carrera en la UPC mientras trabajo. La termino en 2021.",
-          },
-          {
-            year: "2020",
-            title: "Holinsys",
-            text: "Analista de Ingeniería de Software. Angular e Ionic por delante, Node.js y Express por detrás. Ese año también me certifico en Scrum.",
-          },
-          {
-            year: "2021",
-            title: "ITData Consulting",
-            text: "Full Stack con React dentro de un equipo Scrum. Entrego los proyectos un 10% antes de lo planeado.",
-          },
-          {
-            year: "2022",
-            title: "Motorline, Portugal",
-            text: "Full Stack y Mobile. Flutter, widgets nativos en Android e iOS y una app de escritorio que baja un 20% los errores operativos.",
-          },
-          {
-            year: "2024",
-            title: "NestJS en serio",
-            text: "Tres cursos de NestJS en tres meses y una API de reportes PDF construida por mi cuenta.",
-          },
+      bento: {
+        aria: "Datos rápidos",
+        route: { label: "Ruta", from: "Lima", to: "Porto", km: "9.150 km · desde julio de 2022" },
+        years: { label: "Oficio", caption: "años escribiendo software" },
+        langs: {
+          label: "Tres formas de saludar",
+          items: [
+            { word: "Hola", level: "Español · nativo", pct: 100 },
+            { word: "Olá", level: "Português · B2", pct: 72 },
+            { word: "Hello", level: "English · B1", pct: 58 },
+          ],
+        },
+        role: { label: "Ahora", title: "Full Stack", accent: "y Mobile", where: "en Motorline, Porto" },
+        edu: {
+          label: "Estudié",
+          big: "UPC",
+          degree: "Ingeniería de Software",
+          detail: ", Lima, 2015 a 2021. Antes, Redes en Tecsup.",
+        },
+        name: { label: "Nombre", signature: "Jordy Rojas Aliaga" },
+      },
+      giro: {
+        label: "El giro",
+        title: "De configurar a crear.",
+        before: {
+          label: "Antes · Tecsup, 2012 a 2014",
+          title: "Configurar y mantener",
+          text: "Estudié Redes y Comunicación de Datos. Aprendí cómo viajan los datos y cómo se mantiene un sistema en pie.",
+        },
+        arrow: ["y un día", "pasó esto"],
+        after: {
+          label: "Después · desde 2015",
+          title: "Crear",
+          text: "Descubrí que programando podía convertir ideas en soluciones reales, y me enganché. Todo lo que vino después sale de ahí.",
+          chips: ["Climper 2015", "Holinsys 2020", "ITData 2021", "Motorline 2022"],
+        },
+      },
+      off: {
+        title: "Fuera del",
+        accent: "teclado.",
+        lead: "Lo que ningún CV pregunta.",
+        cropAlts: [
+          "Detalle del retrato: rostro con gorro",
+          "Detalle del retrato: manos y brazo",
+          "Detalle del retrato: zapatillas en las escaleras",
         ],
-      },
-      route: {
-        title: "Lima ↔ Porto",
-        text: "Estudié y trabajé en Lima. Hoy vivo y trabajo en Porto.",
-        km: "unos 9.150 km en línea recta",
-        from: "Lima",
-        to: "Porto",
-        tags: ["Español · nativo", "Português · B2", "English · B1"],
-        photoAlt: "Jordy en Porto",
-      },
-      built: {
-        title: "Lo que construyo por gusto.",
-        intro: "Tres proyectos personales que nadie me pidió.",
-        cta: "Ver el caso",
         items: [
           {
-            title: "API de reportes PDF",
-            year: "2024",
-            text: "Backend que toco menos en Motorline, así que lo practico aquí.",
-            slug: "pdf-report-api",
+            label: "De niño, en Lima",
+            title: "Horas sin aburrirme.",
+            text: "Mucho videojuego, dibujos animados y fútbol con los amigos. Era de esos niños que podían pasar horas jugando sin aburrirse.",
           },
           {
-            title: "Cinemapedia",
-            year: "2024",
-            text: "Flutter con arquitectura limpia en tres capas y favoritos sin conexión.",
-            slug: "movies-app",
+            label: "Un domingo en Porto",
+            title: "Domingo sin prisa.",
+            text: "Depende del día, pero normalmente salgo a caminar, tomo un café, conozco algún sitio nuevo o simplemente descanso y disfruto del día.",
           },
           {
-            title: "¿Quién es ese Pokémon?",
-            year: "2021–2026",
-            text: "Uno de mis primeros proyectos serios en Vue 3 y TypeScript. En 2026 volví y lo rediseñé desde cero.",
-            slug: "poke-web",
+            label: "Mi error favorito en producción",
+            title: "Producción tiene personalidad.",
+            text: "Una vez algo funcionaba perfecto en desarrollo y, al llegar a producción, decidió tener personalidad propia 😂 Desde entonces no me confío hasta comprobarlo todo en el entorno real.",
           },
         ],
       },
       lessons: {
-        title: "Lo que me llevo.",
+        title: "Cómo trabajo.",
+        sub: "seis reglas, cada una con su prueba.",
         items: [
-          "Lo difícil primero. Lo fácil se acomoda solo.",
-          "Entregar antes es aprender antes.",
-          "Un arreglo que no evita la repetición solo gana tiempo.",
-          "Cuando el framework no llega, bajo a lo nativo.",
-          "El código limpio es una cortesía con quien lo lea después.",
-          "Los cursos terminan. Los proyectos no.",
+          { title: "Lo difícil primero.", note: "Lo fácil se acomoda solo.", proof: "App de escritorio en Flutter, Motorline" },
+          { title: "Entregar antes es aprender antes.", proof: "ITData: proyectos un 10% antes de lo planeado" },
+          {
+            title: "Un arreglo que no evita la repetición solo gana tiempo.",
+            proof: "Motorline: 20% menos errores operativos",
+          },
+          { title: "Cuando el framework no llega, bajo a lo nativo.", proof: "Widgets nativos en Android e iOS" },
+          {
+            title: "El código limpio es una cortesía.",
+            note: "Con quien lo lea después.",
+            proof: "Certificado en SOLID y Clean Code, 2023",
+          },
+          {
+            title: "Los cursos terminan.",
+            accent: "Los proyectos no.",
+            proof: "Tres cursos de NestJS y una API de reportes PDF, 2024",
+          },
         ],
       },
+      close: { title: "¿Próxima parada?", hand: "tu equipo, quizás.", cta: "Escríbeme", link: "o mira lo que construyo" },
     },
     nav: {
       aria: "Principal",
@@ -458,100 +467,109 @@ const en: Content = {
       meta: {
         title: "About · Jordy Rojas Aliaga",
         description:
-          "From Lima to Porto: how I became a fullstack and mobile engineer, and what I build for fun.",
+          "Fullstack and mobile engineer, from Lima to Porto: how I went from configuring systems to building, and what doesn't fit on a resume.",
       },
       hero: {
-        title: "I got hooked on hard problems.",
-        sub: "What doesn't fit on a resume: where I come from, what I went through and what I build when nobody asks me to.",
-        photoAlt: "Jordy Rojas",
+        label: "About me",
+        title: { before: "Not afraid of", accent: "success." },
+        lead: "I'm Jordy, a full stack and mobile engineer. I was born in Lima, studied networking before software, and since July 2022 I live in Porto, where I work at Motorline.",
+        lead2: "What I like most is turning an idea into something that really works.",
+        chips: [`${YEARS_IN_CODE}+ years`, "Full Stack & Mobile"],
+        photoAlt:
+          "Jordy sitting on sunlit concrete steps, wearing a bucket hat and sneakers, looking to one side with a half smile",
+        caption: "Jordy",
+        stickerBorn: "🇵🇪 Born in Lima",
+        stickerLiving: "🇵🇹 Building in Porto",
+        note: `${YEARS_IN_CODE}+ years in and what comes next.`,
       },
-      line: {
-        title: "From Lima to Porto, step by step.",
-        hint: "Pick a dot",
-        listLabel: "Stages of my path",
-        items: [
-          {
-            year: "2012",
-            title: "Tecsup, Lima",
-            text: "I study Networking and Data Communications until 2014.",
-          },
-          {
-            year: "2015",
-            title: "First job in software",
-            text: "I join Clínica Médica Climper as a Software Analyst. Mobile apps, a REST API and databases for five years.",
-          },
-          {
-            year: "2015",
-            title: "Software Engineering",
-            text: "I start the degree at UPC while working. I finish in 2021.",
-          },
-          {
-            year: "2020",
-            title: "Holinsys",
-            text: "Software Engineering Analyst. Angular and Ionic up front, Node.js and Express behind. I also get Scrum certified that year.",
-          },
-          {
-            year: "2021",
-            title: "ITData Consulting",
-            text: "Full Stack with React inside a Scrum team. I deliver projects 10% ahead of plan.",
-          },
-          {
-            year: "2022",
-            title: "Motorline, Portugal",
-            text: "Full Stack and Mobile. Flutter, native widgets on Android and iOS, and a desktop app that cuts operational errors by 20%.",
-          },
-          {
-            year: "2024",
-            title: "NestJS, for real",
-            text: "Three NestJS courses in three months and a PDF report API I built on my own.",
-          },
+      bento: {
+        aria: "Quick facts",
+        route: { label: "Route", from: "Lima", to: "Porto", km: "9,150 km · since July 2022" },
+        years: { label: "Craft", caption: "years writing software" },
+        langs: {
+          label: "Three ways to say hi",
+          items: [
+            { word: "Hola", level: "Español · native", pct: 100 },
+            { word: "Olá", level: "Português · B2", pct: 72 },
+            { word: "Hello", level: "English · B1", pct: 58 },
+          ],
+        },
+        role: { label: "Now", title: "Full Stack", accent: "& Mobile", where: "at Motorline, Porto" },
+        edu: {
+          label: "Studied",
+          big: "UPC",
+          degree: "Software Engineering",
+          detail: ", Lima, 2015 to 2021. Before that, Networking at Tecsup.",
+        },
+        name: { label: "Name", signature: "Jordy Rojas Aliaga" },
+      },
+      giro: {
+        label: "The turn",
+        title: "From configuring to creating.",
+        before: {
+          label: "Before · Tecsup, 2012 to 2014",
+          title: "Configure and maintain",
+          text: "I studied Networking and Data Communications. I learned how data travels and how to keep a system standing.",
+        },
+        arrow: ["and one day", "this happened"],
+        after: {
+          label: "After · since 2015",
+          title: "Create",
+          text: "I found out that by programming I could turn ideas into real solutions, and I got hooked. Everything after that comes from there.",
+          chips: ["Climper 2015", "Holinsys 2020", "ITData 2021", "Motorline 2022"],
+        },
+      },
+      off: {
+        title: "Away from the",
+        accent: "keyboard.",
+        lead: "What no resume asks.",
+        cropAlts: [
+          "Portrait detail: face under a bucket hat",
+          "Portrait detail: hands and arm",
+          "Portrait detail: sneakers on the steps",
         ],
-      },
-      route: {
-        title: "Lima ↔ Porto",
-        text: "I studied and worked in Lima. Today I live and work in Porto.",
-        km: "about 9,150 km as the crow flies",
-        from: "Lima",
-        to: "Porto",
-        tags: ["Español · native", "Português · B2", "English · B1"],
-        photoAlt: "Jordy in Porto",
-      },
-      built: {
-        title: "What I build for fun.",
-        intro: "Three personal projects nobody asked for.",
-        cta: "See the case",
         items: [
           {
-            title: "PDF Report Generation API",
-            year: "2024",
-            text: "Backend work I touch less at Motorline, so I practice it here.",
-            slug: "pdf-report-api",
+            label: "As a kid, in Lima",
+            title: "Hours without getting bored.",
+            text: "Lots of video games, cartoons and football with friends. I was one of those kids who could play for hours without getting bored.",
           },
           {
-            title: "Cinemapedia",
-            year: "2024",
-            text: "Flutter with a three-layer clean architecture and offline favorites.",
-            slug: "movies-app",
+            label: "A Sunday in Porto",
+            title: "A Sunday with no rush.",
+            text: "It depends on the day, but usually I go for a walk, have a coffee, find a new place or simply rest and enjoy the day.",
           },
           {
-            title: "¿Quién es ese Pokémon?",
-            year: "2021–2026",
-            text: "One of my first serious Vue 3 and TypeScript projects. In 2026 I came back and redesigned it from scratch.",
-            slug: "poke-web",
+            label: "My favourite production bug",
+            title: "Production has a personality.",
+            text: "Once something worked perfectly in development and, once in production, decided to have a personality of its own 😂 Since then I don't trust it until I've checked everything in the real environment.",
           },
         ],
       },
       lessons: {
-        title: "What I carry with me.",
+        title: "How I work.",
+        sub: "six rules, each with its proof.",
         items: [
-          "Hard problems first. The easy ones sort themselves out.",
-          "Delivering early means learning early.",
-          "A fix that doesn't prevent the repeat only buys time.",
-          "When the framework runs out, go native.",
-          "Clean code is a courtesy to whoever reads it next.",
-          "Courses end. Projects don't.",
+          { title: "Hard problems first.", note: "The easy ones sort themselves out.", proof: "Flutter desktop app, Motorline" },
+          { title: "Delivering early means learning early.", proof: "ITData: projects 10% ahead of plan" },
+          {
+            title: "A fix that doesn't prevent the repeat only buys time.",
+            proof: "Motorline: 20% fewer operational errors",
+          },
+          { title: "When the framework runs out, go native.", proof: "Native widgets on Android and iOS" },
+          {
+            title: "Clean code is a courtesy.",
+            note: "To whoever reads it next.",
+            proof: "SOLID and Clean Code certified, 2023",
+          },
+          {
+            title: "Courses end.",
+            accent: "Projects don't.",
+            proof: "Three NestJS courses and a PDF report API, 2024",
+          },
         ],
       },
+      close: { title: "Next stop?", hand: "your team, maybe.", cta: "Write to me", link: "or see what I build" },
     },
     nav: {
       aria: "Primary",
@@ -778,43 +796,9 @@ const en: Content = {
  */
 export const content: Record<Lang, Content> = { es, en };
 
-/** Screenshot covers (About page cards), keyed by project slug. Motorline work is private: no cover. */
-export const covers: Record<string, { src: string; width: number; height: number; fit: "cover" | "contain"; alt: Record<Lang, string> }> = {
-  "pdf-report-api": {
-    src: "/projects/pdf-report-api/html-report.png",
-    width: 848,
-    height: 1200,
-    fit: "contain",
-    alt: {
-      es: "Página PDF generada por la API con títulos, listas anidadas y texto con formato",
-      en: "PDF page generated by the API with headings, nested lists and formatted text",
-    },
-  },
-  "movies-app": {
-    src: "/projects/movies-app/dark-home.jpg",
-    width: 322,
-    height: 700,
-    fit: "contain",
-    alt: {
-      es: "Pantalla de inicio de Cinemapedia en modo oscuro, con carrusel y películas en cines",
-      en: "Cinemapedia home screen in dark mode, with a carousel and movies now in theaters",
-    },
-  },
-  "poke-web": {
-    src: "/projects/poke-web/game.png",
-    width: 1280,
-    height: 800,
-    fit: "cover",
-    alt: {
-      es: "Pantalla de juego con la silueta negra de un Pokémon dentro de un escáner estilo Pokédex",
-      en: "Game screen with a Pokémon's black silhouette inside a Pokédex-style scanner",
-    },
-  },
-};
-
 /**
- * Illustrated collage per project (638x800 JPG). Unlike `covers`, these exist for every
- * project, including the private Motorline work that has no public screenshots.
+ * Illustrated collage per project (638x800 JPG), including the private Motorline work that
+ * has no public screenshots.
  */
 export const collages = {
   widgets: {
@@ -894,21 +878,47 @@ export interface Content {
   aboutTeaser: { title: string; text: string; cta: string };
   about: {
     meta: { title: string; description: string };
-    hero: { title: string; sub: string; photoAlt: string };
-    line: {
-      title: string;
-      hint: string;
-      listLabel: string;
-      items: { year: string; title: string; text: string }[];
+    hero: {
+      label: string;
+      title: { before: string; accent: string };
+      lead: string;
+      lead2: string;
+      chips: string[];
+      photoAlt: string;
+      caption: string;
+      stickerBorn: string;
+      stickerLiving: string;
+      note: string;
     };
-    route: { title: string; text: string; km: string; from: string; to: string; tags: string[]; photoAlt: string };
-    built: {
-      title: string;
-      intro: string;
-      cta: string;
-      items: { title: string; year: string; text: string; slug: string }[];
+    bento: {
+      aria: string;
+      route: { label: string; from: string; to: string; km: string };
+      years: { label: string; caption: string };
+      langs: { label: string; items: { word: string; level: string; pct: number }[] };
+      role: { label: string; title: string; accent: string; where: string };
+      edu: { label: string; big: string; degree: string; detail: string };
+      name: { label: string; signature: string };
     };
-    lessons: { title: string; items: string[] };
+    giro: {
+      label: string;
+      title: string;
+      before: { label: string; title: string; text: string };
+      arrow: [string, string];
+      after: { label: string; title: string; text: string; chips: string[] };
+    };
+    off: {
+      title: string;
+      accent: string;
+      lead: string;
+      cropAlts: [string, string, string];
+      items: { label: string; title: string; text: string }[];
+    };
+    lessons: {
+      title: string;
+      sub: string;
+      items: { title: string; note?: string; accent?: string; proof: string }[];
+    };
+    close: { title: string; hand: string; cta: string; link: string };
   };
   nav: {
     aria: string;

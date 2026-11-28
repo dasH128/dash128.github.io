@@ -1,0 +1,74 @@
+---
+import { content, langPath, EMAIL, type Lang } from "../i18n/content";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = content[lang].about.close;
+---
+
+<section id="contact" class="close" aria-labelledby="close-title">
+  <div class="wrap">
+    <h2 id="close-title" data-reveal>{t.title}</h2>
+    <p class="hand" data-reveal>{t.hand}</p>
+    <a class="btn-paper" href={`mailto:${EMAIL}`} data-reveal>{t.cta}</a>
+    <a class="close__link" href={`${langPath(lang)}#work`} data-reveal>{t.link} →</a>
+  </div>
+</section>
+
+<style>
+  .close {
+    background: var(--blue);
+    color: #fff;
+    text-align: center;
+    padding-block: clamp(5rem, 11vw, 10rem);
+  }
+  h2 {
+    font-size: clamp(3.2rem, 10vw, 9.5rem);
+    max-width: 11ch;
+    margin: 0 auto 1rem;
+  }
+  .hand {
+    font-family: var(--font-hand);
+    font-size: clamp(1.5rem, 2.6vw, 2.4rem);
+    margin: 0 auto 2.4rem;
+    transform: rotate(-2deg);
+  }
+  .btn-paper {
+    display: inline-block;
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 99px;
+    padding: 1rem 2.2rem;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: transform 0.4s var(--ease-out);
+  }
+  .btn-paper:hover {
+    transform: translateY(-3px) rotate(-1deg);
+  }
+  .close__link {
+    display: block;
+    width: fit-content;
+    margin: 1.6rem auto 0;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .close__link:focus-visible,
+  .btn-paper:focus-visible {
+    outline-color: #fff;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn-paper {
+      transition: none;
+    }
+  }
+</style>

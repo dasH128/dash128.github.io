@@ -99,7 +99,7 @@ Single-column stack: marquee, sticky nav, hero, experience, projects, stack, edu
 - **Marquee:** ink bar, mono text, 38s linear loop, static with reduced motion.
 - **Nav:** sticky, paper, 2px bottom rule. See "Migrated so far" for the current pill-based design (this line predates it).
 - **Stats:** three huge numerals, each with one thin ink rule above it and space between them (no boxed grid). The last one is blue.
-- **Project row:** big title, mono context, description, outcome chip (blue), mono tags. On hover (pointer devices) a blue panel wipes up behind the row and the floating collage appears (see "Migrated so far"). The old 16:10 screenshot cover is gone from the list (the About page cards still use `covers`).
+- **Project row:** big title, mono context, description, outcome chip (blue), mono tags. On hover (pointer devices) a blue panel wipes up behind the row and the floating collage appears (see "Migrated so far"). The old 16:10 screenshot cover is gone from the list (the About page no longer shows project cards).
 - **Stack list:** see "Migrated so far" (single lit row, no outline text; this line predates it).
 - **Contact contract:** ink section. See "Migrated so far" for the current order (phone and copyable email, then four numbered clauses, then handwritten signature). This line predates it.
 - **Cursor ring:** a lagging 34px ring (68px, filled, over links, buttons and `[data-cursor]`) with `mix-blend-mode: difference`. Mouse only; the native cursor stays.
@@ -107,17 +107,16 @@ Single-column stack: marquee, sticky nav, hero, experience, projects, stack, edu
 
 ## About page
 
-`/{lang}/about/`, reached from the nav ("Sobre mí" / "About") and from a teaser band under the hero. Five scenes, all text in `content.about`:
+`/{lang}/about/`, reached from the nav ("Sobre mí" / "About") and from a teaser band under the hero. Migrated to the soft prototype direction on 2026-11-28 (proposal in `resource/portfolio/about-propuesta.html`). Scenes, all text in `content.about`:
 
-1. **Opening:** the sentence as a giant Anton headline, the last word in blue. Optional photo.
-2. **Life line:** seven dots (2012 to 2024) on a ruled track. Click or arrow keys pick a stage and its panel shows below. Narrow screens and no-JS render every stage as a plain ruled list (progressive enhancement).
-3. **Lima ↔ Porto:** inline SVG arc that draws itself on entering, the straight-line distance, and the three languages as outlined tags. Optional photo.
-4. **What I build for fun:** three cards with the personal-project covers, linking to their project pages.
-5. **What I carry with me:** numbered lessons (001+) in huge Anton, blue on hover.
+1. **Hero (`AboutHero`):** label, giant title "Sin miedo al éxito" / "Not afraid of success" (last word blue), two lead lines, two chips, and the colour portrait (`public/me/about/hero.webp`, 1122x1402) in a tilted white frame with blue tape, two stickers and a handwritten note. The portrait stays small (max 390px).
+2. **Bento (`AboutBento`):** tilted tiles with the quick facts: Lima ✈ Porto (blue), the years in software (ink, `YEARS_IN_CODE`, automatic), languages as "three ways to say hi" with bars, role at Motorline, "UPC" in blue, and the name as a handwritten signature.
+3. **The turn (`AboutGiro`):** "De configurar a crear": a gridded ink pane (struck-through "Configurar y mantener") and a blue pane ("Crear") with four company/year chips. Draws on Jordy's own answer about moving from networking to software.
+4. **Away from the keyboard (`AboutOff`):** ink section. Three Q&A cards in Jordy's own words (childhood in Lima, a Sunday in Porto, the production bug) between three CSS-background crops of the same portrait.
+5. **How I work (`Lessons`):** six rule cards in a mosaic, each with a proof chip from the CV (the rule-to-proof pairing is Claude's draft).
+6. **Close (`AboutClose`):** blue band "¿Próxima parada? / tu equipo, quizás.", a mailto button and a link to the projects. It carries `id="contact"` so the nav "Hablemos" button scrolls to it. Under it, `AboutFooter`: a slim ink strip with LinkedIn and GitHub pills and a mono line (name, Porto, year). No full Contact footer on this page, it repeated the close.
 
-Optional photos: drop `hero.(webp|jpg|png)` or `porto.(webp|jpg|png)` in `public/me/about/`. If a file exists at build time it appears, if not the scene renders without it (`src/lib/aboutPhoto.ts`).
-
-Only facts from the CV, LinkedIn or the case studies go in the timeline and cards. The six "lessons" are drafts in Jordy's voice, pending his validation.
+Removed with this change: `LifeLine`, `Route`, `BuiltForFun`, `lib/aboutPhoto.ts` and the `covers` export (projects already live in the home). The original PNG of the portrait is kept outside `public/`, in `resource/portfolio/assets/retrato.png`.
 
 Shared utility: `data-reveal` fades an element up once when it enters the viewport (animation with `backwards` fill so hover transforms keep working; content stays visible without JS or with reduced motion).
 

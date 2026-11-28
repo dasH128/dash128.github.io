@@ -3,11 +3,12 @@ import Base from "../../layouts/Base.astro";
 import Marquee from "../../components/Marquee.astro";
 import Nav from "../../components/Nav.astro";
 import AboutHero from "../../components/AboutHero.astro";
-import LifeLine from "../../components/LifeLine.astro";
-import Route from "../../components/Route.astro";
-import BuiltForFun from "../../components/BuiltForFun.astro";
+import AboutBento from "../../components/AboutBento.astro";
+import AboutGiro from "../../components/AboutGiro.astro";
+import AboutOff from "../../components/AboutOff.astro";
 import Lessons from "../../components/Lessons.astro";
-import Contact from "../../components/Contact.astro";
+import AboutClose from "../../components/AboutClose.astro";
+import AboutFooter from "../../components/AboutFooter.astro";
 import { content, langs, type Lang } from "../../i18n/content";
 
 export function getStaticPaths() {
@@ -23,10 +24,11 @@ const { meta } = content[lang].about;
   <Nav lang={lang} page="about" />
   <main>
     <AboutHero lang={lang} />
-    <LifeLine lang={lang} />
-    <Route lang={lang} />
-    <BuiltForFun lang={lang} />
+    <AboutBento lang={lang} />
+    <AboutGiro lang={lang} />
+    <AboutOff lang={lang} />
     <Lessons lang={lang} />
+    <AboutClose lang={lang} />
   </main>
-  <Contact lang={lang} />
+  <AboutFooter lang={lang} />
 </Base>
