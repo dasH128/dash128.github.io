@@ -1,0 +1,138 @@
+---
+import { content, type Lang } from "../i18n/content";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+// The names come from the stack list itself (no extra copy): languages + frameworks on the
+// blue band, data + practice on the ink one. The list below the bands is the real content.
+const groups = content[lang].skills.groups;
+const blue = [...groups[0].items, ...groups[1].items];
+const ink = [...groups[2].items, ...groups[4].items];
+---
+
+<!-- Decorative separator between Stack and Education, so it is hidden from assistive tech. -->
+<div class="bands" aria-hidden="true">
+  <div class="band band--blue">
+    <div class="band__track">
+      {
+        [0, 1].map(() => (
+          <ul class="band__group">
+            {blue.map((name) => (
+              <li>
+                <span>{name}</span>
+                <i>✦</i>
+              </li>
+            ))}
+          </ul>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="band band--ink">
+    <div class="band__track band__track--reverse">
+      {
+        [0, 1].map(() => (
+          <ul class="band__group">
+            {ink.map((name) => (
+              <li>
+                <span>{name}</span>
+                <i>●</i>
+              </li>
+            ))}
+          </ul>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  /* The two bands straddle the border between the darker paper (Stack) and the paper (Education). */
+  .bands {
+    overflow: hidden;
+    padding-block: clamp(1.5rem, 4vw, 3rem);
+    background: linear-gradient(var(--paper-dim) 50%, var(--paper) 50%);
+  }
+
+  .band {
+    margin-inline: -3%;
+    padding-block: 0.3em;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .band--blue {
+    background: var(--blue);
+    color: #fff;
+    rotate: -2deg;
+  }
+
+  .band--ink {
+    margin-top: -0.5rem;
+    background: var(--ink);
+    color: var(--paper);
+    rotate: 1.5deg;
+  }
+
+  .band__track {
+    display: flex;
+    width: max-content;
+    animation: slide 55s linear infinite;
+  }
+
+  .band__track--reverse {
+    animation-direction: reverse;
+    animation-duration: 65s;
+  }
+
+  /* Two identical groups side by side: moving by half the track loops without a jump. */
+  @keyframes slide {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .band__group {
+    display: flex;
+    flex: none;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: clamp(2.6rem, 6vw, 5.4rem);
+    line-height: 1.1;
+  }
+
+  .band__group li {
+    display: flex;
+    align-items: center;
+  }
+
+  .band__group span {
+    padding-inline: 0.3em;
+  }
+
+  .band__group i {
+    font-style: normal;
+    font-size: 0.45em;
+    opacity: 0.85;
+  }
+
+  .band--ink i {
+    color: var(--blue-on-ink);
+    opacity: 1;
+  }
+
+  /* Still, with reduced motion. */
+  @media (prefers-reduced-motion: reduce) {
+    .band__track {
+      animation: none;
+    }
+  }
+</style>

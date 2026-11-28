@@ -1,0 +1,87 @@
+---
+import { content, type Lang } from "../i18n/content";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const items = content[lang].marquee;
+---
+
+<div class="marquee" role="presentation">
+  <div class="marquee__track" aria-hidden="true">
+    {
+      [0, 1].map(() => (
+        <ul class="marquee__group">
+          {items.map((text) => (
+            <li>
+              <span>{text}</span>
+              <i>✺</i>
+            </li>
+          ))}
+        </ul>
+      ))
+    }
+  </div>
+  <p class="sr-only">{items.join(" · ")}</p>
+</div>
+
+<style>
+  .marquee {
+    background: var(--ink);
+    color: var(--paper);
+    overflow: hidden;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    animation: slide 38s linear infinite;
+  }
+
+  .marquee__group {
+    display: flex;
+    flex-shrink: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .marquee__group li {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0.6rem 1.5rem 0.6rem 0;
+    white-space: nowrap;
+  }
+
+  .marquee__group i {
+    font-style: normal;
+    color: var(--blue-on-ink);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @keyframes slide {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee__track {
+      animation: none;
+    }
+  }
+</style>

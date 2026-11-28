@@ -1,0 +1,150 @@
+---
+import { content, type Lang } from "../i18n/content";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = content[lang].about.giro;
+---
+
+<section class="giro" aria-labelledby="giro-title">
+  <div class="wrap">
+    <p class="mono giro__label" data-reveal>{t.label}</p>
+    <h2 id="giro-title" class="giro__title" data-reveal>{t.title}</h2>
+
+    <div class="giro__grid">
+      <div class="pane pane--a" data-reveal>
+        <span class="mono">{t.before.label}</span>
+        <h3>{t.before.title}</h3>
+        <p>{t.before.text}</p>
+      </div>
+
+      <div class="giro__arrow" aria-hidden="true" data-reveal style="--d: 0.1s">
+        <b>→</b>
+        <span>{t.arrow[0]}<br />{t.arrow[1]}</span>
+      </div>
+
+      <div class="pane pane--b" data-reveal style="--d: 0.2s">
+        <span class="mono">{t.after.label}</span>
+        <h3>{t.after.title}</h3>
+        <p>{t.after.text}</p>
+        <ul class="chips">
+          {t.after.chips.map((c) => <li class="chip">{c}</li>)}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .giro__label {
+    color: var(--blue);
+    margin-bottom: 1.2rem;
+  }
+  .giro__title {
+    font-size: clamp(3rem, 8vw, 7.2rem);
+    max-width: 11ch;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+  .giro__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.15fr);
+    gap: clamp(0.8rem, 2vw, 2rem);
+    align-items: stretch;
+  }
+  .pane {
+    border-radius: 14px;
+    padding: clamp(1.4rem, 2.6vw, 2.4rem);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    overflow: hidden;
+  }
+  .pane h3 {
+    font-size: clamp(2.4rem, 4.6vw, 4.4rem);
+  }
+  .pane p {
+    max-width: 30em;
+    line-height: 1.55;
+  }
+  .pane--a {
+    background-color: var(--ink);
+    color: var(--paper);
+    transform: rotate(-1deg);
+    background-image: linear-gradient(rgba(244, 241, 232, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(244, 241, 232, 0.07) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  .pane--a .mono {
+    color: var(--blue-on-ink);
+  }
+  .pane--a h3 {
+    text-decoration: line-through;
+    text-decoration-thickness: 0.07em;
+    text-decoration-color: var(--blue-on-ink);
+    opacity: 0.9;
+  }
+  .pane--b {
+    background: var(--blue);
+    color: #fff;
+    transform: rotate(1deg);
+    box-shadow: var(--shadow-card);
+  }
+  .pane--b .mono {
+    opacity: 0.85;
+  }
+  .giro__arrow {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .giro__arrow b {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(3.4rem, 6vw, 5.5rem);
+    line-height: 1;
+    color: var(--blue);
+  }
+  .giro__arrow span {
+    font-family: var(--font-hand);
+    color: var(--blue);
+    font-size: 1.15rem;
+    transform: rotate(-5deg);
+    text-align: center;
+  }
+  .chips {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: auto 0 0;
+    padding-top: 0.6rem;
+  }
+  .chip {
+    border: var(--rule) solid rgba(255, 255, 255, 0.7);
+    border-radius: 99px;
+    padding: 0.35rem 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 900px) {
+    .giro__grid {
+      grid-template-columns: 1fr;
+    }
+    .giro__arrow {
+      flex-direction: row;
+      justify-content: center;
+    }
+    .giro__arrow b {
+      transform: rotate(90deg);
+    }
+  }
+</style>

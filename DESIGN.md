@@ -1,196 +1,153 @@
 ---
 name: Jordy Rojas Aliaga — Portfolio
-description: A confident, data-forward personal portfolio built in a hand-illustrated SaaS-landing register, applied to a person instead of a product.
+description: A typographic, confident personal portfolio. Oversized condensed type, paper and ink, one azulejo blue, and a few theatrical moments.
 colors:
-  paper: "#f7f2e7"
-  paper-dim: "#efe8d8"
-  ink: "#15130f"
-  ink-soft: "#4a463d"
-  line: "rgba(21, 19, 15, 0.86)"
-  green: "#2e7d32"
-  green-ink: "#143d18"
-  forest: "#2e5c43"
-  forest-ink: "#eef4ee"
-  burgundy: "#631f2a"
-  burgundy-ink: "#f6e9ea"
-  periwinkle: "#8890ee"
-  periwinkle-ink: "#16123f"
-  rust: "#b9481d"
-  rust-ink: "#fbeee5"
-  night: "#121009"
-  night-ink: "#f4efe3"
+  paper: "#f4f1e8"
+  paper-dim: "#e8e3d4"
+  ink: "#14130f"
+  ink-soft: "#5a564c"
+  blue: "#2342e8"
+  blue-on-ink: "#8a99ff"
 typography:
   display:
-    fontFamily: "Bricolage Grotesque, Hanken Grotesk, sans-serif"
-    fontSize: "clamp(2.4rem, 5.2vw, 4.4rem)"
-    fontWeight: 700
-    lineHeight: 1.05
-    letterSpacing: "-0.02em"
-  title:
-    fontFamily: "Bricolage Grotesque, Hanken Grotesk, sans-serif"
-    fontSize: "clamp(1.8rem, 3.4vw, 2.6rem)"
-    fontWeight: 700
-    lineHeight: 1.15
-    letterSpacing: "-0.02em"
-  label:
-    fontFamily: "Bricolage Grotesque, sans-serif"
-    fontSize: "0.9rem"
-    fontWeight: 600
-    letterSpacing: "0.02em"
+    fontFamily: "Anton, Impact, Arial Narrow, sans-serif"
+    textTransform: uppercase
+    lineHeight: 0.92-0.98
   body:
-    fontFamily: "Hanken Grotesk, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
-    fontSize: "17px"
-    fontWeight: 400
+    fontFamily: "Geist, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
+    fontSize: "1.0625rem"
     lineHeight: 1.6
+  mono:
+    fontFamily: "Geist Mono, ui-monospace, SF Mono, Menlo, monospace"
+    fontSize: "0.78rem"
+    textTransform: uppercase
+    letterSpacing: "0.05em"
 rounded:
-  sm: "10px"
-  md: "18px"
-  lg: "28px"
-  pill: "999px"
+  none: "0"
 spacing:
-  section: "clamp(4rem, 8vw, 7rem)"
-  section-mobile: "clamp(3rem, 12vw, 4.5rem)"
-  card-padding: "1.75rem"
-components:
-  button-primary:
-    backgroundColor: "{colors.green}"
-    textColor: "#ffffff"
-    typography: "{typography.label}"
-    rounded: "{rounded.pill}"
-    padding: "0.75em 1.5em"
-  button-primary-hover:
-    backgroundColor: "{colors.green}"
-  card-forest:
-    backgroundColor: "{colors.forest}"
-    textColor: "{colors.forest-ink}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.card-padding}"
-  card-burgundy:
-    backgroundColor: "{colors.burgundy}"
-    textColor: "{colors.burgundy-ink}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.card-padding}"
-  nav-mark:
-    backgroundColor: "{colors.paper}"
-    textColor: "{colors.ink}"
-    typography: "{typography.label}"
-    rounded: "{rounded.sm}"
-    size: "44px"
+  section: "clamp(4rem, 9vw, 8rem)"
+  gutter: "clamp(1.25rem, 4vw, 3rem)"
+  rule: "1.5px"
 ---
 
 # Design System: Jordy Rojas Aliaga — Portfolio
 
+## Direction change in progress (decided 2026-11-26)
+
+The system is moving toward the softer, more playful prototype in `resource/portfolio/`: illustrated collages, rounded cards and pills, soft shadows, a handwriting accent font (`Nothing You Could Do`), tilted cards, and a Lima ↔ Porto narrative. Where this section conflicts with the rules below ("square corners", "hard-offset shadows only", "no pills"), this section wins, and the older rule is updated when the piece it governs is migrated. It is done piece by piece, not all at once.
+
+Constraints that do NOT change: one blue accent (the prototype's green Portugal stamp is out), all copy in `content.ts` for every language in `langs` (today `es` and `en`), no scroll-jacking, no page-transition curtain on every click, intro only on first visit and skippable.
+
+Migrated so far:
+- Nav (`Nav.astro`): handwritten `jordy.` logo (`--font-hand`), links in one outlined pill with a sliding blue underline, language picker (see "Language picker" below), blue pill CTA, decorative Porto clock from 1100px. On the home page a scroll-spy marks the link of the section under 40% of the viewport with `aria-current="location"` (same blue + underline as the current page); About keeps `aria-current="page"`. Under 860px: burger plus a full-screen blue menu (hidden with `visibility`, rest of the page `inert` while open, Escape closes and returns focus, page scroll locked). Labels live in `content.nav` (`menuOpen`, `menuClose`, `clock`).
+- Contact (`Contact.astro`): opens with the rotary-phone sticker (`public/contact/phone.png`, rings on hover) and the email as a big Anton button that copies on click (toast; falls back to selecting the text if the clipboard is blocked). LinkedIn and GitHub as outlined pills. Then the contract (unchanged copy), and the handwritten signature plus a solid "Sign by email" pill (`mailto:`) closes it. The phone is decoration only: no phone number is published and no copy invites a call. New strings live in `content.contact` (`lead`, `copyHint`, `copied`, `copyFailed`, `phoneAlt`, `github`); `GITHUB` is exported next to `LINKEDIN`.
+- Hero (`Hero.astro`): says who he is, not the stance. Giant Anton words "¡Hola! / Soy / Jordy" around a black-and-white cut-out photo with a paper outline and four hand-drawn blue lines that draw themselves; role line in mono, two pills (Lima ✈ Porto, years), a line that types rotating phrases (static first phrase without JS or with reduced motion). The real `h1` is `sr-only`; the big words are decorative. Below: one-sentence proof, a pill "See my work" button and "Write to me" link, then the three stats. Under 820px it stacks. `.btn` is now a blue pill site-wide (also used by the About teaser); `.btn--paper` was removed. Copy in `content.hero`.
+- Experience title is the full stance line ("No busco trabajo. Busco el problema difícil.", three lines in Spanish, four in English), with a one-line sub ("Four companies, two countries and one habit: shipping.").
+- Rhythm pass: `--rule` is 1.5px; the global top rule on `section` is gone and vertical padding grew, so About and Home breathe like the prototype. `AboutTeaser` sits on `--paper-dim`. New `Quote.astro` right after the hero: the keyboard rule in handwriting that writes itself on entering the viewport, plus scattered zigzags (about 58% of the viewport tall; plain visible text without JS or with reduced motion). Copy in `content.quote`. The phrase is Jordy's own (confirmed 2026-11-26).
+- Intro (`Intro.astro`): giant words are windows (an SVG mask over an ink screen) onto drifting pictures: "Del Perú" (Lima), "Al mundo" (Italia, Suiza, Irlanda, Portugal, each with a caption), then "Apps / APIs / Que funcionan" over three retro illustrations, a `01 / 03` counter, and an ending on "JORDY" with the black-and-white cut-out photo before the curtain lifts. About 3.5 s plus the 0.8 s lift. No library: Web Animations plus one SVG `<text>`; on screens under 760px multi-word text is split into one line per word. Images (`public/intro/`, about 1.6 MB with the photo) are requested only when the intro plays, so returning visitors download nothing; blue shows through the letters until an image is ready. Any key, any click or the "Skip intro" button ends it. The intro (not a timer) removes `intro` from `<html>`, which starts the hero's entrance (`animation-play-state: paused` while it is up); a 7 s failsafe in `<head>` removes it anyway. All words and captions are in `content.intro` (es and en). Careful in scripts: `html` also carries the class `intro`, so select `div.intro`.
+- Code blocks (`CodeBlock.astro`, colouring in `src/lib/highlight.ts`): an editor window, not a plain box. Three window dots, then file name and language as pills and a Copy pill (copies the code only; if the clipboard is blocked it selects the code and says Cmd/Ctrl + C); dim line numbers; key lines get a blue band and a short handwritten margin note with a small arrow (a paraphrase of the caption, in `projects.ts`, hidden under 900 px); the explanation sits in a footer inside the window. Background is ink mixed with 10% blue, 12 px corners. **Exception to the one-accent rule:** syntax colours use several hues (violet keywords, teal italic types, pink italic properties, sand strings, soft orange numbers), softened to sit next to paper and blue, and functions use the site's blue-on-ink; the window dots are macOS red/yellow/green. This is the only place allowed to do that. Colouring is done at build time with Shiki (`shiki` is a direct dependency), so the browser gets coloured text and no highlighter. Fragments that are a method or object member are coloured inside an invisible wrapper (`wrap` in `CodeSnippet`).
+- Project pages (`ProjectDetail.astro`, route `src/pages/[lang]/projects/[slug].astro`): one template for all five projects, two layers. Layer 1 for everyone: back link, "02 of 05 · client", giant blue Anton title, handwriting tagline, the tilted collage, a four-cell meta strip (year, client, role, stack), the big number when there is one (−20%), then the three chapters (The challenge, What I built, The result) with the tags and links; projects under NDA say so and point to the contact. Layer 2 "Under the hood" only for the three with public code and screens: blocks of text, layer tables, a code sample (see "Code blocks") and real screenshots, on a darker paper. Ends with a blue "Next project" band that loops through the five, then the normal contact footer. Same nav as the rest of the site, with the ES/EN switch staying on the same project. No parallax, no page-transition curtain, real URLs (no hash routing).
+- Stack, bands and Education (`Skills.astro`, `StackBands.astro`, `Education.astro`): Stack sits on `--paper-dim`. Only the row closest to the middle of the screen is lit (full ink, blue label); the others are dimmed to `--ink-soft`, which keeps its contrast (the old outline-only text was hard to read and lit two or three rows at once). Without JS or with reduced motion every row is lit. Under it, two tilted bands (blue, ink) straddle the border between Stack and Education, moving in opposite directions; they are decorative (`aria-hidden`), built from the stack list itself (no extra copy), and static with reduced motion. They can be removed by deleting `<StackBands />` from `pages/[lang]/index.astro`. Education: a shorter headline, degrees as rows led by the years in blue Anton, certifications as a one-line table (name, issuer, month). The section is 1,302 px tall (it was 1,396 px).
+- Sharing (link previews, icons, search): every page carries Open Graph and Twitter card tags (`og:image` 1200x630 JPG, absolute URL, alt text, `og:url`, site name, locale and its alternate), `theme-color` (paper), JSON-LD `Person` on the two home pages (only facts already on the site; no email), `sitemap.xml` with hreflang links and `robots.txt` (both written by hand in `src/pages`). Share image: two cards, one per language (`public/og/es.jpg` and `public/og/en.jpg`, 1200x630, same design, only the role and "N+ años / N+ years" change), source in `scripts/og-default.html` (`?lang=es|en`). Every page of a language uses that language's card, project pages included; the root uses the default language's. Per-project cards were tried and dropped (kept outside the site, in `resource/og-project-cards/`). The root URL `/` redirects by language with JavaScript, which chats do not run, so it has its own full set of tags in both languages (`rootMeta` in `content.ts`) and is no longer `noindex`. Meta descriptions stay under about 150 characters. Icons: a blue tile with a paper "J" and an ink full stop, drawn by `scripts/make-icons.mjs` (`favicon.svg`, `favicon.ico` 32 px, `apple-touch-icon.png` 180 px). Chats cache previews: after publishing, refresh them with the Facebook Sharing Debugger (covers WhatsApp and Instagram) and LinkedIn's Post Inspector, or add `?v=2` to the link.
+- Project collages (`collages` in `content.ts`, files in `public/projects/collages/`): tilted card, `--radius-card`, `--shadow-card`. They no longer sit inside each row (that made the list 2,600 px, 3.4 screens). With a mouse, the row gets a blue panel that wipes up from its bottom edge (a little wider than the column), the title nudges 1 rem right, the outcome chip inverts to white, and one floating collage follows the cursor, centred on it and kept inside the window, only while over a row; it is decorative (`aria-hidden`), the five pictures are fetched shortly before the list scrolls into view, and with reduced motion it follows without lag. On touch screens (`hover: none`) each row shows a small tilted thumbnail next to the title instead. The list is about 1,300 px (1.4 screens).
+
+## Language picker
+
+Four languages: es, en, pt, it (`langs`). On large screens the nav shows one outlined pill with a globe and the greeting in the current language (Hola, Hello, Olá, Ciao). It opens a full-screen blue sheet (`#lang-sheet`, a dialog) with the four greetings in giant Anton; each is a real link to the same page in that language (`hreflang`, `lang`), the current one underlined with a handwritten "you are here". Esc, the Close pill or a click on the empty blue closes it; focus goes in on the current language and returns to the pill; the page and the rest of the header are `inert` while it is open. Under 860px the pill and the sheet are gone: the burger menu ends with a row of four code pills (ES EN PT IT). Without JavaScript the pill is replaced by four plain links (`noscript`). The sheet is opened on request only, it is not a transition on every click. Greetings and names are `langMeta` in `content.ts`; `nav.langLabel`, `nav.langClose` and `nav.here` are per language. Choosing a language is remembered in `localStorage.lang`, which the root `/` uses to redirect.
+
+**Provisional languages.** `provisionalLangs` in `content.ts` lists languages that are not published yet. `pt` (European Portuguese) and `it` are fully written (their blocks in `content.ts`, the five projects in `projects.ts`, share cards `public/og/pt.jpg` and `it.jpg`) but wait for a native review. Italian appears in the languages tile and in the ticker as "learning" (Jordy is just starting), nowhere else. Their pages are `noindex` and left out of the sitemap, the hreflang alternates and the root redirect (`liveLangs`). Project pages fall back to English (`projectText`). To publish a language once reviewed, remove it from `provisionalLangs`. To add a new one: its `Content` block, its `text` in every project, its share card (`public/og/{lang}.jpg`, `scripts/og-default.html`), then the list.
+
 ## Overview
 
-**Creative North Star: "The Evidence Ledger"**
+**Creative North Star: "The Hard Problem"**
 
-The site treats "considering Jordy for a role" as a product decision, not a portfolio to browse. It borrows the confident, flat-color, hand-illustrated register of a SaaS landing page (the user's pinned reference, rothfinder.com) and applies it to a person: an off-white paper ground, oversized bold display type, black-outlined cards in saturated flat accent colors, and a stat ledger styled like a scoreboard. The only ornament is a set of thin, single-stroke hand-drawn squiggles that self-draw on load and on scroll — everything else is flat color, hard black-ish outlines, and rounded geometry.
+The site's stance is "No busco trabajo. Busco el problema difícil." (figurative: easy work does not interest him, challenges do). It lives in the Experience section, not the hero. Everything serves that confidence. Type does the heavy lifting (huge, condensed, uppercase), color is rationed to a single azulejo blue (a nod to Porto), and structure comes from space, background changes and thin ink rules inside lists, not boxes.
 
-The pinned reference used small-caps tracked eyebrow labels throughout; this build ships with none. That is a deliberate, reviewed craft-floor deviation (eyebrows are banned outright), not an oversight — do not reintroduce them to "match the reference" more closely.
+Inspiration is worksruthi.com: personality from oversized type, one brand color and a few theatrical moments. Palette, voice and content are Jordy's own; do not drift toward that site's red or Impact-on-black look.
 
-**Key Characteristics:**
-- Off-white paper ground with near-black ink and a near-black (not pure-black) outline color reused everywhere.
-- Two shipped accent-card colors (forest, burgundy) out of four defined in tokens; periwinkle and rust exist as unused reserve tokens.
-- One signature motion device: hand-drawn squiggle doodles that self-draw via `stroke-dasharray`/`stroke-dashoffset`.
-- Scroll-triggered reveal (fade + rise) is scoped to the Hero only — not a generic section-enter treatment.
-- Bricolage Grotesque for all display/heading/label text, Hanken Grotesk for body — chosen to avoid the Space Grotesk/DM Sans default pairing.
+**Key characteristics**
+- Paper (#f4f1e8) ground, near-black ink, and exactly one accent: blue. No second accent color.
+- Anton for every heading and big number, Geist for reading text, Geist Mono for metadata.
+- Square corners everywhere. Hierarchy is built with 2px ink rules and scale contrast.
+- Hard-offset shadows only (buttons, covers, code blocks). No blurred shadows.
+- Hand-drawn doodle squiggles are the one ornament, sparse, around the hero photo and under the signature.
+- Bilingual (ES/EN) with equal weight; all copy lives in one typed file.
 
 ## Colors
 
-Flat, saturated, and paired with near-black outlines rather than shadows-as-depth; light neutrals dominate, accents are used sparingly and only where evidence (projects, footer) needs to be set apart.
+- **Paper** `#f4f1e8`: page ground. **Paper Dim** `#e8e3d4`: inline code and quiet fills.
+- **Ink** `#14130f`: text, rules, borders, the dark contact/footer surface and the marquee.
+- **Ink Soft** `#5a564c`: secondary text (about 6.6:1 on paper).
+- **Blue** `#2342e8`: the accent. Primary buttons, the second line of the hero, outcome highlights, hover states, labels that become "active". White text on it passes AA (about 7:1).
+- **Blue on Ink** `#8a99ff`: the same accent on dark surfaces (clause numerals, signature doodle, hover on ink rows). Plain blue on ink fails contrast, never use it there.
 
-### Primary
-- **Signal Green** (`#2e7d32`): the one primary-action color — CTA pill background, link-selection highlight, focus-ring color, and the hero ledger's outcome-stat highlight strip. Deliberately darkened from an earlier, brighter green (~`#3fa92e`) specifically to clear 4.5:1 contrast against white text; `#2e7d32` is the canonical, shipped value, not the brighter one recorded in the surface brief's original aspiration.
-
-### Secondary
-- **Deep Forest** (`#2e5c43`): background of the first project card (paired text `#eef4ee`).
-- **Dark Burgundy** (`#631f2a`): background of the second project card (paired text `#f6e9ea`).
-
-### Neutral
-- **Paper** (`#f7f2e7`): page background.
-- **Paper Dim** (`#efe8d8`): scrollbar track, subtle recess fill.
-- **Ink** (`#15130f`): primary text and heading color.
-- **Ink Soft** (`#4a463d`): secondary/supporting text (subheads, dates, captions).
-- **Line** (`rgba(21, 19, 15, 0.86)`): the near-black outline used on every bordered surface — pills, cards, nav mark, table rules. Not pure black; carries a hint of warmth to sit against the paper ground.
-- **Night** (`#121009`) / **Night Ink** (`#f4efe3`): the inverted footer/contact surface — the one place the page flips to a dark ground.
-
-### Not shipped
-- **Periwinkle** (`#8890ee`) and **Rust** (`#b9481d`) are defined as CSS custom properties (with paired ink tokens) but currently unused: the accent system was planned for four project-card colors, and only two real projects exist to card. Don't treat these as a mandate to invent two more project cards to "use up" the palette; they're a reserve for if a third and fourth real project are added later.
-
-### Named Rules
-**The Outline-Not-Shadow Rule.** Every bordered surface (pills, cards, tags, the nav mark) is defined primarily by a ~1.75px near-black outline (`--line`), not by shadow. Where a shadow is present (`--shadow-card`), it's a soft ambient lift under the whole card, never the thing that defines the edge.
+**One-Accent Rule.** If something needs emphasis, it is blue or it is big. Do not add a second hue.
 
 ## Typography
 
-**Display Font:** Bricolage Grotesque (with Hanken Grotesk, sans-serif fallback)
-**Body Font:** Hanken Grotesk (with system sans-serif fallback)
-
-**Character:** A bold, slightly condensed geometric grotesk for anything that has to announce itself (headlines, stats, nav, tags, labels), paired with a warmer, more legible grotesk for anything meant to be read in paragraphs. The pairing replaced an initial Space Grotesk/DM Sans combination flagged as an overused AI-generated-site default.
-
-### Hierarchy
-- **Display** (700, `clamp(2.4rem, 5.2vw, 4.4rem)`, line-height 1.05): the hero headline only.
-- **Title** (700, `clamp(1.8rem, 3.4vw, 2.6rem)`, line-height 1.15): section headings (Work, Experience, Stack).
-- **Stat** (700, 2rem for the primary ledger stat / 1.4rem for the outcome highlight): the ledger and card outcome numbers, always Bricolage Grotesque even when body copy surrounds them.
-- **Label** (600, 0.85–0.98rem, tracked slightly loose): nav links, pill/CTA text, card tags, section eyebrow-adjacent metadata (company/date lines) — always Bricolage Grotesque, never small-caps, never letter-spaced into an eyebrow pattern.
-- **Body** (400, 17px base / 1.6 line-height, max-width 68ch): paragraph copy — subheads, project detail, experience descriptions.
-
-### Named Rules
-**The No-Eyebrow Rule.** No small-caps, letter-spaced-uppercase label sits above a heading anywhere in the build, even though the pinned visual reference uses them. This is a standing prohibition carried from the finish review, not a gap to fill in on the next surface.
+- **Display (Anton, uppercase):** hero `clamp(3rem, 6.9vw, 6.6rem)`, section titles `clamp(2.6rem, 7.2vw, 6.25rem)`, big numerals and company/project names. Line-height 0.92-0.98.
+- **Body (Geist):** 17px, 1.6, max 62-68ch.
+- **Mono (Geist Mono, uppercase, tracked):** nav, dates, tags, labels. Metadata only, never body copy.
+- Small mono labels (including the tag above a case-study title) are allowed. The old "no eyebrow" rule belonged to the previous system and is retired.
 
 ## Layout
 
-Single-column, section-stacked page (`Nav → Hero → Experience → Projects → Skills → Education → Contact`), each section wrapped in a centered `.wrap` container (`min(1180px, 100% - 3rem)`). Section vertical rhythm is generous and consistent: `padding-block: clamp(4rem, 8vw, 7rem)`, tightening to `clamp(3rem, 12vw, 4.5rem)` under 640px. Section-internal heads (title + optional subhead) cap at ~60–62ch and sit in a `flex-column` with `~0.9rem` gap, always followed by ~2.5–4rem of margin before the section body.
+Single-column stack: marquee, sticky nav, hero, experience, projects, stack, education, contact (dark). `.wrap` is `min(1240px, 100% - 2 * gutter)`. Sections are separated by space (`clamp(5rem, 11vw, 10rem)` of vertical padding) and, where a beat is needed, a background change (paper-dim, blue, ink). No rule between sections.
 
-Hero uses a two-column grid (`minmax(0,1fr) minmax(280px,380px)`, gap `clamp(2.5rem,6vw,5rem)`) pairing copy against the stat ledger card, collapsing to one column under 880px. Experience and Skills use a repeating row list (`4.5rem`/`14rem` label column + flexible body column) with top/bottom hairline rules (`--line`, 1.75px) instead of card boundaries. Projects uses a 2-column card grid collapsing to 1 column under 780px. Education reuses the same hairline-rule row pattern as two parallel lists side by side (Education / Certifications, equal-width columns) rather than one continuous list, collapsing to stacked single columns under 780px. Contact/footer flips to a two-column grid (`minmax(0,1fr) minmax(220px,320px)`) that stacks under 720px.
-
-## Elevation & Depth
-
-Mostly flat with outline-as-structure; a single soft ambient shadow token (`--shadow-card: 0 14px 30px -14px rgba(21,19,15,0.35)`) lifts project cards and the hero ledger just enough to read as physical objects, not as a layering system. Depth is otherwise conveyed by flat color blocking (accent card backgrounds against the paper ground) and by a darkened overlay tint (`rgba(0,0,0,0.16)`) used for the card footer band, not by additional shadow steps.
-
-### Shadow Vocabulary
-- **Card lift** (`box-shadow: 0 14px 30px -14px rgba(21, 19, 15, 0.35)`): applied to project cards and the hero ledger card; the only shadow in the system.
-- **CTA glow** (`box-shadow: 0 10px 22px -12px var(--green-ink)`, intensifying slightly on hover): scoped to the primary pill button only, tinted to the green rather than neutral black.
-
-### Named Rules
-**The One-Shadow Rule.** There is exactly one ambient card shadow and one CTA-specific glow in the whole system. Don't add new shadow values for new components; reuse `--shadow-card` or state explicitly why a component needs the CTA glow instead.
-
-## Shapes
-
-Rounded-but-structured: three radius steps (`--radius-sm: 10px` for small marks like the nav initials and contact mark; `--radius-md: 18px` for the hero ledger card; `--radius-lg: 28px` for project cards) plus full-pill (`999px`) for every button, tag, and chip. Every rounded surface pairs its radius with the same ~1.75px near-black outline (`--stroke`/`--line`), so the outline — not the radius — is what reads as the system's signature edge.
+- **Hero:** 12-col grid. Copy spans columns 1-9 and the photo 8-12, so the headline can overlap the photo column slightly. Stacks under 700px. The subtitle is capped to 77% of the copy column so it never runs under the photo.
+- **Lists (experience, projects, stack, education):** ruled rows. Experience and projects are `3.5rem | 1.1fr | 1fr` and stack on narrow screens.
+- **Project pages:** see "Migrated so far" (one template for all five projects).
 
 ## Components
 
-### Buttons
-- **Shape:** full pill (`border-radius: 999px`), outlined with `1.75px solid var(--line)` even on the filled primary variant.
-- **Primary:** green fill (`#2e7d32`), white text, padding `0.75em 1.5em`, green-tinted shadow; lifts `translateY(-2px)` on hover, settles on active.
-- **Secondary:** an underlined text link (`.link-underline`, 1.5px underline, 4px offset, weight 600) — no pill, no border. Used wherever a CTA needs a lower-emphasis sibling ("View my work", "LinkedIn").
+- **Button (`.btn`, `.pill` on case pages):** blue fill, white text, 2px ink border, `5px 5px 0 ink` shadow. Hover moves up-left and grows the shadow, active presses in. Variant `.btn--paper` for dark surfaces.
+- **Link (`.link`):** underlined 2px, turns blue on hover.
+- **Marquee:** ink bar, mono text, 38s linear loop, static with reduced motion.
+- **Nav:** sticky, paper, 2px bottom rule. See "Migrated so far" for the current pill-based design (this line predates it).
+- **Stats:** three huge numerals, each with one thin ink rule above it and space between them (no boxed grid). The last one is blue.
+- **Project row:** big title, mono context, description, outcome chip (blue), mono tags. On hover (pointer devices) a blue panel wipes up behind the row and the floating collage appears (see "Migrated so far"). The old 16:10 screenshot cover is gone from the list (the About page no longer shows project cards).
+- **Stack list:** see "Migrated so far" (single lit row, no outline text; this line predates it).
+- **Contact contract:** ink section. See "Migrated so far" for the current order (phone and copyable email, then four numbered clauses, then handwritten signature). This line predates it.
+- **Cursor ring:** a lagging 34px ring (68px, filled, over links, buttons and `[data-cursor]`) with `mix-blend-mode: difference`. Mouse only; the native cursor stays.
+- **Intro:** first visit only (`localStorage.introSeen`), `?intro` replays it, off with reduced motion. See "Migrated so far" for the current story intro (this line predates it).
 
-### Chips / Tags
-- **Style:** pill-shaped, `1–1.25px` outline in the current text color (so tags on a colored card outline in white-ish, tags on paper outline in ink), weight 600, small size (0.78–0.9rem).
+## About page
 
-### Cards / Containers
-- **Corner Style:** 28px radius (project cards), 18px (hero ledger).
-- **Background:** flat accent fill only for project cards (forest, burgundy); the hero ledger stays on-paper with an inset green highlight strip for the standout stat.
-- **Shadow Strategy:** the single `--shadow-card` ambient lift (see Elevation).
-- **Border:** 1.75px near-black outline on every card, no exceptions.
-- **Internal Padding:** ~1.75rem horizontal, tiered vertical padding by zone (top icon row, body, footer band).
+`/{lang}/about/`, reached from the nav ("Sobre mí" / "About") and from a teaser band under the hero. Migrated to the soft prototype direction on 2026-11-28 (proposal in `resource/portfolio/about-propuesta.html`). Scenes, all text in `content.about`:
 
-### Navigation
-- Sticky top bar, translucent paper background (`color-mix` at 88% opacity) with backdrop blur, no bottom border at rest. Left: a square outlined initials mark ("JR", 44px, 10px radius). Center-right: inline text links, ink-soft at rest, ink on hover, no underline, no active-state treatment beyond the hover color shift. Right: the primary pill CTA at a slightly reduced size. On mobile, links wrap to a centered second row.
+1. **Hero (`AboutHero`):** label, giant title "Sin miedo al éxito" / "Not afraid of success" (last word blue), two lead lines, two chips, and the colour portrait (`public/me/about/hero.webp`, 1122x1402) in a tilted white frame with blue tape, two stickers and a handwritten note. The portrait stays small (max 390px).
+2. **Bento (`AboutBento`):** tilted tiles with the quick facts: Lima ✈ Porto (blue), the years in software (ink, `YEARS_IN_CODE`, automatic), languages as "four ways to say hi" with bars (Italian is a short bar labelled "learning"), role at Motorline, "UPC" in blue, and the name as a handwritten signature.
+3. **The turn (`AboutGiro`):** "De configurar a crear": a gridded ink pane (struck-through "Configurar y mantener") and a blue pane ("Crear") with four company/year chips. Draws on Jordy's own answer about moving from networking to software.
+4. **Away from the keyboard (`AboutOff`):** ink section. Three Q&A cards in Jordy's own words (childhood in Lima, a Sunday in Porto, the production bug) between three CSS-background crops of the same portrait.
+5. **How I work (`Lessons`):** six rule cards in a mosaic, each with a proof chip from the CV (the rule-to-proof pairing is Claude's draft).
+6. **Close (`AboutClose`):** blue band "¿Próxima parada? / tu equipo, quizás.", a mailto button and a link to the projects. It carries `id="contact"` so the nav "Hablemos" button scrolls to it. Under it, `AboutFooter`: a slim ink strip with LinkedIn and GitHub pills and a mono line (name, Porto, year). No full Contact footer on this page, it repeated the close.
 
-### Doodle (signature component)
-The hand-drawn squiggle is the one true signature device: a single-stroke SVG path (4 variants — tangle, loop, flick, underline) that self-draws via `stroke-dasharray: 1` / `stroke-dashoffset` animated to 0 over 1.3s. Used sparse and low-opacity (0.5–0.55) scattered in the Hero's empty space, inside project cards as a muted corner accent, and as an underline flourish in the Contact footer. Respects `prefers-reduced-motion` by snapping to fully-drawn with no transition.
+Removed with this change: `LifeLine`, `Route`, `BuiltForFun`, `lib/aboutPhoto.ts` and the `covers` export (projects already live in the home). The original PNG of the portrait is kept outside `public/`, in `resource/portfolio/assets/retrato.png`.
+
+Shared utility: `data-reveal` fades an element up once when it enters the viewport (animation with `backwards` fill so hover transforms keep working; content stays visible without JS or with reduced motion).
+
+## Motion
+
+Entrance (`rise`) on the hero copy, doodles that draw themselves on entering the viewport, hover shifts on rows, the stack scroll focus, the cursor ring, the intro. All of it respects `prefers-reduced-motion`. No scroll-jacking and no parallax.
+
+## Internationalization
+
+- Languages are listed once in `langs` (`src/i18n/content.ts`: es, en, pt, it; pt and it are provisional, see "Language picker"). `content` is `Record<Lang, Content>`, and `Content` is an interface, so a missing key or a language without a text block is a type error (checked with `tsc`, not by `astro build`).
+- Routes: `/es/` and `/en/` from `src/pages/[lang]/index.astro`. `/` is a client-side redirect: saved choice, then browser languages, then `defaultLang`.
+- To add a language: add it to `langs`, write its `Content` block (including `ogLocale`) and its alt texts in `covers`. Nothing else is language-specific.
+- Project pages are `/{lang}/projects/{slug}/` in every language. Their copy is in `src/i18n/projects.ts` (one typed `ProjectDetail` per project, a `text` block per language), the shared labels in `content.projectPage`. The old `/projects/{slug}` URLs (English only) redirect to `/en/projects/{slug}/` (see `redirects` in `astro.config.mjs`). To add a language, add its `text` block to every project and its `projectPage` labels.
 
 ## Do's and Don'ts
 
-### Do:
-- **Do** pair every filled or bordered surface with the same `1.75px` near-black outline (`--line`) — it's the connective tissue between the paper, card, and pill components.
-- **Do** keep the Doodle component sparse and low-opacity; it's an accent, not a pattern-fill.
-- **Do** use Bricolage Grotesque for anything that functions as a label, stat, or heading, and Hanken Grotesk for anything read as a paragraph.
-- **Do** scope the `.reveal` scroll-fade-and-rise treatment to the Hero's copy and ledger only; it is not a generic section-enter animation to apply everywhere.
+**Do**
+- Keep headings in Anton uppercase and let scale carry the hierarchy.
+- Use blue for emphasis and `blue-on-ink` on dark.
+- Use thin (1.5px) ink rules only to order lists, and space or background to separate sections.
+- Pass user-visible text through `content.ts`, never hardcode it in a component.
+- Add `data-cursor` to any new large interactive surface that isn't a link or button.
 
-### Don't:
-- **Don't** add small-caps, tracked-uppercase eyebrow labels above headings anywhere, even though the pinned visual reference (rothfinder.com) uses them — this was banned by the finish review as a craft-floor default, not left out by accident.
-- **Don't** introduce hard-offset (non-blurred) drop shadows; the system's only shadow is the soft ambient `--shadow-card` lift plus the tinted CTA glow.
-- **Don't** treat the unused `--periwinkle` / `--rust` tokens as a mandate to invent additional project cards just to "use" the palette; add a third/fourth accent card only when a third/fourth real project exists.
-- **Don't** reintroduce the brighter, pre-review green (~`#3fa92e`); `#2e7d32` is the canonical primary and exists specifically to clear white-text contrast.
+**Don't**
+- Don't add a second accent color or reuse the retired palette (green, forest, burgundy, periwinkle, rust).
+- Don't use rounded corners, blurred shadows, or pill shapes.
+- Don't put Geist Mono on paragraphs.
+- Don't invent employers, metrics or testimonials. Content comes from the CV, LinkedIn, or Jordy.

@@ -1,0 +1,74 @@
+---
+import { content, LINKEDIN, GITHUB, type Lang } from "../i18n/content";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = content[lang].contact;
+const year = new Date().getFullYear();
+---
+
+<footer class="strip">
+  <div class="wrap strip__row">
+    <ul class="strip__links">
+      <li><a class="pill" href={LINKEDIN} target="_blank" rel="noopener noreferrer">{t.linkedin} ↗</a></li>
+      <li><a class="pill" href={GITHUB} target="_blank" rel="noopener noreferrer">{t.github} ↗</a></li>
+    </ul>
+    <p class="strip__line mono">Jordy Rojas Aliaga · Porto · {year}</p>
+  </div>
+</footer>
+
+<style>
+  .strip {
+    background: var(--ink);
+    color: var(--paper);
+    padding-block: 1.4rem;
+  }
+  .strip__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+  }
+  .strip__links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 0.6rem;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.55em 1.1em;
+    border-radius: 99px;
+    border: 1.5px solid var(--paper);
+    font-weight: 600;
+    font-size: 0.92rem;
+    text-decoration: none;
+    transition: background 0.2s var(--ease-out), color 0.2s var(--ease-out), transform 0.2s var(--ease-out);
+  }
+  .pill:hover {
+    background: var(--paper);
+    color: var(--ink);
+    transform: translateY(-2px);
+  }
+  .pill:focus-visible {
+    outline-color: var(--blue-on-ink);
+  }
+  .strip__line {
+    margin: 0;
+    color: rgba(244, 241, 232, 0.65);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pill {
+      transition: none;
+    }
+    .pill:hover {
+      transform: none;
+    }
+  }
+</style>

@@ -1,0 +1,598 @@
+---
+import { content, collages, COLLAGE_SIZE, langPath, projectPath, type Lang } from "../i18n/content";
+import { projectBySlug, projectNav, projectText } from "../i18n/projects";
+import CodeBlock from "./CodeBlock.astro";
+
+interface Props {
+  lang: Lang;
+  slug: string;
+}
+const { lang, slug } = Astro.props;
+
+const project = projectBySlug(slug)!;
+const t = projectText(project, lang);
+const ui = content[lang].projectPage;
+const { index, total, next } = projectNav(slug);
+const nextText = projectText(next, lang);
+const collage = collages[project.collage];
+const nextCollage = collages[next.collage];
+const home = langPath(lang);
+const pad = (n: number) => String(n).padStart(2, "0");
+
+// The only markup the project copy uses: `code`. Escape everything else.
+const rich = (s: string) =>
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/`([^`]+)`/g, "<code>$1</code>");
+---
+
+<main class="detail" style={`--cols:${project.shotCols ?? 3}`}>
+  <!-- 1. Who, what, when -->
+  <section class="top wrap">
+    <a class="back mono" href={`${home}#work`}>{ui.back}</a>
+
+    <div class="top__grid">
+      <div class="top__copy">
+        <p class="mono top__count rise" style="--d: 0s">{pad(index)} {ui.of} {pad(total)} · {t.client}</p>
+        <h1 class="top__title rise" style="--d: 0.08s">{t.title}</h1>
+        <p class="top__tagline rise" style="--d: 0.2s">{t.tagline}</p>
+        {
+          (project.demo || project.github) && (
+            <div class="top__actions rise" style="--d: 0.3s">
+              {project.demo && (
+                <a class="btn" href={project.demo} target="_blank" rel="noopener">
+                  {ui.demo} ↗
+                </a>
+              )}
+              {project.github && (
+                <a class={project.demo ? "ghost" : "btn"} href={project.github} target="_blank" rel="noopener">
+                  {ui.github} ↗
+                </a>
+              )}
+            </div>
+          )
+        }
+      </div>
+
+      <figure class="top__art rise" style="--d: 0.15s">
+        <img
+          src={collage.src}
+          alt={collage.alt[lang]}
+          width={COLLAGE_SIZE.width}
+          height={COLLAGE_SIZE.height}
+          fetchpriority="high"
+        />
+      </figure>
+    </div>
+
+    <dl class="meta">
+      <div><dt class="mono">{ui.year}</dt><dd>{t.year}</dd></div>
+      <div><dt class="mono">{ui.client}</dt><dd>{t.client}</dd></div>
+      <div><dt class="mono">{ui.role}</dt><dd>{t.role}</dd></div>
+      <div><dt class="mono">{ui.stack}</dt><dd>{t.tags.slice(0, 3).join(", ")}</dd></div>
+    </dl>
+  </section>
+
+  <!-- 2. The number, when there is one -->
+  {
+    t.stat && (
+      <section class="stat wrap" data-reveal>
+        <p class="stat__value">{t.stat.value}</p>
+        <p class="stat__label mono">{t.stat.label}</p>
+      </section>
+    )
+  }
+
+  <!-- 3. Challenge, what I built, result -->
+  <section class="chapters wrap">
+    <article class="chapter" data-reveal>
+      <h2>{ui.challenge}</h2>
+      <p>{t.challenge}</p>
+    </article>
+    <article class="chapter" data-reveal>
+      <h2>{ui.built}</h2>
+      <p>{t.built}</p>
+    </article>
+    <article class="chapter" data-reveal>
+      <h2>{ui.result}</h2>
+      <div class="chapter__result">
+        <p>{t.result}</p>
+        <ul class="tags mono">
+          {t.tags.map((tag) => <li>{tag}</li>)}
+        </ul>
+        <div class="links">
+          {
+            project.demo && (
+              <a class="btn" href={project.demo} target="_blank" rel="noopener">
+                {ui.demo} ↗
+              </a>
+            )
+          }
+          {
+            project.github && (
+              <a class={project.demo ? "ghost" : "btn"} href={project.github} target="_blank" rel="noopener">
+                {ui.github} ↗
+              </a>
+            )
+          }
+          {
+            project.nda && (
+              <p class="nda mono">
+                {ui.nda} <a class="link" href="#contact">{ui.ndaCta} →</a>
+              </p>
+            )
+          }
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- 4. How it is built (only the projects that have public code and screens) -->
+  {
+    t.tech && (
+      <section class="tech">
+        <div class="wrap">
+          <h2 class="tech__title">{ui.underHood}</h2>
+          <p class="tech__sub">{ui.underHoodSub}</p>
+
+          {t.tech.map((b) => (
+            <div class="tblock" data-reveal>
+              <h3>{b.h}</h3>
+              <div class="tblock__body rich">
+                {b.p?.map((para) => <p set:html={rich(para)} />)}
+
+                {b.rows && (
+                  <div class="rows">
+                    {b.rows.map((r) => (
+                      <div class="row">
+                        <code class="row__base">{r.base}</code>
+                        <p set:html={rich(r.summary)} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {b.code && <CodeBlock code={b.code} ui={ui} />}
+              </div>
+
+              {b.shots && (
+                <div class="gallery">
+                  {b.shots.map((s) => (
+                    <figure class="shot">
+                      <img src={s.src} alt={s.alt} loading="lazy" decoding="async" />
+                      <figcaption set:html={rich(s.caption)} />
+                    </figure>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- 5. Next project -->
+  <a class="next" href={projectPath(lang, next.slug)}>
+    <div class="wrap next__in">
+      <div>
+        <span class="mono next__label">{ui.next} →</span>
+        <span class="next__title">{nextText.title}</span>
+      </div>
+      <img
+        class="next__art"
+        src={nextCollage.src}
+        alt=""
+        width={COLLAGE_SIZE.width}
+        height={COLLAGE_SIZE.height}
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  </a>
+</main>
+
+<style>
+  /* Sections here set their own spacing (the global `section` rule is for the home page). */
+  .top,
+  .stat,
+  .chapters {
+    padding-block: 0;
+  }
+
+  /* ---- 1. top ---- */
+  .top {
+    padding-top: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .back {
+    display: inline-block;
+    text-decoration: none;
+    color: var(--ink-soft);
+    transition: color 0.2s var(--ease-out);
+  }
+
+  .back:hover {
+    color: var(--blue);
+  }
+
+  .top__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+    gap: clamp(1.5rem, 4vw, 4rem);
+    align-items: center;
+    margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .top__count {
+    color: var(--blue);
+  }
+
+  .top__title {
+    margin-top: 0.8rem;
+    font-size: clamp(2.8rem, 7.4vw, 6.6rem);
+    line-height: 0.95;
+    color: var(--blue);
+    text-wrap: balance;
+  }
+
+  .top__tagline {
+    margin-top: 1.25rem;
+    font-family: var(--font-hand);
+    font-size: clamp(1.4rem, 2.6vw, 2.4rem);
+    line-height: 1.25;
+    color: var(--ink);
+  }
+
+  .top__actions,
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+
+  .links {
+    margin-top: 1.5rem;
+  }
+
+  .ghost {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.85em 1.5em;
+    border: 1.5px solid var(--ink);
+    border-radius: 99px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s var(--ease-out), color 0.2s var(--ease-out), transform 0.2s var(--ease-out);
+  }
+
+  .ghost:hover {
+    background: var(--ink);
+    color: var(--paper);
+    transform: translateY(-2px);
+  }
+
+  .top__art {
+    margin: 0;
+    justify-self: end;
+    width: min(100%, 380px);
+    rotate: 3deg;
+  }
+
+  .top__art img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+  }
+
+  .meta {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--gutter);
+    margin: clamp(2.5rem, 6vw, 4.5rem) 0 0;
+  }
+
+  .meta > div {
+    padding-top: 0.9rem;
+    border-top: var(--rule) solid var(--ink);
+  }
+
+  .meta dt {
+    color: var(--blue);
+  }
+
+  .meta dd {
+    margin: 0.4rem 0 0;
+    font-weight: 500;
+  }
+
+  /* ---- 2. stat ---- */
+  .stat {
+    margin-top: clamp(4rem, 9vw, 7rem);
+  }
+
+  .stat__value {
+    max-width: none;
+    font-family: var(--font-display);
+    font-size: clamp(5.5rem, 17vw, 14rem);
+    line-height: 0.85;
+    color: var(--blue);
+  }
+
+  .stat__label {
+    margin-top: 0.8rem;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+  }
+
+  /* ---- 3. chapters ---- */
+  .chapters {
+    display: grid;
+    gap: clamp(3rem, 6vw, 5.5rem);
+    margin-top: clamp(4rem, 9vw, 7rem);
+    padding-bottom: clamp(5rem, 11vw, 9rem);
+  }
+
+  .chapter {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: var(--gutter);
+  }
+
+  .chapter h2 {
+    font-size: clamp(2.2rem, 5vw, 4.5rem);
+    color: var(--blue);
+  }
+
+  .chapter p {
+    max-width: 46ch;
+    font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+    line-height: 1.45;
+  }
+
+  .chapter__result .nda {
+    max-width: none;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+
+  .tags {
+    list-style: none;
+    padding: 0;
+    margin-top: 1.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.5rem;
+  }
+
+  .tags li {
+    padding: 0.25em 0.6em;
+    border: 1.5px solid var(--ink);
+  }
+
+  /* ---- 4. under the hood ---- */
+  .tech {
+    background: var(--paper-dim);
+    padding-block: clamp(4rem, 9vw, 8rem);
+  }
+
+  .tech__title {
+    font-size: clamp(2.8rem, 8vw, 6.5rem);
+  }
+
+  .tech__sub {
+    margin-top: 1rem;
+    color: var(--ink-soft);
+    font-size: 1.15rem;
+  }
+
+  .tblock {
+    display: grid;
+    grid-template-columns: minmax(0, 0.6fr) minmax(0, 1.4fr);
+    gap: 1rem var(--gutter);
+    margin-top: clamp(3rem, 6vw, 5rem);
+    padding-top: clamp(1.5rem, 3vw, 2.5rem);
+    border-top: var(--rule) solid var(--ink);
+  }
+
+  .tblock h3 {
+    font-size: clamp(1.7rem, 3.2vw, 2.6rem);
+  }
+
+  .tblock__body {
+    display: grid;
+    gap: 1.25rem;
+    min-width: 0;
+  }
+
+  .tblock__body p {
+    max-width: 68ch;
+  }
+
+  .rich :global(code) {
+    font-family: var(--font-mono);
+    background: color-mix(in srgb, var(--ink) 9%, transparent);
+    padding: 0.1em 0.4em;
+    font-size: 0.88em;
+  }
+
+  .rows {
+    display: grid;
+    border-top: var(--rule) solid var(--ink);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: minmax(150px, 240px) minmax(0, 1fr);
+    gap: 1.25rem;
+    padding-block: 1rem;
+    border-bottom: var(--rule) solid var(--ink);
+  }
+
+  .row__base {
+    align-self: start;
+    background: none !important;
+    padding: 0 !important;
+    color: var(--blue);
+    font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+
+  .row p {
+    color: var(--ink-soft);
+  }
+
+  .gallery {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+    gap: clamp(1.25rem, 3vw, 2rem);
+    margin-top: 0.5rem;
+  }
+
+  .shot {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--paper);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+  }
+
+  .shot img {
+    width: 100%;
+    height: auto;
+    background: #fff;
+  }
+
+  .shot figcaption {
+    padding: 0.9rem 1.1rem 1.1rem;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    flex: 1;
+  }
+
+  /* ---- 5. next project ---- */
+  .next {
+    display: block;
+    background: var(--blue);
+    color: #fff;
+    text-decoration: none;
+    overflow: hidden;
+    padding-block: clamp(4rem, 9vw, 7rem);
+  }
+
+  .next__in {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--gutter);
+  }
+
+  .next__label {
+    display: block;
+    margin-bottom: 1rem;
+    opacity: 0.8;
+  }
+
+  .next__title {
+    display: block;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: clamp(2.6rem, 8vw, 7rem);
+    line-height: 0.92;
+    text-wrap: balance;
+    transition: transform 0.5s var(--ease-out);
+  }
+
+  .next__art {
+    flex: none;
+    width: clamp(130px, 16vw, 230px);
+    height: auto;
+    rotate: 6deg;
+    border-radius: var(--radius-card);
+    box-shadow: 0 30px 50px -24px rgba(0, 0, 0, 0.55);
+    transition: rotate 0.6s var(--ease-out), scale 0.6s var(--ease-out);
+  }
+
+  .next:hover .next__title {
+    transform: translateX(0.6rem);
+  }
+
+  .next:hover .next__art {
+    rotate: -4deg;
+    scale: 1.06;
+  }
+
+  .next:focus-visible {
+    outline-color: var(--ink);
+    outline-offset: -6px;
+  }
+
+  /* ---- motion ---- */
+  .rise {
+    animation: rise 0.9s var(--ease-out) both;
+    animation-delay: var(--d, 0s);
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+  }
+
+  /* ---- small screens ---- */
+  @media (max-width: 860px) {
+    .top__grid {
+      grid-template-columns: 1fr;
+    }
+    .top__art {
+      justify-self: start;
+      width: min(70%, 300px);
+    }
+    .meta {
+      grid-template-columns: 1fr 1fr;
+      row-gap: 1.5rem;
+    }
+    .chapter,
+    .tblock {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+    .row {
+      grid-template-columns: 1fr;
+      gap: 0.4rem;
+    }
+    .gallery {
+      grid-template-columns: repeat(min(var(--cols, 3), 2), minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 520px) {
+    .gallery {
+      grid-template-columns: 1fr;
+    }
+    .next__in {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .next__art {
+      width: 120px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rise {
+      animation: none;
+    }
+    .back,
+    .ghost,
+    .next__title,
+    .next__art {
+      transition: none;
+    }
+  }
+</style>

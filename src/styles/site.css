@@ -1,0 +1,221 @@
+/* Site-wide design system: paper, ink, one azulejo blue.
+   Case-study pages add their own shared styles in layouts/CaseStudy.astro. */
+
+:root {
+  --paper: #f4f1e8;
+  --paper-dim: #e8e3d4;
+  --ink: #14130f;
+  --ink-soft: #5a564c;
+  --blue: #2342e8;
+  --blue-on-ink: #8a99ff;
+  /* Thin rules only inside lists (experience, projects, ...). Sections are separated by space and background, not lines. */
+  --rule: 1.5px;
+  --radius-card: 6px;
+  --shadow-card: 0 28px 48px -28px rgba(20, 19, 15, 0.55);
+
+  --font-display: "Anton", Impact, "Arial Narrow", sans-serif;
+  --font-body: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  /* Handwriting accent: logo, quotes and one-line asides only. Never body copy. */
+  --font-hand: "Nothing You Could Do", "Segoe Script", cursive;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 4.5rem;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--blue);
+  color: #fff;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol {
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.005em;
+  line-height: 0.98;
+}
+
+p {
+  max-width: 62ch;
+}
+
+.wrap {
+  width: min(1240px, 100% - 2 * var(--gutter));
+  margin-inline: auto;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+section {
+  padding-block: clamp(5rem, 11vw, 10rem);
+}
+
+.section-title {
+  font-size: clamp(2.6rem, 7.2vw, 6.25rem);
+  max-width: 16ch;
+  margin-bottom: clamp(2.5rem, 6vw, 5rem);
+}
+
+/* Buttons: pills. Solid blue, darkens to ink on hover. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.85em 1.5em;
+  background: var(--blue);
+  color: #fff;
+  border: 1.5px solid var(--blue);
+  border-radius: 99px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background 0.2s var(--ease-out), border-color 0.2s var(--ease-out), transform 0.2s var(--ease-out);
+}
+
+.btn:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.link {
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+  transition: color 0.2s var(--ease-out);
+}
+
+.link:hover {
+  color: var(--blue);
+}
+
+/* Scroll reveal: elements with data-reveal fade up once when they enter the viewport.
+   Uses an animation with `backwards` fill, so hover transforms keep working afterwards.
+   Content stays visible without JS (the `js` class) and with reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-reveal]:not(.is-in) {
+    opacity: 0;
+  }
+
+  html.js [data-reveal].is-in {
+    animation: reveal 0.8s var(--ease-out) var(--d, 0s) backwards;
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+}
+
+/* Cursor follower (added by script, mouse + motion-OK only) */
+.cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 200;
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: transparent;
+  mix-blend-mode: difference;
+  pointer-events: none;
+  opacity: 0;
+  transition: width 0.25s var(--ease-out), height 0.25s var(--ease-out), margin 0.25s var(--ease-out),
+    background 0.25s var(--ease-out), opacity 0.3s;
+}
+
+.cursor.is-on {
+  opacity: 1;
+}
+
+.cursor.is-big {
+  width: 68px;
+  height: 68px;
+  margin: -34px 0 0 -34px;
+  background: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .btn {
+    transition: none;
+  }
+}

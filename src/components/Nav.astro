@@ -1,20 +1,157 @@
 ---
+import { content, langs, langMeta, langPath, aboutPath, projectPath, type Lang } from "../i18n/content";
+
+interface Props {
+  lang: Lang;
+  /** Where the nav is rendered. Section links on other pages point back to the home page. */
+  page?: "home" | "about" | "project";
+  /** Slug of the project, when `page` is "project" (so the language switch stays on it). */
+  slug?: string;
+}
+const { lang, page = "home", slug } = Astro.props;
+const t = content[lang].nav;
+
+const home = langPath(lang);
+const section = (id: string) => (page === "home" ? `#${id}` : `${home}#${id}`);
+// Same page, other language.
+const switchTo = (l: Lang) =>
+  page === "about" ? aboutPath(l) : page === "project" && slug ? projectPath(l, slug) : langPath(l);
+
+// Same order as the sections on the home page (see pages/[lang]/index.astro).
+const links = [
+  { href: aboutPath(lang), label: t.about, current: page === "about" },
+  { href: section("experience"), label: t.experience, id: "experience" },
+  { href: section("work"), label: t.work, id: "work" },
+  { href: section("stack"), label: t.stack, id: "stack" },
+  { href: section("education"), label: t.education, id: "education" },
+];
 ---
 
-<header class="nav">
+<header class="nav" data-nav>
   <div class="wrap nav__row">
-    <a href="#top" class="nav__mark" aria-label="Jordy Rojas Aliaga — home">
-      <span>JR</span>
-    </a>
+    <a href={page === "home" ? "#top" : home} class="nav__mark" aria-label={t.home}>jordy<span>.</span></a>
 
-    <nav class="nav__links" aria-label="Primary">
-      <a href="#work">Work</a>
-      <a href="#experience">Experience</a>
-      <a href="#stack">Stack</a>
-      <a href="#education">Education</a>
+    <nav class="nav__links mono" aria-label={t.aria}>
+      {
+        links.map((l) => (
+          <a href={l.href} aria-current={l.current ? "page" : undefined} data-section={page === "home" ? l.id : undefined}>
+            {l.label}
+          </a>
+        ))
+      }
     </nav>
 
-    <a href="#contact" class="pill pill--primary nav__cta">Contact</a>
+    <div class="nav__end">
+      <span class="nav__clock mono" aria-hidden="true">{t.clock} <b data-clock>--:--</b></span>
+
+      <div class="nav__lang">
+        <button
+          class="langbtn mono"
+          type="button"
+          aria-haspopup="dialog"
+          aria-expanded="false"
+          aria-controls="lang-sheet"
+          aria-label={`${t.langLabel}: ${langMeta[lang].name}`}
+          data-lang-open
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"></path>
+          </svg>
+          <span>{langMeta[lang].greeting}</span>
+        </button>
+        <!-- Without JavaScript the picker cannot open, so the four languages are plain links. -->
+        <noscript>
+          <ul class="langplain mono">
+            {
+              langs.map((l) => (
+                <li>
+                  <a href={switchTo(l)} hreflang={l} lang={l} aria-current={l === lang ? "true" : undefined}>
+                    {l}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </noscript>
+      </div>
+
+      <a href="#contact" class="nav__cta">{t.cta} →</a>
+
+      <button
+        class="nav__burger"
+        type="button"
+        aria-expanded="false"
+        aria-controls="nav-menu"
+        aria-label={t.menuOpen}
+        data-open-label={t.menuOpen}
+        data-close-label={t.menuClose}
+      >
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Hidden with visibility, so closed links are out of the tab order and the a11y tree. -->
+  <nav class="menu" id="nav-menu" aria-label={t.aria}>
+    <ol>
+      {
+        links.map((l, i) => (
+          <li>
+            <a href={l.href} aria-current={l.current ? "page" : undefined} data-section={page === "home" ? l.id : undefined}>
+              <span class="mono" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+              {l.label}
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+    <a href="#contact" class="menu__cta">{t.cta} →</a>
+    <div class="menu__langs" role="group" aria-label={t.langLabel}>
+      <span class="mono" aria-hidden="true">{t.langLabel}</span>
+      <ul>
+        {
+          langs.map((l) => (
+            <li>
+              <a
+                href={switchTo(l)}
+                data-lang={l}
+                hreflang={l}
+                lang={l}
+                aria-label={langMeta[l].name}
+                aria-current={l === lang ? "true" : undefined}
+              >
+                {l}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Language picker (large screens): a blue sheet with the four greetings. Hidden with visibility. -->
+  <div class="sheet" id="lang-sheet" role="dialog" aria-modal="true" aria-label={t.langLabel}>
+    <button class="sheet__close mono" type="button" data-lang-close>{t.langClose} ✕</button>
+    <ul class="sheet__list">
+      {
+        langs.map((l) => (
+          <li>
+            <a
+              href={switchTo(l)}
+              data-lang={l}
+              hreflang={l}
+              lang={l}
+              aria-current={l === lang ? "true" : undefined}
+            >
+              <span class="sheet__word">{langMeta[l].greeting}</span>
+              <span class="sheet__meta mono">{l} · {langMeta[l].name}</span>
+              <span class="sheet__here" aria-hidden="true">{t.here}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
   </div>
 </header>
 
@@ -23,69 +160,528 @@
     position: sticky;
     top: 0;
     z-index: 40;
-    padding-block: 1.1rem;
-    background: color-mix(in srgb, var(--paper) 88%, transparent);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid transparent;
+    background: var(--paper);
+    border-bottom: var(--rule) solid var(--ink);
+    transition: background 0.3s var(--ease-out), border-color 0.3s var(--ease-out);
   }
 
   .nav__row {
+    position: relative;
+    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
+    gap: 1.25rem;
+    padding-block: 0.65rem;
   }
 
+  /* Logo: handwritten, tilted, blue name with an ink full stop. */
   .nav__mark {
-    display: grid;
-    place-items: center;
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-sm);
-    border: var(--stroke) solid var(--line);
-    background: var(--paper);
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-weight: 700;
-    font-size: 1.05rem;
+    font-family: var(--font-hand);
+    font-size: 2rem;
+    line-height: 1;
     text-decoration: none;
-    color: var(--ink);
-    flex-shrink: 0;
+    color: var(--blue);
+    display: inline-block;
+    transform: rotate(-4deg);
+    transition: transform 0.3s var(--ease-out);
   }
 
+  .nav__mark span {
+    color: var(--ink);
+  }
+
+  .nav__mark:hover {
+    transform: rotate(-1deg) scale(1.05);
+  }
+
+  /* Links live in one outlined pill. */
   .nav__links {
     display: flex;
-    align-items: center;
-    gap: clamp(0.85rem, 3vw, 2.5rem);
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-weight: 500;
-    font-size: 0.98rem;
+    gap: clamp(0.9rem, 2vw, 1.75rem);
+    padding: 0.55rem 1.2rem;
+    border: 1.5px solid var(--ink);
+    border-radius: 99px;
+    background: var(--paper);
   }
 
   .nav__links a {
+    position: relative;
     text-decoration: none;
-    color: var(--ink-soft);
-    transition: color 0.25s var(--ease-out);
-  }
-
-  .nav__links a:hover {
+    white-space: nowrap;
     color: var(--ink);
   }
 
-  .nav__cta {
-    padding-block: 0.62em;
-    font-size: 0.92rem;
+  /* Underline that slides in on hover and stays on the current page. */
+  .nav__links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -4px;
+    height: 1.5px;
+    background: var(--blue);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.45s var(--ease-out);
   }
 
-  @media (max-width: 640px) {
-    .nav__row {
-      flex-wrap: wrap;
-      row-gap: 0.75rem;
+  .nav__links a:hover::after,
+  .nav__links a[aria-current]::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .nav__links a[aria-current] {
+    color: var(--blue);
+  }
+
+  .nav__end {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .nav__clock {
+    display: none;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+
+  .nav__clock b {
+    font-weight: 500;
+    color: var(--blue);
+  }
+
+  @media (min-width: 1100px) {
+    .nav__clock {
+      display: inline;
     }
-    .nav__links {
-      order: 3;
-      width: 100%;
+  }
+
+  /* Language picker trigger: globe plus the greeting in the current language. Opens the sheet. */
+  .langbtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45em 0.95em 0.45em 0.8em;
+    border: 1.5px solid var(--ink);
+    border-radius: 99px;
+    background: var(--paper);
+    cursor: pointer;
+    transition: background 0.2s var(--ease-out), color 0.2s var(--ease-out);
+  }
+  .langbtn svg {
+    width: 15px;
+    height: 15px;
+  }
+  .langbtn:hover,
+  .langbtn[aria-expanded="true"] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .langplain {
+    display: flex;
+    gap: 0.4rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* The sheet: four giant greetings on blue. Same curtain as the mobile menu, opened on request. */
+  .sheet {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem var(--gutter);
+    background: var(--blue);
+    color: #fff;
+    visibility: hidden;
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 0.65s var(--ease-out), visibility 0s 0.65s;
+  }
+  .sheet.is-open {
+    visibility: visible;
+    clip-path: inset(0);
+    transition: clip-path 0.65s var(--ease-out), visibility 0s;
+  }
+  .sheet__close {
+    position: absolute;
+    top: 1.1rem;
+    right: var(--gutter);
+    padding: 0.5em 1.1em;
+    border: 1.5px solid #fff;
+    border-radius: 99px;
+    color: #fff;
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.2s var(--ease-out), color 0.2s var(--ease-out);
+  }
+  .sheet__close:hover {
+    background: #fff;
+    color: var(--blue);
+  }
+  .sheet__close:focus-visible,
+  .sheet__list a:focus-visible {
+    outline-color: #fff;
+  }
+  .sheet__list {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    width: min(1240px, 100%);
+    display: grid;
+    gap: 0.1rem;
+  }
+  .sheet__list a {
+    display: flex;
+    align-items: baseline;
+    gap: 1.2rem;
+    text-decoration: none;
+    transition: transform 0.5s var(--ease-out), opacity 0.3s var(--ease-out);
+  }
+  .sheet__word {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: clamp(3.4rem, 10vw, 8rem);
+    line-height: 0.98;
+  }
+  .sheet__meta {
+    opacity: 0.85;
+  }
+  .sheet__here {
+    font-family: var(--font-hand);
+    font-size: 1.5rem;
+    transform: rotate(-4deg);
+    display: none;
+  }
+  .sheet__list a[aria-current="true"] .sheet__word {
+    text-decoration: underline;
+    text-decoration-thickness: 0.05em;
+    text-underline-offset: 0.1em;
+  }
+  .sheet__list a[aria-current="true"] .sheet__here {
+    display: inline;
+  }
+  @media (hover: hover) {
+    .sheet__list:hover a {
+      opacity: 0.45;
+    }
+    .sheet__list a:hover,
+    .sheet__list a:focus-visible {
+      opacity: 1;
+      transform: translateX(1.2rem) rotate(-0.8deg);
+    }
+  }
+
+  .nav__cta {
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    white-space: nowrap;
+    padding: 0.55em 1.1em;
+    border-radius: 99px;
+    background: var(--blue);
+    color: #fff;
+    border: 1.5px solid var(--blue);
+    transition: background 0.2s var(--ease-out), border-color 0.2s var(--ease-out), transform 0.2s var(--ease-out);
+  }
+
+  .nav__cta:hover {
+    background: var(--ink);
+    border-color: var(--ink);
+    transform: translateY(-1px);
+  }
+
+  .nav__burger {
+    display: none;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1.5px solid var(--ink);
+    border-radius: 50%;
+    background: var(--paper);
+    cursor: pointer;
+    place-content: center;
+    gap: 5px;
+  }
+
+  .nav__burger span {
+    display: block;
+    width: 18px;
+    height: 1.5px;
+    background: var(--ink);
+    transition: transform 0.35s var(--ease-out), opacity 0.2s;
+  }
+
+  .nav__burger[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(6.5px) rotate(45deg);
+  }
+  .nav__burger[aria-expanded="true"] span:nth-child(2) {
+    opacity: 0;
+  }
+  .nav__burger[aria-expanded="true"] span:nth-child(3) {
+    transform: translateY(-6.5px) rotate(-45deg);
+  }
+
+  /* Full-screen menu (small screens only). */
+  .menu {
+    display: none;
+  }
+
+  @media (max-width: 860px) {
+    .nav__links,
+    .nav__cta,
+    .nav__lang,
+    .sheet {
+      display: none;
+    }
+
+    .nav__burger {
+      display: grid;
+    }
+
+    .menu {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
       justify-content: center;
-      font-size: 0.88rem;
+      gap: 2rem;
+      padding: 6rem var(--gutter) 2.5rem;
+      background: var(--blue);
+      color: #fff;
+      visibility: hidden;
+      clip-path: inset(0 0 100% 0);
+      transition: clip-path 0.55s var(--ease-out), visibility 0s 0.55s;
+    }
+
+    .nav.is-open .menu {
+      visibility: visible;
+      clip-path: inset(0);
+      transition: clip-path 0.55s var(--ease-out), visibility 0s;
+    }
+
+    .menu ol {
+      list-style: none;
+      padding: 0;
+    }
+
+    .menu ol a {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      padding-block: 0.15em;
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      text-decoration: none;
+      font-size: clamp(2.6rem, 12vw, 5rem);
+      line-height: 1;
+    }
+
+    .menu ol a span {
+      font-size: 0.78rem;
+      margin-top: 0.9em;
+      opacity: 0.75;
+    }
+
+    .menu ol a[aria-current] {
+      text-decoration: underline;
+      text-decoration-thickness: 3px;
+      text-underline-offset: 6px;
+    }
+
+    .menu__langs {
+      border-top: 1px solid rgba(255, 255, 255, 0.4);
+      padding-top: 1.1rem;
+    }
+    .menu__langs > span {
+      display: block;
+      opacity: 0.8;
+      margin-bottom: 0.7rem;
+    }
+    .menu__langs ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.4rem;
+    }
+    .menu__langs a {
+      display: block;
+      text-align: center;
+      padding: 0.6em 0;
+      border: 1.5px solid #fff;
+      border-radius: 99px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    .menu__langs a[aria-current="true"] {
+      background: #fff;
+      color: var(--blue);
+    }
+
+    .menu__cta {
+      align-self: flex-start;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 0.8em 1.4em;
+      border-radius: 99px;
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    /* While open, the bar sits on the blue menu. */
+    .nav.is-open {
+      background: transparent;
+      border-bottom-color: transparent;
+    }
+    .nav.is-open .nav__mark,
+    .nav.is-open .nav__mark span {
+      color: #fff;
+    }
+    .nav.is-open .nav__burger {
+      border-color: #fff;
+    }
+    .nav.is-open .nav__burger {
+      background: transparent;
+    }
+    .nav.is-open .nav__burger span {
+      background: #fff;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .nav__end {
+      gap: 0.6rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu,
+    .sheet,
+    .sheet.is-open,
+    .sheet__list a,
+    .nav.is-open .menu,
+    .nav__links a::after,
+    .nav__mark,
+    .nav__burger span {
+      transition: none;
     }
   }
 </style>
+
+<script>
+  const nav = document.querySelector<HTMLElement>("[data-nav]");
+  const burger = nav?.querySelector<HTMLButtonElement>(".nav__burger");
+  const menu = nav?.querySelector<HTMLElement>(".menu");
+
+  if (nav && burger && menu) {
+    // Everything outside the header becomes inert while the menu is open, so Tab and
+    // screen readers stay inside it.
+    const others = () => [...document.body.children].filter((el) => el !== nav && el.tagName !== "SCRIPT");
+
+    const setOpen = (open: boolean, restoreFocus = false) => {
+      nav.classList.toggle("is-open", open);
+      burger.setAttribute("aria-expanded", String(open));
+      burger.setAttribute("aria-label", (open ? burger.dataset.closeLabel : burger.dataset.openLabel) ?? "");
+      document.documentElement.style.overflow = open ? "hidden" : "";
+      others().forEach((el) => (el as HTMLElement).toggleAttribute("inert", open));
+      if (open) menu.querySelector<HTMLElement>("a")?.focus({ preventScroll: true });
+      else if (restoreFocus) burger.focus();
+    };
+
+    burger.addEventListener("click", () => setOpen(!nav.classList.contains("is-open")));
+    menu.addEventListener("click", (e) => {
+      if ((e.target as Element).closest("a")) setOpen(false);
+    });
+    addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && nav.classList.contains("is-open")) setOpen(false, true);
+    });
+    // Leaving the small-screen layout while open would strand the page with no scroll.
+    matchMedia("(min-width: 861px)").addEventListener("change", (e) => {
+      if (e.matches) setOpen(false);
+    });
+  }
+
+  // Language picker (large screens): a blue sheet with the four greetings.
+  const sheet = document.querySelector<HTMLElement>("#lang-sheet");
+  const langBtn = nav?.querySelector<HTMLButtonElement>("[data-lang-open]");
+  if (nav && sheet && langBtn) {
+    const closeBtn = sheet.querySelector<HTMLButtonElement>("[data-lang-close]");
+    const row = nav.querySelector<HTMLElement>(".nav__row");
+    // The page, and the rest of the header, are inert while the sheet is open.
+    const behind = () => [
+      ...[...document.body.children].filter((el) => el !== nav && el.tagName !== "SCRIPT"),
+      ...(row ? [row] : []),
+    ];
+    const setSheet = (open: boolean, restoreFocus = false) => {
+      sheet.classList.toggle("is-open", open);
+      langBtn.setAttribute("aria-expanded", String(open));
+      document.documentElement.style.overflow = open ? "hidden" : "";
+      behind().forEach((el) => (el as HTMLElement).toggleAttribute("inert", open));
+      if (open) {
+        (sheet.querySelector<HTMLElement>('a[aria-current="true"]') ?? closeBtn)?.focus({ preventScroll: true });
+      } else if (restoreFocus) langBtn.focus();
+    };
+    langBtn.addEventListener("click", () => setSheet(true));
+    closeBtn?.addEventListener("click", () => setSheet(false, true));
+    sheet.addEventListener("click", (e) => {
+      if (e.target === sheet) setSheet(false, true);
+    });
+    addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && sheet.classList.contains("is-open")) setSheet(false, true);
+    });
+    matchMedia("(max-width: 860px)").addEventListener("change", (e) => {
+      if (e.matches) setSheet(false);
+    });
+  }
+
+  // Scroll-spy: on the home page, mark the link of the section under the middle of the
+  // viewport. `aria-current="location"` is the right value for "where you are on this page".
+  const spy = [...document.querySelectorAll<HTMLAnchorElement>("[data-nav] a[data-section]")];
+  if (spy.length) {
+    const sections = [...new Set(spy.map((a) => a.dataset.section!))]
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => !!el);
+    let queued = false;
+    const update = () => {
+      queued = false;
+      const line = innerHeight * 0.4;
+      const current = sections.find((el) => {
+        const r = el.getBoundingClientRect();
+        return r.top <= line && r.bottom > line;
+      });
+      spy.forEach((a) => {
+        if (current && a.dataset.section === current.id) a.setAttribute("aria-current", "location");
+        else a.removeAttribute("aria-current");
+      });
+    };
+    const queue = () => {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    };
+    addEventListener("scroll", queue, { passive: true });
+    addEventListener("resize", queue);
+    update();
+  }
+
+  // Live Porto clock (decorative, hidden from assistive tech).
+  const clock = document.querySelector<HTMLElement>("[data-clock]");
+  if (clock) {
+    const fmt = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Lisbon", hour: "2-digit", minute: "2-digit" });
+    const tick = () => (clock.textContent = fmt.format(new Date()));
+    tick();
+    setInterval(tick, 20000);
+  }
+</script>

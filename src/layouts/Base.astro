@@ -1,0 +1,189 @@
+---
+import "../styles/site.css";
+import Intro from "../components/Intro.astro";
+import { content, liveLangs, isProvisional, langPath, type Lang } from "../i18n/content";
+import { ogImage, personJsonLd, OG_SIZE } from "../lib/seo";
+
+interface Props {
+  lang: Lang;
+  /** Overrides for pages that aren't the translated home page (e.g. case studies). */
+  title?: string;
+  description?: string;
+  /** true (default): translated page, with per-language alternates. */
+  home?: boolean;
+  /** Sub-path under /{lang}/ for translated pages other than the home ("about/"). Empty = home. */
+  path?: string;
+}
+
+const { lang, home = true, path = "" } = Astro.props;
+// The intro curtain belongs to the home page only.
+const isHome = home && !path;
+const t = content[lang];
+const title = Astro.props.title ?? t.meta.title;
+const description = Astro.props.description ?? t.meta.description;
+const site = Astro.site ? Astro.site.origin : "";
+const canonical = home ? `${langPath(lang)}${path}` : Astro.url.pathname;
+const pageUrl = `${site}${canonical}`;
+const imageUrl = `${site}${ogImage(lang)}`;
+const provisional = isProvisional(lang);
+const otherLocales = liveLangs.filter((l) => l !== lang).map((l) => content[l].ogLocale);
+---
+
+<!doctype html>
+<html lang={t.htmlLang} data-home={isHome ? "" : undefined}>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#f4f1e8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <meta name="author" content="Jordy Rojas Aliaga" />
+    {provisional && <meta name="robots" content="noindex" />}
+    <title>{title}</title>
+
+    <!-- What chats and social networks show when the link is shared. -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:site_name" content="Jordy Rojas Aliaga" />
+    <meta property="og:locale" content={t.ogLocale} />
+    {otherLocales.map((l) => <meta property="og:locale:alternate" content={l} />)}
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content={String(OG_SIZE.width)} />
+    <meta property="og:image:height" content={String(OG_SIZE.height)} />
+    <meta property="og:image:alt" content={t.meta.ogAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    {isHome && <script type="application/ld+json" set:html={JSON.stringify(personJsonLd(lang, site))} />}
+    {home && !provisional && liveLangs.map((l) => <link rel="alternate" hreflang={l} href={`${site}${langPath(l)}${path}`} />)}
+    {isHome && <link rel="alternate" hreflang="x-default" href={`${site}${import.meta.env.BASE_URL}`} />}
+    <link rel="canonical" href={`${site}${canonical}`} />
+
+    <script is:inline>
+      // Intro plays once per browser (or on demand with ?intro), never with reduced motion.
+      // Only on the home page.
+      document.documentElement.classList.add("js");
+      try {
+        var calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var forced = location.search.indexOf("intro") > -1;
+        var isHome = document.documentElement.hasAttribute("data-home");
+        if (isHome && !calm && (forced || !localStorage.getItem("introSeen"))) {
+          document.documentElement.classList.add("intro");
+          localStorage.setItem("introSeen", "1");
+          // Failsafe: whatever happens, the intro never keeps the page hidden for long.
+          setTimeout(function () {
+            document.documentElement.classList.remove("intro");
+          }, 7000);
+        }
+      } catch (e) {}
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Nothing+You+Could+Do&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    {isHome && <Intro lang={lang} />}
+    <slot />
+
+    <script>
+      // Cursor follower: a lagging ring on top of the normal cursor (mouse only).
+      const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
+      const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (fine && !calm) {
+        const ring = document.createElement("div");
+        ring.className = "cursor";
+        ring.setAttribute("aria-hidden", "true");
+        document.body.appendChild(ring);
+
+        let x = 0, y = 0, tx = 0, ty = 0, on = false;
+        addEventListener(
+          "pointermove",
+          (e) => {
+            tx = e.clientX;
+            ty = e.clientY;
+            if (!on) {
+              x = tx;
+              y = ty;
+              on = true;
+              ring.classList.add("is-on");
+            }
+            const hot = (e.target as Element | null)?.closest("a, button, [data-cursor]");
+            ring.classList.toggle("is-big", !!hot);
+          },
+          { passive: true },
+        );
+        document.documentElement.addEventListener("mouseleave", () => {
+          on = false;
+          ring.classList.remove("is-on");
+        });
+        const loop = () => {
+          x += (tx - x) * 0.18;
+          y += (ty - y) * 0.18;
+          ring.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+          requestAnimationFrame(loop);
+        };
+        loop();
+      }
+    </script>
+
+    <script>
+      // Remember the language the visitor picked, so "/" can send them back to it.
+      document.querySelectorAll<HTMLAnchorElement>("[data-lang]").forEach((a) => {
+        a.addEventListener("click", () => {
+          try {
+            localStorage.setItem("lang", a.dataset.lang ?? "");
+          } catch {}
+        });
+      });
+
+      // Scroll reveal for [data-reveal] elements.
+      const reveals = document.querySelectorAll("[data-reveal]");
+      if (!("IntersectionObserver" in window)) {
+        reveals.forEach((el) => el.classList.add("is-in"));
+      } else {
+        const rio = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-in");
+                rio.unobserve(entry.target);
+              }
+            }
+          },
+          { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
+        );
+        reveals.forEach((el) => rio.observe(el));
+      }
+
+      // Hand-drawn doodles sketch themselves in as they enter the viewport.
+      const doodles = document.querySelectorAll(".doodle-draw");
+      if (!("IntersectionObserver" in window)) {
+        doodles.forEach((el) => el.classList.add("is-drawn"));
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-drawn");
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { threshold: 0.4 },
+        );
+        doodles.forEach((el) => io.observe(el));
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,34 @@
+---
+import Base from "../../layouts/Base.astro";
+import Marquee from "../../components/Marquee.astro";
+import Nav from "../../components/Nav.astro";
+import AboutHero from "../../components/AboutHero.astro";
+import AboutBento from "../../components/AboutBento.astro";
+import AboutGiro from "../../components/AboutGiro.astro";
+import AboutOff from "../../components/AboutOff.astro";
+import Lessons from "../../components/Lessons.astro";
+import AboutClose from "../../components/AboutClose.astro";
+import AboutFooter from "../../components/AboutFooter.astro";
+import { content, langs, type Lang } from "../../i18n/content";
+
+export function getStaticPaths() {
+  return langs.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const { meta } = content[lang].about;
+---
+
+<Base lang={lang} title={meta.title} description={meta.description} path="about/">
+  <Marquee lang={lang} />
+  <Nav lang={lang} page="about" />
+  <main>
+    <AboutHero lang={lang} />
+    <AboutBento lang={lang} />
+    <AboutGiro lang={lang} />
+    <AboutOff lang={lang} />
+    <Lessons lang={lang} />
+    <AboutClose lang={lang} />
+  </main>
+  <AboutFooter lang={lang} />
+</Base>

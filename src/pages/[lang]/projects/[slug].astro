@@ -1,0 +1,24 @@
+---
+import Base from "../../../layouts/Base.astro";
+import Marquee from "../../../components/Marquee.astro";
+import Nav from "../../../components/Nav.astro";
+import ProjectDetail from "../../../components/ProjectDetail.astro";
+import Contact from "../../../components/Contact.astro";
+import { langs, type Lang } from "../../../i18n/content";
+import { projects, projectBySlug, projectText } from "../../../i18n/projects";
+
+export function getStaticPaths() {
+  return langs.flatMap((lang) => projects.map((p) => ({ params: { lang, slug: p.slug } })));
+}
+
+const lang = Astro.params.lang as Lang;
+const slug = Astro.params.slug as string;
+const text = projectText(projectBySlug(slug)!, lang);
+---
+
+<Base lang={lang} title={`${text.title} · Jordy Rojas Aliaga`} description={text.description} path={`projects/${slug}/`}>
+  <Marquee lang={lang} />
+  <Nav lang={lang} page="project" slug={slug} />
+  <ProjectDetail lang={lang} slug={slug} />
+  <Contact lang={lang} />
+</Base>

@@ -1,68 +1,86 @@
 ---
-import "../styles/global.css";
-import Nav from "../components/Nav.astro";
-import Hero from "../components/Hero.astro";
-import Experience from "../components/Experience.astro";
-import Projects from "../components/Projects.astro";
-import Skills from "../components/Skills.astro";
-import Education from "../components/Education.astro";
-import Contact from "../components/Contact.astro";
+import { content, langs, liveLangs, langPath, defaultLang, rootMeta } from "../i18n/content";
+import { OG_SIZE, ogImage } from "../lib/seo";
 
-const description =
-  "Jordy Rojas Aliaga — Fullstack & Mobile Software Engineer with 8+ years shipping web and mobile products in Portugal and Peru.";
+// Every language in `langs` is picked up here: no per-language code in this file.
+const paths = Object.fromEntries(langs.map((l) => [l, langPath(l)]));
+
+// Chats and social networks do not run the redirect script below: they read this head. So the
+// root carries the full set of share tags, in both languages (see `rootMeta`).
+const site = Astro.site ? Astro.site.origin : "";
+const rootUrl = `${site}${import.meta.env.BASE_URL}`;
+// The root has no language of its own: it uses the default language's card.
+const imageUrl = `${site}${ogImage(defaultLang)}`;
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<meta name="description" content={description} />
-		<title>Jordy Rojas Aliaga — Fullstack & Mobile Engineer</title>
+<!doctype html>
+<html lang={defaultLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{rootMeta.title}</title>
+    <meta name="description" content={rootMeta.description} />
+    <meta name="author" content="Jordy Rojas Aliaga" />
+    <link rel="canonical" href={rootUrl} />
+    {liveLangs.map((l) => <link rel="alternate" hreflang={l} href={`${site}${paths[l]}`} />)}
+    <link rel="alternate" hreflang="x-default" href={rootUrl} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#f4f1e8" />
 
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&display=swap"
-			rel="stylesheet"
-		/>
-	</head>
-	<body>
-		<Nav />
-		<main>
-			<Hero />
-			<Experience />
-			<Projects />
-			<Skills />
-			<Education />
-		</main>
-		<Contact />
-
-		<script>
-			function onEnter(selector, activeClass, options) {
-				const targets = document.querySelectorAll(selector);
-				if (!("IntersectionObserver" in window)) {
-					targets.forEach((el) => el.classList.add(activeClass));
-					return;
-				}
-				const io = new IntersectionObserver((entries) => {
-					for (const entry of entries) {
-						if (entry.isIntersecting) {
-							entry.target.classList.add(activeClass);
-							io.unobserve(entry.target);
-						}
-					}
-				}, options);
-				targets.forEach((el) => io.observe(el));
-			}
-
-			// Hero's first-impression entrance.
-			onEnter(".reveal", "is-visible", { threshold: 0.15, rootMargin: "0px 0px -60px 0px" });
-
-			// Signature moment: the hand-drawn doodles sketch themselves in as they enter view.
-			onEnter(".doodle-draw", "is-drawn", { threshold: 0.4 });
-		</script>
-	</body>
+    <meta property="og:title" content={rootMeta.title} />
+    <meta property="og:description" content={rootMeta.description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={rootUrl} />
+    <meta property="og:site_name" content="Jordy Rojas Aliaga" />
+    <meta property="og:locale" content={content[defaultLang].ogLocale} />
+    {liveLangs.filter((l) => l !== defaultLang).map((l) => <meta property="og:locale:alternate" content={content[l].ogLocale} />)}
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content={String(OG_SIZE.width)} />
+    <meta property="og:image:height" content={String(OG_SIZE.height)} />
+    <meta property="og:image:alt" content={rootMeta.ogAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={rootMeta.title} />
+    <meta name="twitter:description" content={rootMeta.description} />
+    <meta name="twitter:image" content={imageUrl} />
+    <noscript><meta http-equiv="refresh" content={`0;url=${paths[defaultLang]}`} /></noscript>
+    <script is:inline define:vars={{ paths, langs: liveLangs, fallback: defaultLang }}>
+      // Saved choice first, then the browser's language list, then the default.
+      var lang = fallback;
+      try {
+        var saved = localStorage.getItem("lang");
+        if (saved && Object.prototype.hasOwnProperty.call(paths, saved)) {
+          lang = saved;
+        } else {
+          var prefs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language];
+          outer: for (var i = 0; i < prefs.length; i++) {
+            var p = String(prefs[i]).toLowerCase();
+            for (var j = 0; j < langs.length; j++) {
+              if (p === langs[j] || p.indexOf(langs[j] + "-") === 0) {
+                lang = langs[j];
+                break outer;
+              }
+            }
+          }
+        }
+      } catch (e) {}
+      location.replace(paths[lang] + location.hash);
+    </script>
+  </head>
+  <body>
+    <p>
+      {
+        liveLangs.map((l, i) => (
+          <>
+            {i > 0 && " · "}
+            <a href={paths[l]} hreflang={l}>
+              {l.toUpperCase()}
+            </a>
+          </>
+        ))
+      }
+    </p>
+  </body>
 </html>
