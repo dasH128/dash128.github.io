@@ -7,6 +7,14 @@ export const EMAIL = "rojas71421@gmail.com";
 export const LINKEDIN = "https://www.linkedin.com/in/dash128/";
 export const GITHUB = "https://github.com/dasH128";
 
+/** First job in software (Clínica Climper, Jan 2015). */
+export const CAREER_START = 2015;
+/**
+ * "N+" years in software, computed at build time. It subtracts one year on purpose: the claim
+ * stays true all year, and it goes up by itself every January (2026 -> 10+, 2027 -> 11+).
+ */
+export const YEARS_IN_CODE = new Date().getFullYear() - CAREER_START - 1;
+
 /** The root URL redirects by language with JavaScript, but chats and social networks do not run
     scripts: they read this, so it has to work for any reader, hence both languages. */
 export const rootMeta = {
@@ -55,14 +63,14 @@ const es: Content = {
       title: "Jordy Rojas Aliaga · Ingeniero Fullstack y Mobile",
       // Short on purpose: chats and social networks cut long descriptions.
       description:
-        "Ingeniero fullstack y mobile en Porto. 8+ años lanzando producto entre Perú y Portugal. Flutter, NestJS y problemas difíciles.",
+        `Ingeniero fullstack y mobile en Porto. ${YEARS_IN_CODE}+ años lanzando producto entre Perú y Portugal. Flutter, NestJS y problemas difíciles.`,
       jobTitle: "Ingeniero fullstack y mobile",
       ogAlt: "Jordy Rojas Aliaga, ingeniero fullstack y mobile, de Lima a Porto",
     },
     marquee: [
       "Porto ↔ Lima",
       "Flutter + NestJS",
-      "8+ años lanzando software",
+      `${YEARS_IN_CODE}+ años lanzando software`,
       "ES · PT · EN",
       "Programando desde 2015",
     ],
@@ -85,7 +93,7 @@ const es: Content = {
     },
     aboutTeaser: {
       title: "Lo que no cabe en el CV.",
-      text: "De Lima a Porto, ocho años de oficio y una costumbre: ir primero por el problema difícil.",
+      text: `De Lima a Porto, más de ${YEARS_IN_CODE} años de oficio y una costumbre: ir primero por el problema difícil.`,
       cta: "Leer mi historia",
     },
     about: {
@@ -208,15 +216,15 @@ const es: Content = {
       name: "Jordy",
       role: "Ingeniero fullstack y mobile · Porto, PT",
       pillRoute: "🇵🇪 Lima ✈ 🇵🇹 Porto",
-      pillYears: "+8 años creando software",
+      pillYears: `+${YEARS_IN_CODE} años creando software`,
       typed: ["jordy rojas aliaga", "de Lima, Perú", "ahora en Porto", "Flutter y NestJS", "programando desde 2015"],
-      sub: "Flutter, NestJS y más de 8 años lanzando producto entre Perú y Portugal. Lideré una app de escritorio dentro de una fábrica real.",
+      sub: `Flutter, NestJS y más de ${YEARS_IN_CODE} años lanzando producto entre Perú y Portugal. Lideré una app de escritorio dentro de una fábrica real.`,
       cta: "Ver proyectos",
       secondary: "Escríbeme",
       photoAlt: "Jordy Rojas sonriendo, con gorro de pescador y las manos en los bolsillos",
       statsLabel: "Cifras de mi trayectoria",
       stats: [
-        { n: "8+", l: "años lanzando software" },
+        { n: `${YEARS_IN_CODE}+`, l: "años lanzando software" },
         { n: "4", l: "empresas en 2 países" },
         { n: "20%", l: "menos errores operativos en Motorline" },
       ],
@@ -413,14 +421,14 @@ const en: Content = {
       title: "Jordy Rojas Aliaga · Fullstack & Mobile Engineer",
       // Short on purpose: chats and social networks cut long descriptions.
       description:
-        "Fullstack and mobile engineer in Porto. 8+ years shipping product between Peru and Portugal. Flutter, NestJS and hard problems.",
+        `Fullstack and mobile engineer in Porto. ${YEARS_IN_CODE}+ years shipping product between Peru and Portugal. Flutter, NestJS and hard problems.`,
       jobTitle: "Fullstack and mobile engineer",
       ogAlt: "Jordy Rojas Aliaga, fullstack and mobile engineer, from Lima to Porto",
     },
     marquee: [
       "Porto ↔ Lima",
       "Flutter + NestJS",
-      "8+ years shipping software",
+      `${YEARS_IN_CODE}+ years shipping software`,
       "ES · PT · EN",
       "Coding since 2015",
     ],
@@ -443,7 +451,7 @@ const en: Content = {
     },
     aboutTeaser: {
       title: "What doesn't fit on a resume.",
-      text: "From Lima to Porto, eight years of craft and one habit: going for the hard problem first.",
+      text: `From Lima to Porto, more than ${YEARS_IN_CODE} years of craft and one habit: going for the hard problem first.`,
       cta: "Read my story",
     },
     about: {
@@ -566,15 +574,15 @@ const en: Content = {
       name: "Jordy",
       role: "Fullstack & mobile engineer · Porto, PT",
       pillRoute: "🇵🇪 Lima ✈ 🇵🇹 Porto",
-      pillYears: "8+ years building software",
+      pillYears: `${YEARS_IN_CODE}+ years building software`,
       typed: ["jordy rojas aliaga", "from Lima, Peru", "now in Porto", "Flutter & NestJS", "coding since 2015"],
-      sub: "Flutter, NestJS and 8+ years shipping product between Peru and Portugal. I led a desktop app inside a real factory.",
+      sub: `Flutter, NestJS and ${YEARS_IN_CODE}+ years shipping product between Peru and Portugal. I led a desktop app inside a real factory.`,
       cta: "See my work",
       secondary: "Write to me",
       photoAlt: "Jordy Rojas smiling, wearing a bucket hat with hands in pockets",
       statsLabel: "Career numbers",
       stats: [
-        { n: "8+", l: "years shipping software" },
+        { n: `${YEARS_IN_CODE}+`, l: "years shipping software" },
         { n: "4", l: "companies in 2 countries" },
         { n: "20%", l: "fewer operational errors at Motorline" },
       ],
