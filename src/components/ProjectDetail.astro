@@ -1,6 +1,6 @@
 ---
 import { content, collages, COLLAGE_SIZE, langPath, projectPath, type Lang } from "../i18n/content";
-import { projectBySlug, projectNav } from "../i18n/projects";
+import { projectBySlug, projectNav, projectText } from "../i18n/projects";
 import CodeBlock from "./CodeBlock.astro";
 
 interface Props {
@@ -10,10 +10,10 @@ interface Props {
 const { lang, slug } = Astro.props;
 
 const project = projectBySlug(slug)!;
-const t = project.text[lang];
+const t = projectText(project, lang);
 const ui = content[lang].projectPage;
 const { index, total, next } = projectNav(slug);
-const nextText = next.text[lang];
+const nextText = projectText(next, lang);
 const collage = collages[project.collage];
 const nextCollage = collages[next.collage];
 const home = langPath(lang);

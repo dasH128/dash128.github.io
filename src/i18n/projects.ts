@@ -64,7 +64,8 @@ export interface ProjectDetail {
   nda?: boolean;
   /** Columns of the screenshot gallery on wide screens. */
   shotCols?: number;
-  text: Record<Lang, ProjectText>;
+  /** Spanish and English are written; other languages fall back to English until translated (`projectText`). */
+  text: { es: ProjectText; en: ProjectText } & Partial<Record<Lang, ProjectText>>;
 }
 
 const P = "/projects";
@@ -810,4 +811,9 @@ export const projectBySlug = (slug: string): ProjectDetail | undefined => projec
 export function projectNav(slug: string) {
   const i = Math.max(0, projects.findIndex((p) => p.slug === slug));
   return { index: i + 1, total: projects.length, next: projects[(i + 1) % projects.length] };
+}
+
+/** Text of a project in a language, falling back to English while that language is not translated. */
+export function projectText(p: ProjectDetail, lang: Lang): ProjectText {
+  return p.text[lang] ?? p.text.en;
 }

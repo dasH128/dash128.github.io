@@ -1,5 +1,22 @@
-export const langs = ["es", "en"] as const;
+export const langs = ["es", "en", "pt", "it"] as const;
 export type Lang = (typeof langs)[number];
+/**
+ * Languages whose pages exist but are not translated yet (they reuse the English text, with the
+ * navigation translated). They are `noindex`, left out of the sitemap, hreflang and the root
+ * redirect. Empty this list, language by language, as each translation is reviewed.
+ */
+export const provisionalLangs: readonly Lang[] = ["pt", "it"];
+export const isProvisional = (l: Lang): boolean => provisionalLangs.includes(l);
+/** Languages that are translated and published. */
+export const liveLangs: readonly Lang[] = langs.filter((l) => !isProvisional(l));
+
+/** How each language greets and names itself, used by the language picker. Same in every page language. */
+export const langMeta: Record<Lang, { name: string; greeting: string }> = {
+  es: { name: "Español", greeting: "Hola" },
+  en: { name: "English", greeting: "Hello" },
+  pt: { name: "Português", greeting: "Olá" },
+  it: { name: "Italiano", greeting: "Ciao" },
+};
 /** Used by "/" when the visitor has no saved choice and no browser language matches. */
 export const defaultLang: Lang = "en";
 
@@ -214,6 +231,8 @@ const es: Content = {
       education: "Estudios",
       cta: "Hablemos",
       langLabel: "Idioma",
+      langClose: "Cerrar",
+      here: "estás aquí",
       menuOpen: "Abrir menú",
       menuClose: "Cerrar menú",
       clock: "Porto",
@@ -581,6 +600,8 @@ const en: Content = {
       education: "Education",
       cta: "Let's talk",
       langLabel: "Language",
+      langClose: "Close",
+      here: "you are here",
       menuOpen: "Open menu",
       menuClose: "Close menu",
       clock: "Porto",
@@ -794,7 +815,52 @@ const en: Content = {
  * One block per language. `Record<Lang, Content>` makes the build fail if a language
  * listed in `langs` has no block, and `Content` makes it fail if a block misses a key.
  */
-export const content: Record<Lang, Content> = { es, en };
+/* Portuguese and Italian are provisional: English text, translated navigation (see `provisionalLangs`). */
+const pt: Content = {
+  ...en,
+  htmlLang: "pt-PT",
+  ogLocale: "pt_PT",
+  nav: {
+    ...en.nav,
+    aria: "Principal",
+    home: "Jordy Rojas Aliaga, início",
+    about: "Sobre mim",
+    work: "Projetos",
+    experience: "Experiência",
+    stack: "Stack",
+    education: "Formação",
+    cta: "Falemos",
+    langLabel: "Idioma",
+    langClose: "Fechar",
+    here: "estás aqui",
+    menuOpen: "Abrir menu",
+    menuClose: "Fechar menu",
+  },
+};
+
+const it: Content = {
+  ...en,
+  htmlLang: "it",
+  ogLocale: "it_IT",
+  nav: {
+    ...en.nav,
+    aria: "Principale",
+    home: "Jordy Rojas Aliaga, home",
+    about: "Chi sono",
+    work: "Progetti",
+    experience: "Esperienza",
+    stack: "Stack",
+    education: "Studi",
+    cta: "Parliamone",
+    langLabel: "Lingua",
+    langClose: "Chiudi",
+    here: "sei qui",
+    menuOpen: "Apri il menu",
+    menuClose: "Chiudi il menu",
+  },
+};
+
+export const content: Record<Lang, Content> = { es, en, pt, it };
 
 /**
  * Illustrated collage per project (638x800 JPG), including the private Motorline work that
@@ -806,6 +872,8 @@ export const collages = {
     alt: {
       es: "Collage: widgets saliendo de un móvil",
       en: "Collage: widgets popping out of a phone",
+      pt: "Colagem: widgets a saírem de um telemóvel",
+      it: "Collage: widget che escono da uno smartphone",
     },
   },
   monitor: {
@@ -813,6 +881,8 @@ export const collages = {
     alt: {
       es: "Collage: un capataz delante de manómetros",
       en: "Collage: a factory foreman in front of pressure gauges",
+      pt: "Colagem: um capataz à frente de manómetros",
+      it: "Collage: un caposquadra davanti a dei manometri",
     },
   },
   pdf: {
@@ -820,6 +890,8 @@ export const collages = {
     alt: {
       es: "Collage: una mecanógrafa de los años 50 rodeada de informes impresos",
       en: "Collage: a 1950s typist surrounded by printed reports",
+      pt: "Colagem: uma dactilógrafa dos anos 50 rodeada de relatórios impressos",
+      it: "Collage: una dattilografa degli anni 50 circondata da report stampati",
     },
   },
   cinema: {
@@ -827,6 +899,8 @@ export const collages = {
     alt: {
       es: "Collage: una mujer con un móvil y una tira de película",
       en: "Collage: a woman holding a phone and a strip of film",
+      pt: "Colagem: uma mulher com um telemóvel e uma tira de filme",
+      it: "Collage: una donna con uno smartphone e una pellicola",
     },
   },
   poke: {
@@ -834,6 +908,8 @@ export const collages = {
     alt: {
       es: "Collage: un niño estudiando una silueta misteriosa",
       en: "Collage: a kid studying a mysterious silhouette",
+      pt: "Colagem: um miúdo a estudar uma silhueta misteriosa",
+      it: "Collage: un bambino che studia una sagoma misteriosa",
     },
   },
 } as const satisfies Record<string, { src: string; alt: Record<Lang, string> }>;
@@ -930,6 +1006,9 @@ export interface Content {
     education: string;
     cta: string;
     langLabel: string;
+    /** Close button of the language picker, and the handwritten "you are here" note. */
+    langClose: string;
+    here: string;
     menuOpen: string;
     menuClose: string;
     /** Label for the live Porto clock. */

@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { langs, langPath, aboutPath, projectPath, type Lang } from "../i18n/content";
+import { liveLangs as langs, langPath, aboutPath, projectPath, type Lang } from "../i18n/content";
 import { projects } from "../i18n/projects";
 
 /** Every page, with its translations linked (hreflang). Written by hand: no extra dependency. */

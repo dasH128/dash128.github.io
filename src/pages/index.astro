@@ -1,5 +1,5 @@
 ---
-import { content, langs, langPath, defaultLang, rootMeta } from "../i18n/content";
+import { content, langs, liveLangs, langPath, defaultLang, rootMeta } from "../i18n/content";
 import { OG_SIZE, ogImage } from "../lib/seo";
 
 // Every language in `langs` is picked up here: no per-language code in this file.
@@ -22,7 +22,7 @@ const imageUrl = `${site}${ogImage(defaultLang)}`;
     <meta name="description" content={rootMeta.description} />
     <meta name="author" content="Jordy Rojas Aliaga" />
     <link rel="canonical" href={rootUrl} />
-    {langs.map((l) => <link rel="alternate" hreflang={l} href={`${site}${paths[l]}`} />)}
+    {liveLangs.map((l) => <link rel="alternate" hreflang={l} href={`${site}${paths[l]}`} />)}
     <link rel="alternate" hreflang="x-default" href={rootUrl} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
@@ -35,7 +35,7 @@ const imageUrl = `${site}${ogImage(defaultLang)}`;
     <meta property="og:url" content={rootUrl} />
     <meta property="og:site_name" content="Jordy Rojas Aliaga" />
     <meta property="og:locale" content={content[defaultLang].ogLocale} />
-    {langs.filter((l) => l !== defaultLang).map((l) => <meta property="og:locale:alternate" content={content[l].ogLocale} />)}
+    {liveLangs.filter((l) => l !== defaultLang).map((l) => <meta property="og:locale:alternate" content={content[l].ogLocale} />)}
     <meta property="og:image" content={imageUrl} />
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content={String(OG_SIZE.width)} />
@@ -46,7 +46,7 @@ const imageUrl = `${site}${ogImage(defaultLang)}`;
     <meta name="twitter:description" content={rootMeta.description} />
     <meta name="twitter:image" content={imageUrl} />
     <noscript><meta http-equiv="refresh" content={`0;url=${paths[defaultLang]}`} /></noscript>
-    <script is:inline define:vars={{ paths, langs, fallback: defaultLang }}>
+    <script is:inline define:vars={{ paths, langs: liveLangs, fallback: defaultLang }}>
       // Saved choice first, then the browser's language list, then the default.
       var lang = fallback;
       try {
@@ -72,7 +72,7 @@ const imageUrl = `${site}${ogImage(defaultLang)}`;
   <body>
     <p>
       {
-        langs.map((l, i) => (
+        liveLangs.map((l, i) => (
           <>
             {i > 0 && " · "}
             <a href={paths[l]} hreflang={l}>

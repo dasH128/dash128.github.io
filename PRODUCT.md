@@ -24,7 +24,7 @@ Confident and a little cheeky. The site does not beg for a job. Its stance is "N
 
 ## Operating Context
 
-Single-developer static site, no backend or CMS. Viewed on desktop and mobile, usually as a first impression before a resume or LinkedIn/GitHub profile. Bilingual: Spanish and English with equal weight, with a language switch. Every project has a detail page in both languages.
+Single-developer static site, no backend or CMS. Viewed on desktop and mobile, usually as a first impression before a resume or LinkedIn/GitHub profile. Four languages: Spanish and English are written and live; Portuguese and Italian are provisional (English text, translated navigation, `noindex`) until they are translated and reviewed. A language picker is in the nav. Every project has a detail page in both languages.
 
 ## Capabilities and Constraints
 

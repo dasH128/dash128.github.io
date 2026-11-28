@@ -1,5 +1,5 @@
 ---
-import { content, langs, langPath, aboutPath, projectPath, type Lang } from "../i18n/content";
+import { content, langs, langMeta, langPath, aboutPath, projectPath, type Lang } from "../i18n/content";
 
 interface Props {
   lang: Lang;
@@ -44,20 +44,36 @@ const links = [
     <div class="nav__end">
       <span class="nav__clock mono" aria-hidden="true">{t.clock} <b data-clock>--:--</b></span>
 
-      <div class="nav__lang mono" role="group" aria-label={t.langLabel}>
-        {
-          langs.map((l) => (
-            <a
-              href={switchTo(l)}
-              data-lang={l}
-              hreflang={l}
-              lang={l}
-              aria-current={l === lang ? "true" : undefined}
-            >
-              {l}
-            </a>
-          ))
-        }
+      <div class="nav__lang">
+        <button
+          class="langbtn mono"
+          type="button"
+          aria-haspopup="dialog"
+          aria-expanded="false"
+          aria-controls="lang-sheet"
+          aria-label={`${t.langLabel}: ${langMeta[lang].name}`}
+          data-lang-open
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"></path>
+          </svg>
+          <span>{langMeta[lang].greeting}</span>
+        </button>
+        <!-- Without JavaScript the picker cannot open, so the four languages are plain links. -->
+        <noscript>
+          <ul class="langplain mono">
+            {
+              langs.map((l) => (
+                <li>
+                  <a href={switchTo(l)} hreflang={l} lang={l} aria-current={l === lang ? "true" : undefined}>
+                    {l}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </noscript>
       </div>
 
       <a href="#contact" class="nav__cta">{t.cta} →</a>
@@ -91,7 +107,52 @@ const links = [
       }
     </ol>
     <a href="#contact" class="menu__cta">{t.cta} →</a>
+    <div class="menu__langs" role="group" aria-label={t.langLabel}>
+      <span class="mono" aria-hidden="true">{t.langLabel}</span>
+      <ul>
+        {
+          langs.map((l) => (
+            <li>
+              <a
+                href={switchTo(l)}
+                data-lang={l}
+                hreflang={l}
+                lang={l}
+                aria-label={langMeta[l].name}
+                aria-current={l === lang ? "true" : undefined}
+              >
+                {l}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
   </nav>
+
+  <!-- Language picker (large screens): a blue sheet with the four greetings. Hidden with visibility. -->
+  <div class="sheet" id="lang-sheet" role="dialog" aria-modal="true" aria-label={t.langLabel}>
+    <button class="sheet__close mono" type="button" data-lang-close>{t.langClose} ✕</button>
+    <ul class="sheet__list">
+      {
+        langs.map((l) => (
+          <li>
+            <a
+              href={switchTo(l)}
+              data-lang={l}
+              hreflang={l}
+              lang={l}
+              aria-current={l === lang ? "true" : undefined}
+            >
+              <span class="sheet__word">{langMeta[l].greeting}</span>
+              <span class="sheet__meta mono">{l} · {langMeta[l].name}</span>
+              <span class="sheet__here" aria-hidden="true">{t.here}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
 </header>
 
 <style>
@@ -198,29 +259,122 @@ const links = [
     }
   }
 
-  /* Language switch: a segmented pill, the current language filled. */
-  .nav__lang {
-    display: flex;
-    padding: 3px;
+  /* Language picker trigger: globe plus the greeting in the current language. Opens the sheet. */
+  .langbtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45em 0.95em 0.45em 0.8em;
     border: 1.5px solid var(--ink);
     border-radius: 99px;
-  }
-
-  .nav__lang a {
-    text-decoration: none;
-    color: var(--ink);
-    padding: 0.3em 0.75em;
-    border-radius: 99px;
+    background: var(--paper);
+    cursor: pointer;
     transition: background 0.2s var(--ease-out), color 0.2s var(--ease-out);
   }
-
-  .nav__lang a:hover {
-    background: var(--paper-dim);
+  .langbtn svg {
+    width: 15px;
+    height: 15px;
   }
-
-  .nav__lang a[aria-current="true"] {
+  .langbtn:hover,
+  .langbtn[aria-expanded="true"] {
     background: var(--ink);
     color: var(--paper);
+  }
+  .langplain {
+    display: flex;
+    gap: 0.4rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* The sheet: four giant greetings on blue. Same curtain as the mobile menu, opened on request. */
+  .sheet {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem var(--gutter);
+    background: var(--blue);
+    color: #fff;
+    visibility: hidden;
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 0.65s var(--ease-out), visibility 0s 0.65s;
+  }
+  .sheet.is-open {
+    visibility: visible;
+    clip-path: inset(0);
+    transition: clip-path 0.65s var(--ease-out), visibility 0s;
+  }
+  .sheet__close {
+    position: absolute;
+    top: 1.1rem;
+    right: var(--gutter);
+    padding: 0.5em 1.1em;
+    border: 1.5px solid #fff;
+    border-radius: 99px;
+    color: #fff;
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.2s var(--ease-out), color 0.2s var(--ease-out);
+  }
+  .sheet__close:hover {
+    background: #fff;
+    color: var(--blue);
+  }
+  .sheet__close:focus-visible,
+  .sheet__list a:focus-visible {
+    outline-color: #fff;
+  }
+  .sheet__list {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    width: min(1240px, 100%);
+    display: grid;
+    gap: 0.1rem;
+  }
+  .sheet__list a {
+    display: flex;
+    align-items: baseline;
+    gap: 1.2rem;
+    text-decoration: none;
+    transition: transform 0.5s var(--ease-out), opacity 0.3s var(--ease-out);
+  }
+  .sheet__word {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: clamp(3.4rem, 10vw, 8rem);
+    line-height: 0.98;
+  }
+  .sheet__meta {
+    opacity: 0.85;
+  }
+  .sheet__here {
+    font-family: var(--font-hand);
+    font-size: 1.5rem;
+    transform: rotate(-4deg);
+    display: none;
+  }
+  .sheet__list a[aria-current="true"] .sheet__word {
+    text-decoration: underline;
+    text-decoration-thickness: 0.05em;
+    text-underline-offset: 0.1em;
+  }
+  .sheet__list a[aria-current="true"] .sheet__here {
+    display: inline;
+  }
+  @media (hover: hover) {
+    .sheet__list:hover a {
+      opacity: 0.45;
+    }
+    .sheet__list a:hover,
+    .sheet__list a:focus-visible {
+      opacity: 1;
+      transform: translateX(1.2rem) rotate(-0.8deg);
+    }
   }
 
   .nav__cta {
@@ -280,7 +434,9 @@ const links = [
 
   @media (max-width: 860px) {
     .nav__links,
-    .nav__cta {
+    .nav__cta,
+    .nav__lang,
+    .sheet {
       display: none;
     }
 
@@ -339,6 +495,40 @@ const links = [
       text-underline-offset: 6px;
     }
 
+    .menu__langs {
+      border-top: 1px solid rgba(255, 255, 255, 0.4);
+      padding-top: 1.1rem;
+    }
+    .menu__langs > span {
+      display: block;
+      opacity: 0.8;
+      margin-bottom: 0.7rem;
+    }
+    .menu__langs ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.4rem;
+    }
+    .menu__langs a {
+      display: block;
+      text-align: center;
+      padding: 0.6em 0;
+      border: 1.5px solid #fff;
+      border-radius: 99px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    .menu__langs a[aria-current="true"] {
+      background: #fff;
+      color: var(--blue);
+    }
+
     .menu__cta {
       align-self: flex-start;
       font-weight: 600;
@@ -358,16 +548,8 @@ const links = [
     .nav.is-open .nav__mark span {
       color: #fff;
     }
-    .nav.is-open .nav__lang,
     .nav.is-open .nav__burger {
       border-color: #fff;
-    }
-    .nav.is-open .nav__lang a {
-      color: #fff;
-    }
-    .nav.is-open .nav__lang a[aria-current="true"] {
-      background: #fff;
-      color: var(--blue);
     }
     .nav.is-open .nav__burger {
       background: transparent;
@@ -385,6 +567,9 @@ const links = [
 
   @media (prefers-reduced-motion: reduce) {
     .menu,
+    .sheet,
+    .sheet.is-open,
+    .sheet__list a,
     .nav.is-open .menu,
     .nav__links a::after,
     .nav__mark,
@@ -424,6 +609,39 @@ const links = [
     // Leaving the small-screen layout while open would strand the page with no scroll.
     matchMedia("(min-width: 861px)").addEventListener("change", (e) => {
       if (e.matches) setOpen(false);
+    });
+  }
+
+  // Language picker (large screens): a blue sheet with the four greetings.
+  const sheet = document.querySelector<HTMLElement>("#lang-sheet");
+  const langBtn = nav?.querySelector<HTMLButtonElement>("[data-lang-open]");
+  if (nav && sheet && langBtn) {
+    const closeBtn = sheet.querySelector<HTMLButtonElement>("[data-lang-close]");
+    const row = nav.querySelector<HTMLElement>(".nav__row");
+    // The page, and the rest of the header, are inert while the sheet is open.
+    const behind = () => [
+      ...[...document.body.children].filter((el) => el !== nav && el.tagName !== "SCRIPT"),
+      ...(row ? [row] : []),
+    ];
+    const setSheet = (open: boolean, restoreFocus = false) => {
+      sheet.classList.toggle("is-open", open);
+      langBtn.setAttribute("aria-expanded", String(open));
+      document.documentElement.style.overflow = open ? "hidden" : "";
+      behind().forEach((el) => (el as HTMLElement).toggleAttribute("inert", open));
+      if (open) {
+        (sheet.querySelector<HTMLElement>('a[aria-current="true"]') ?? closeBtn)?.focus({ preventScroll: true });
+      } else if (restoreFocus) langBtn.focus();
+    };
+    langBtn.addEventListener("click", () => setSheet(true));
+    closeBtn?.addEventListener("click", () => setSheet(false, true));
+    sheet.addEventListener("click", (e) => {
+      if (e.target === sheet) setSheet(false, true);
+    });
+    addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && sheet.classList.contains("is-open")) setSheet(false, true);
+    });
+    matchMedia("(max-width: 860px)").addEventListener("change", (e) => {
+      if (e.matches) setSheet(false);
     });
   }
 
