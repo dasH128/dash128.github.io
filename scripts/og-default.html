@@ -10,7 +10,7 @@
   /* FUENTE de public/og/default.jpg. Para regenerarla: copiar este archivo a public/_tmp-og.html, abrir
      http://localhost:4321/_tmp-og.html con `astro dev`, capturar la region 0,0 a 1200,630 (sin el
      puntero del raton dentro), convertir a JPG (calidad ~86) y borrar la copia de public/.
-     Una por idioma: ?lang=en -> public/og/en.jpg, ?lang=es -> public/og/es.jpg. */
+     Una por idioma: ?lang=en -> public/og/en.jpg, ?lang=es -> public/og/es.jpg, ?lang=pt -> public/og/pt.jpg, ?lang=it -> public/og/it.jpg. */
   /* La imagen que sale en WhatsApp, LinkedIn, X... al compartir el enlace. Se captura a 1200x630.
      Margen de seguridad de 64 px: algunas apps recortan los bordes. */
   :root{--paper:#f4f1e8;--ink:#14130f;--ink-soft:#5a564c;--blue:#2342e8}
@@ -58,8 +58,9 @@
 </div>
 <script>
   // Language: ?lang=es or ?lang=en (default). One card per language in public/og/{lang}.jpg.
-  const TEXT = { en: { role: "Fullstack & Mobile Engineer", years: "10+ years" }, es: { role: "Ingeniero Fullstack y Mobile", years: "10+ años" } };
-  const L = new URLSearchParams(location.search).get("lang") === "es" ? "es" : "en";
+  const TEXT = { en: { role: "Fullstack & Mobile Engineer", years: "10+ years" }, es: { role: "Ingeniero Fullstack y Mobile", years: "10+ años" }, pt: { role: "Engenheiro Fullstack e Mobile", years: "10+ anos" }, it: { role: "Ingegnere Fullstack e Mobile", years: "10+ anni" } };
+  const q = new URLSearchParams(location.search).get("lang");
+  const L = q in TEXT ? q : "en";
   document.getElementById("role").textContent = TEXT[L].role;
   document.getElementById("years").textContent = TEXT[L].years;
   // Tells the capture it can go: fonts and photo ready.

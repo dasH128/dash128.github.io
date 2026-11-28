@@ -64,7 +64,7 @@ export interface ProjectDetail {
   nda?: boolean;
   /** Columns of the screenshot gallery on wide screens. */
   shotCols?: number;
-  /** Spanish and English are written; other languages fall back to English until translated (`projectText`). */
+  /** Every language in `langs` is written. `projectText` still falls back to English if a language is added without its text. */
   text: { es: ProjectText; en: ProjectText } & Partial<Record<Lang, ProjectText>>;
 }
 
@@ -169,6 +169,36 @@ export const projects: ProjectDetail[] = [
           "I extended the production Flutter app with native widgets for Android (Kotlin) and iOS and push notifications, sharing state between the Flutter engine and the native code.",
         result: "Widgets and notifications always in sync with the app.",
       },
+      pt: {
+        title: "Integração móvel nativa",
+        tagline: "Flutter, apresento-te o teu ecrã inicial.",
+        description:
+          "Widgets nativos de Android e iOS e notificações push para uma aplicação Flutter em produção na Motorline.",
+        client: "Motorline",
+        role: "Programador móvel",
+        year: "2022 a atualidade",
+        tags: ["Flutter", "Kotlin", "Widgets nativos", "Notificações push"],
+        challenge:
+          "Os utilizadores queriam ver a informação-chave sem abrir a aplicação: diretamente no ecrã inicial, e com um aviso quando algo mudasse.",
+        built:
+          "Ampliei a aplicação Flutter em produção com widgets nativos para Android (Kotlin) e iOS e notificações push, partilhando o estado entre o motor do Flutter e o código nativo.",
+        result: "Widgets e notificações sempre sincronizados com a aplicação.",
+      },
+      it: {
+        title: "Integrazione mobile nativa",
+        tagline: "Flutter, ti presento la tua schermata Home.",
+        description:
+          "Widget nativi per Android e iOS e notifiche push per un'app Flutter in produzione in Motorline.",
+        client: "Motorline",
+        role: "Sviluppatore mobile",
+        year: "dal 2022",
+        tags: ["Flutter", "Kotlin", "Widget nativi", "Notifiche push"],
+        challenge:
+          "Gli utenti volevano vedere le informazioni chiave senza aprire l'app: direttamente nella schermata Home, e con un avviso quando qualcosa cambiava.",
+        built:
+          "Ho esteso l'app Flutter in produzione con widget nativi per Android (Kotlin) e iOS e notifiche push, condividendo lo stato tra il motore di Flutter e il codice nativo.",
+        result: "Widget e notifiche sempre sincronizzati con l'app.",
+      },
     },
   },
 
@@ -209,6 +239,38 @@ export const projects: ProjectDetail[] = [
         built:
           "I led a Flutter desktop platform that measures production-task efficiency live and keeps data synchronized across systems, with Node.js services and cron-scheduled jobs.",
         result: "Operational errors dropped by 20%.",
+      },
+      pt: {
+        title: "Monitorização de produção e controlo de qualidade",
+        tagline: "Eficiência em tempo real no chão de fábrica.",
+        description:
+          "Plataforma desktop em Flutter que mede em tempo real a eficiência da produção numa fábrica e reduziu os erros operacionais em 20%.",
+        client: "Motorline",
+        role: "Programador líder",
+        year: "2022 a atualidade",
+        tags: ["Flutter desktop", "Node.js", "Automação com cron", "Sincronização de dados"],
+        stat: { value: "−20%", label: "erros operacionais" },
+        challenge:
+          "A fábrica precisava de ver, em tempo real, a eficiência de cada tarefa de produção e de evitar que os pequenos erros se acumulassem.",
+        built:
+          "Liderei uma plataforma desktop em Flutter que mede em direto a eficiência das tarefas de produção e mantém os dados sincronizados entre sistemas, com serviços em Node.js e tarefas agendadas com cron.",
+        result: "Os erros operacionais desceram 20%.",
+      },
+      it: {
+        title: "Monitoraggio della produzione e controllo qualità",
+        tagline: "Efficienza in tempo reale in fabbrica.",
+        description:
+          "Piattaforma desktop in Flutter che misura in tempo reale l'efficienza della produzione in una fabbrica e ha ridotto del 20% gli errori operativi.",
+        client: "Motorline",
+        role: "Lead developer",
+        year: "dal 2022",
+        tags: ["Flutter desktop", "Node.js", "Automazione con cron", "Sincronizzazione dei dati"],
+        stat: { value: "−20%", label: "errori operativi" },
+        challenge:
+          "La fabbrica aveva bisogno di vedere, in tempo reale, l'efficienza di ogni attività di produzione e di evitare che i piccoli errori si accumulassero.",
+        built:
+          "Ho guidato una piattaforma desktop in Flutter che misura in diretta l'efficienza delle attività di produzione e mantiene i dati sincronizzati tra i sistemi, con servizi in Node.js e job pianificati con cron.",
+        result: "Gli errori operativi sono scesi del 20%.",
       },
     },
   },
@@ -386,6 +448,176 @@ export const projects: ProjectDetail[] = [
             h: "Stack",
             p: [
               "NestJS on the API layer, Prisma against PostgreSQL for data access, `pdfmake` for document composition and layout, PDFKit underneath for the actual PDF stream, and Chart.js (rendered server-side to SVG/PNG) for the charts embedded in the statistics report.",
+            ],
+          },
+        ],
+      },
+      pt: {
+        title: "API de relatórios em PDF",
+        tagline: "Entram dados, saem documentos impecáveis.",
+        description:
+          "Uma API NestJS + Prisma que transforma registos da base de dados em relatórios PDF a pedido: faturas, certificados, tabelas e painéis com gráficos incorporados.",
+        client: "Projeto pessoal",
+        role: "Engenheiro de backend",
+        year: "2024",
+        tags: ["NestJS", "Prisma", "PostgreSQL", "pdfmake", "PDFKit", "Chart.js"],
+        challenge:
+          "Quase todas as aplicações de negócio acabam por precisar de imprimir alguma coisa: uma fatura, um certificado, um relatório mensal. Queria um único serviço capaz de fazer tudo isso a partir de dados reais da base de dados.",
+        built:
+          "Uma API NestJS que lê o PostgreSQL através do Prisma e gera PDFs prontos: faturas de compra, certificados, tabelas de referência e painéis de estatísticas com gráficos SVG incorporados. Também converte modelos HTML em PDF.",
+        result:
+          "Um endpoint tipado e testável por tipo de documento, rápido o suficiente para gerar relatórios na hora em vez de em processos noturnos.",
+        tech: [
+          {
+            h: "Porque o construí",
+            p: [
+              "Comecei este projeto depois de terminar o curso “Nest + Reportes: Genera PDF desde Node” da DevTalles e continuei a ampliá-lo por conta própria: novos tipos de relatório, consultas reais ao Prisma em vez de dados estáticos e gráficos SVG renderizados no servidor em vez de imagens pré-feitas. É o projeto que uso para praticar padrões de backend que toco menos no trabalho móvel e em Flutter que faço no dia a dia na Motorline.",
+            ],
+          },
+          {
+            h: "Arquitetura",
+            p: [
+              "Cada endpoint segue o mesmo caminho: um controlador resolve o pedido, um serviço obtém os dados através do Prisma (ou executa uma consulta SQL direta quando o construtor de consultas do Prisma não consegue expressá-la) e um `PrinterService` partilhado converte uma definição de documento do pdfmake num stream PDF. Nada é guardado em cache nem persistido: cada pedido reconstrói o documento a partir de dados em direto.",
+            ],
+            rows: [
+              {
+                base: "/basic-report",
+                summary:
+                  "Certificados e tabelas de referência: uma declaração de trabalho gerada a partir de um registo real de funcionário e uma lista de países que se pode filtrar por continente.",
+              },
+              {
+                base: "/extra-reports",
+                summary:
+                  "Experiências de formato: converter um modelo HTML existente diretamente em PDF, um relatório de layout fixo e um tamanho de página personalizado com um código QR incorporado.",
+              },
+              {
+                base: "/store-reports",
+                summary:
+                  "Relatórios orientados a dados: uma fatura de compra construída a partir de uma encomenda real (cliente, produtos, totais) e um painel de estatísticas que combina um `groupBy` do Prisma com um join em SQL direto.",
+              },
+            ],
+            code: {
+              ...pdfSnippet,
+              notes: { 2: "groupBy do Prisma", 9: "SQL direto" },
+              caption:
+                "`store-reports.service.ts`: combinar um `groupBy` do Prisma com um join em SQL direto e entregar os dois conjuntos de dados a uma função construtora de relatórios.",
+            },
+          },
+          {
+            h: "Exemplo de resultado",
+            p: ["As capturas abaixo são PDFs reais gerados pela API em execução sobre uma base de dados com dados de teste, não maquetes."],
+            shots: [
+              {
+                src: `${P}/pdf-report-api/statistics.png`,
+                alt: "PDF do relatório de estatísticas: um gráfico em anel com os principais países de clientes, um gráfico de linhas, um gráfico de barras e um gráfico radar numa só página",
+                caption: "Estatísticas de clientes e inventário: `groupBy` do Prisma mais um join em SQL direto, renderizados como gráficos.",
+              },
+              {
+                src: `${P}/pdf-report-api/invoice.png`,
+                alt: "PDF de uma fatura de compra com um código QR, dados do cliente e uma tabela de linhas",
+                caption: "Uma encomenda de compra renderizada como fatura, obtida em direto do Prisma.",
+              },
+              {
+                src: `${P}/pdf-report-api/countries.png`,
+                alt: "PDF do relatório de países com uma tabela às riscas com códigos ISO, nomes, continentes e nomes locais",
+                caption: "Uma tabela de países de 12 páginas, com linhas às riscas e cabeçalho repetido.",
+              },
+              {
+                src: `${P}/pdf-report-api/html-report.png`,
+                alt: "PDF gerado a partir de um modelo HTML existente, com títulos, listas e estilos em linha",
+                caption: "Um modelo HTML existente convertido diretamente em PDF.",
+              },
+            ],
+          },
+          {
+            h: "Stack",
+            p: [
+              "NestJS na camada da API, Prisma sobre PostgreSQL para o acesso a dados, `pdfmake` para a composição e o layout dos documentos, PDFKit por baixo para o stream PDF propriamente dito e Chart.js (renderizado no servidor para SVG/PNG) para os gráficos incorporados no relatório de estatísticas.",
+            ],
+          },
+        ],
+      },
+      it: {
+        title: "API di report PDF",
+        tagline: "Entrano dati, escono documenti impeccabili.",
+        description:
+          "Un'API NestJS + Prisma che trasforma i record del database in report PDF su richiesta: fatture, certificati, tabelle e dashboard con grafici incorporati.",
+        client: "Progetto personale",
+        role: "Ingegnere backend",
+        year: "2024",
+        tags: ["NestJS", "Prisma", "PostgreSQL", "pdfmake", "PDFKit", "Chart.js"],
+        challenge:
+          "Quasi ogni applicazione aziendale finisce per dover stampare qualcosa: una fattura, un certificato, un report mensile. Volevo un unico servizio in grado di fare tutto questo a partire da dati reali del database.",
+        built:
+          "Un'API NestJS che legge PostgreSQL tramite Prisma e genera PDF pronti: fatture d'acquisto, certificati, tabelle di riferimento e dashboard di statistiche con grafici SVG incorporati. Converte anche template HTML in PDF.",
+        result:
+          "Un endpoint tipizzato e testabile per ogni tipo di documento, abbastanza veloce da generare i report al momento invece che in elaborazioni notturne.",
+        tech: [
+          {
+            h: "Perché l'ho costruita",
+            p: [
+              "Ho iniziato questo progetto dopo aver finito il corso “Nest + Reportes: Genera PDF desde Node” di DevTalles e ho continuato a estenderlo da solo: nuovi tipi di report, vere query di Prisma al posto di dati statici e grafici SVG renderizzati lato server invece di immagini già pronte. È il progetto che uso per esercitarmi su pattern di backend che tocco meno nel lavoro mobile e in Flutter di ogni giorno in Motorline.",
+            ],
+          },
+          {
+            h: "Architettura",
+            p: [
+              "Ogni endpoint segue lo stesso percorso: un controller risolve la richiesta, un service recupera i dati tramite Prisma (o esegue una query SQL grezza quando il query builder di Prisma non riesce a esprimerla) e un `PrinterService` condiviso trasforma una definizione di documento di pdfmake in uno stream PDF. Nulla viene messo in cache né salvato: ogni richiesta ricostruisce il documento da dati dal vivo.",
+            ],
+            rows: [
+              {
+                base: "/basic-report",
+                summary:
+                  "Certificati e tabelle di riferimento: una lettera di impiego generata da un record reale di un dipendente e un elenco di paesi filtrabile per continente.",
+              },
+              {
+                base: "/extra-reports",
+                summary:
+                  "Esperimenti di formato: convertire un template HTML esistente direttamente in PDF, un report a layout fisso e un formato di pagina personalizzato con un codice QR incorporato.",
+              },
+              {
+                base: "/store-reports",
+                summary:
+                  "Report guidati dai dati: una fattura d'acquisto costruita da un ordine reale (cliente, prodotti, totali) e una dashboard di statistiche che combina un `groupBy` di Prisma con una join in SQL grezzo.",
+              },
+            ],
+            code: {
+              ...pdfSnippet,
+              notes: { 2: "groupBy di Prisma", 9: "SQL grezzo" },
+              caption:
+                "`store-reports.service.ts`: combinare un `groupBy` di Prisma con una join in SQL grezzo e passare entrambi i dataset a una funzione che costruisce il report.",
+            },
+          },
+          {
+            h: "Esempio di output",
+            p: ["Le schermate qui sotto sono PDF reali generati dall'API in esecuzione su un database di prova, non mockup."],
+            shots: [
+              {
+                src: `${P}/pdf-report-api/statistics.png`,
+                alt: "PDF del report di statistiche: un grafico ad anello dei principali paesi dei clienti, un grafico a linee, un grafico a barre e un grafico radar in un'unica pagina",
+                caption: "Statistiche di clienti e magazzino: `groupBy` di Prisma più una join in SQL grezzo, rese come grafici.",
+              },
+              {
+                src: `${P}/pdf-report-api/invoice.png`,
+                alt: "PDF di una fattura d'acquisto con un codice QR, i dati del cliente e una tabella di righe",
+                caption: "Un ordine d'acquisto reso come fattura, letto dal vivo da Prisma.",
+              },
+              {
+                src: `${P}/pdf-report-api/countries.png`,
+                alt: "PDF del report dei paesi con una tabella a righe alternate con codici ISO, nomi, continenti e nomi locali",
+                caption: "Una tabella di paesi di 12 pagine, con righe alternate e intestazione ripetuta.",
+              },
+              {
+                src: `${P}/pdf-report-api/html-report.png`,
+                alt: "PDF generato da un template HTML esistente, con titoli, elenchi e stili inline",
+                caption: "Un template HTML esistente convertito direttamente in PDF.",
+              },
+            ],
+          },
+          {
+            h: "Stack",
+            p: [
+              "NestJS per il livello API, Prisma su PostgreSQL per l'accesso ai dati, `pdfmake` per la composizione e il layout dei documenti, PDFKit sotto per lo stream PDF vero e proprio e Chart.js (renderizzato lato server in SVG/PNG) per i grafici incorporati nel report di statistiche.",
             ],
           },
         ],
@@ -618,6 +850,222 @@ export const projects: ProjectDetail[] = [
           },
         ],
       },
+      pt: {
+        title: "Cinemapedia",
+        tagline: "Um guia de bolso do que está nos cinemas.",
+        description:
+          "Aplicação Flutter para descobrir filmes com dados do TMDB: pesquisa, elenco e sinopse, e favoritos guardados offline com Isar.",
+        client: "Projeto pessoal",
+        role: "Engenheiro mobile",
+        year: "2024",
+        tags: ["Flutter", "Dart", "Riverpod", "go_router", "Isar", "Dio", "TMDB API"],
+        challenge:
+          "Uma aplicação de filmes é o teste clássico de uma stack móvel: muitas listas, imagens, navegação e estado offline. Construí-a para afinar a minha arquitetura em Flutter.",
+        built:
+          "Uma aplicação Flutter sobre a API do TMDB com listas de filmes em cartaz, populares, mais bem avaliados e a estrear, pesquisa e páginas de detalhe com elenco e sinopse. Os favoritos são guardados offline com Isar; o estado vive no Riverpod e a navegação no go_router.",
+        result:
+          "Temas claro e escuro com 15 cores de destaque, scroll infinito fluido e uma arquitetura fácil de ampliar.",
+        tech: [
+          {
+            h: "O que faz",
+            p: [
+              "O ecrã inicial vai buscar quatro listas do TMDB (em cartaz, populares, mais bem avaliados e a estrear) para filas com scroll infinito, e os títulos em cartaz servem também de apresentação em destaque no topo. Tocar num cartaz abre um ecrã de detalhe com a sinopse, os géneros e as fotografias do elenco obtidas no endpoint de créditos do TMDB. O ícone da lupa abre uma pesquisa com debounce sobre a mesma API, e cada ecrã de detalhe tem um botão de favorito que persiste numa base de dados Isar no dispositivo, por isso o separador de favoritos lê instantaneamente, sem chamadas de rede.",
+            ],
+          },
+          {
+            h: "Arquitetura",
+            p: ["A aplicação segue uma divisão de arquitetura limpa em três camadas, cada uma a conhecer apenas a de baixo:"],
+            rows: [
+              {
+                base: "domain",
+                summary:
+                  "Núcleo independente da framework: as entidades Movie e Actor e os contratos abstratos de repositório e fonte de dados de que o resto da aplicação depende.",
+              },
+              {
+                base: "infraestructure",
+                summary:
+                  "As respostas REST do TMDB convertidas em entidades de domínio através do Dio, mais uma fonte de dados Isar que lê e escreve favoritos no dispositivo.",
+              },
+              {
+                base: "presentation",
+                summary:
+                  "Providers do Riverpod a gerir o estado, go_router para a navegação e os ecrãs e widgets: a única camada que sabe que qualquer um dos dois existe.",
+              },
+            ],
+            code: {
+              ...cinemaSnippet,
+              notes: { 3: "o único que muda em cada lista" },
+              caption:
+                "`movies_provider.dart`: o mesmo padrão de paginação com `StateNotifier` sustenta as quatro listas do ecrã inicial; só muda a função de obtenção com que cada uma é construída.",
+            },
+          },
+          {
+            h: "Ecrãs",
+            p: ["As capturas abaixo são da aplicação a correr num simulador de iOS."],
+            shots: [
+              {
+                src: `${P}/movies-app/home.jpg`,
+                alt: "Ecrã inicial com uma apresentação de filmes em destaque, uma fila de filmes em cartaz e outra de estreias próximas",
+                caption: "Início: destaques, em cartaz e a estrear.",
+              },
+              {
+                src: `${P}/movies-app/dark-home.jpg`,
+                alt: "O mesmo ecrã inicial em modo escuro",
+                caption: "Início escuro: o tema aplica-se de imediato a todos os ecrãs.",
+              },
+              {
+                src: `${P}/movies-app/detail.jpg`,
+                alt: "Ecrã de detalhe de um filme com a sinopse, os géneros, fotografias do elenco e um ícone de favorito preenchido",
+                caption: "Detalhe: sinopse, géneros e elenco, com o botão de favorito.",
+              },
+              {
+                src: `${P}/movies-app/dark-detail.png`,
+                alt: "Ecrã de detalhe de um filme em modo escuro com a sinopse, os géneros, fotografias do elenco e um ícone de favorito preenchido",
+                caption: "Detalhe escuro: sinopse, géneros e elenco, com o botão de favorito.",
+              },
+              {
+                src: `${P}/movies-app/search.jpg`,
+                alt: "Lista de resultados de pesquisa com vários filmes que correspondem a uma consulta, cada um com a sua classificação",
+                caption: "Pesquisa: debounce de 500 ms contra a API do TMDB enquanto escreves.",
+              },
+              {
+                src: `${P}/movies-app/dark-search.png`,
+                alt: "Lista de resultados de pesquisa em modo escuro com vários filmes que correspondem a uma consulta, cada um com a sua classificação",
+                caption: "Pesquisa escura: debounce de 500 ms contra a API do TMDB enquanto escreves.",
+              },
+              {
+                src: `${P}/movies-app/favorites.png`,
+                alt: "Ecrã de favoritos com uma grelha em mosaico de dois cartazes de filmes guardados",
+                caption: "Favoritos: guardados no dispositivo com Isar, sem ida e volta à rede.",
+              },
+              {
+                src: `${P}/movies-app/dark-favorites.png`,
+                alt: "Ecrã de favoritos em modo escuro com uma grelha em mosaico de dois cartazes de filmes guardados",
+                caption: "Favoritos escuros: guardados no dispositivo com Isar, sem ida e volta à rede.",
+              },
+              {
+                src: `${P}/movies-app/dark-settings.jpg`,
+                alt: "Ecrã de definições em modo escuro com o idioma, a cor de destaque e um interruptor de modo escuro",
+                caption: "Definições escuras: idioma, uma das 15 cores de destaque e o interruptor do tema.",
+              },
+            ],
+          },
+          {
+            h: "Stack",
+            p: [
+              "Flutter e Dart para a aplicação em si, `flutter_riverpod` para a gestão de estado e `go_router` para a navegação. Os dados dos filmes vêm da API REST do TMDB através do Dio, e os favoritos são guardados no dispositivo com `Isar`, sem backend próprio.",
+            ],
+          },
+        ],
+      },
+      it: {
+        title: "Cinemapedia",
+        tagline: "Una guida tascabile a quello che c'è al cinema.",
+        description:
+          "App Flutter per scoprire film con i dati di TMDB: ricerca, cast e sinossi, e preferiti salvati offline con Isar.",
+        client: "Progetto personale",
+        role: "Ingegnere mobile",
+        year: "2024",
+        tags: ["Flutter", "Dart", "Riverpod", "go_router", "Isar", "Dio", "TMDB API"],
+        challenge:
+          "Un'app di film è il classico banco di prova di uno stack mobile: tante liste, immagini, navigazione e stato offline. L'ho costruita per affinare la mia architettura in Flutter.",
+        built:
+          "Un'app Flutter sull'API di TMDB con liste di film in programmazione, popolari, più votati e in arrivo, ricerca e pagine di dettaglio con cast e sinossi. I preferiti sono salvati offline con Isar; lo stato vive in Riverpod e la navigazione in go_router.",
+        result:
+          "Temi chiaro e scuro con 15 colori d'accento, scorrimento infinito fluido e un'architettura facile da estendere.",
+        tech: [
+          {
+            h: "Cosa fa",
+            p: [
+              "La home carica quattro liste di TMDB (in programmazione, popolari, più votati e in arrivo) in file a scorrimento infinito, e i titoli in programmazione fanno anche da presentazione in evidenza in alto. Toccando una locandina si apre una schermata di dettaglio con la sinossi, i generi e le foto del cast prese dall'endpoint dei crediti di TMDB. L'icona della lente apre una ricerca con debounce sulla stessa API, e ogni schermata di dettaglio ha un interruttore dei preferiti che persiste in un database Isar sul dispositivo, per cui la scheda dei preferiti si legge subito, senza chiamate di rete.",
+            ],
+          },
+          {
+            h: "Architettura",
+            p: ["L'app segue una divisione in clean architecture su tre livelli, ognuno a conoscenza solo di quello sottostante:"],
+            rows: [
+              {
+                base: "domain",
+                summary:
+                  "Nucleo indipendente dal framework: le entità Movie e Actor e i contratti astratti di repository e datasource da cui dipende il resto dell'app.",
+              },
+              {
+                base: "infraestructure",
+                summary:
+                  "Le risposte REST di TMDB mappate in entità di dominio tramite Dio, più un datasource Isar che legge e scrive i preferiti sul dispositivo.",
+              },
+              {
+                base: "presentation",
+                summary:
+                  "Provider di Riverpod che gestiscono lo stato, go_router per la navigazione, e le schermate e i widget: l'unico livello che sa che esistono entrambi.",
+              },
+            ],
+            code: {
+              ...cinemaSnippet,
+              notes: { 3: "l'unica cosa che cambia per ogni lista" },
+              caption:
+                "`movies_provider.dart`: lo stesso pattern di paginazione con `StateNotifier` regge tutte e quattro le liste della home; cambia solo la funzione di recupero con cui ciascuna è costruita.",
+            },
+          },
+          {
+            h: "Schermate",
+            p: ["Le schermate qui sotto sono dell'app in esecuzione su un simulatore iOS."],
+            shots: [
+              {
+                src: `${P}/movies-app/home.jpg`,
+                alt: "Schermata Home con una presentazione di film in evidenza, una fila di film in programmazione e una di prossime uscite",
+                caption: "Home: presentazione in evidenza, in programmazione e in arrivo.",
+              },
+              {
+                src: `${P}/movies-app/dark-home.jpg`,
+                alt: "La stessa schermata Home in modalità scura",
+                caption: "Home scura: il tema si applica subito a tutte le schermate.",
+              },
+              {
+                src: `${P}/movies-app/detail.jpg`,
+                alt: "Schermata di dettaglio di un film con sinossi, generi, foto del cast e un'icona dei preferiti piena",
+                caption: "Dettaglio: sinossi, generi e cast, con l'interruttore dei preferiti.",
+              },
+              {
+                src: `${P}/movies-app/dark-detail.png`,
+                alt: "Schermata di dettaglio di un film in modalità scura con sinossi, generi, foto del cast e un'icona dei preferiti piena",
+                caption: "Dettaglio scuro: sinossi, generi e cast, con l'interruttore dei preferiti.",
+              },
+              {
+                src: `${P}/movies-app/search.jpg`,
+                alt: "Elenco dei risultati di ricerca con diversi film corrispondenti a una query, ciascuno con il suo voto",
+                caption: "Ricerca: debounce di 500 ms sull'API di TMDB mentre scrivi.",
+              },
+              {
+                src: `${P}/movies-app/dark-search.png`,
+                alt: "Elenco dei risultati di ricerca in modalità scura con diversi film corrispondenti a una query, ciascuno con il suo voto",
+                caption: "Ricerca scura: debounce di 500 ms sull'API di TMDB mentre scrivi.",
+              },
+              {
+                src: `${P}/movies-app/favorites.png`,
+                alt: "Schermata dei preferiti con una griglia a mosaico di due locandine di film salvati",
+                caption: "Preferiti: salvati sul dispositivo con Isar, senza andata e ritorno in rete.",
+              },
+              {
+                src: `${P}/movies-app/dark-favorites.png`,
+                alt: "Schermata dei preferiti in modalità scura con una griglia a mosaico di due locandine di film salvati",
+                caption: "Preferiti scuri: salvati sul dispositivo con Isar, senza andata e ritorno in rete.",
+              },
+              {
+                src: `${P}/movies-app/dark-settings.jpg`,
+                alt: "Schermata delle impostazioni in modalità scura con lingua, colore d'accento e un interruttore della modalità scura",
+                caption: "Impostazioni scure: lingua, uno dei 15 colori d'accento e l'interruttore del tema.",
+              },
+            ],
+          },
+          {
+            h: "Stack",
+            p: [
+              "Flutter e Dart per l'app vera e propria, `flutter_riverpod` per la gestione dello stato e `go_router` per la navigazione. I dati dei film arrivano dall'API REST di TMDB tramite Dio, e i preferiti sono salvati sul dispositivo con `Isar`, senza backend proprio.",
+            ],
+          },
+        ],
+      },
     },
   },
 
@@ -797,6 +1245,178 @@ export const projects: ProjectDetail[] = [
             h: "Stack",
             p: [
               "Vue 3 with the Options API and TypeScript for the app itself, Axios talking directly to PokeAPI with no caching layer in between, and utility-class styling with a handful of scoped keyframe animations for the Pokédex scanlines and lens glow.",
+            ],
+          },
+        ],
+      },
+      pt: {
+        title: "¿Quién es ese Pokémon?",
+        tagline: "Adivinha a silhueta. Bate o ranking.",
+        description:
+          "Jogo de perguntas em Vue 3 + TypeScript sobre a PokeAPI: adivinha o Pokémon pela silhueta antes de o relógio e os corações acabarem.",
+        client: "Projeto pessoal",
+        role: "Engenheiro de frontend",
+        year: "2021 a 2026",
+        tags: ["Vue 3", "TypeScript", "Axios", "PokeAPI", "Vue CLI"],
+        challenge:
+          "Um pequeno jogo que começou em 2021 como projeto para aprender Vue e se tornou o meu laboratório de ideias de interface.",
+        built:
+          "Um jogo de perguntas sobre a PokeAPI: adivinha o Pokémon pela silhueta em três níveis de dificuldade, com um top 10 local.",
+        result:
+          "Redesenhado por completo em 2026 com um aspeto de terminal holográfico retro. Está online, experimenta.",
+        tech: [
+          {
+            h: "Porque o construí",
+            p: [
+              "Foi um dos meus primeiros projetos em Vue 3 + TypeScript, feito em 2021 para praticar a composição de componentes, as propriedades computadas e a obtenção de dados em direto de uma API REST pública em vez de dados estáticos. Voltei a ele em 2026 para redesenhar a interface de raiz (o atual aspeto de “terminal holográfico de Kanto”), deixando intacta a lógica original do jogo.",
+            ],
+          },
+          {
+            h: "O que faz",
+            p: [
+              "Em cada ronda baralham-se os 650 ids de Pokémon de Kanto a Unova, vão-se buscar quatro à PokeAPI e um é mostrado como silhueta negra que só se revela quando respondes. A dificuldade escolhida no início (Fácil, Normal ou Difícil) define as vidas, os segundos por pergunta e quantas pistas tens; cada pista elimina duas das três opções erradas, deixando uma escolha 50/50. O Normal e o Difícil acrescentam um relógio geral do jogo que custa uma vida e reinicia sempre que chega ao fim. As pontuações finais são guardadas diretamente num top 10 local, sem backend.",
+            ],
+          },
+          {
+            h: "Arquitetura",
+            p: [
+              "Não há router nem biblioteca de estado: o `App.vue` limita-se a alternar entre o menu e o ecrã de jogo com um par prop/emit, e cada ecrã gere o seu próprio estado através da Options API. A lógica que não é interface vive em três módulos pequenos, cada um com um único propósito:",
+            ],
+            rows: [
+              {
+                base: "api/pokemonApi.ts",
+                summary:
+                  "Uma única instância do Axios apontada ao endpoint /pokemon da PokeAPI: todos os pedidos do nome e do id de um Pokémon passam por ela.",
+              },
+              {
+                base: "helper/getPokemonOptions.ts",
+                summary:
+                  "Baralha no cliente os 650 ids de Kanto a Unova, escolhe quatro e resolve os quatro pedidos à PokeAPI em paralelo com Promise.all.",
+              },
+              {
+                base: "helper/dificultad.ts + scoreStorage.ts",
+                summary:
+                  "Níveis de dificuldade (vidas, segundos por pergunta, pistas, tempo total) e um top 10 em localStorage, reordenado e cortado a cada gravação.",
+              },
+            ],
+            code: {
+              ...pokeSnippet,
+              notes: { 8: "baralhado de novo" },
+              caption:
+                "`PokemonPage.vue`: usar uma pista mantém o Pokémon correto e um engodo aleatório, e volta a baralhar os dois para que a posição da resposta no ecrã não a denuncie.",
+            },
+          },
+          {
+            h: "Ecrãs",
+            p: ["As capturas abaixo são da aplicação a correr localmente, não maquetes."],
+            shots: [
+              {
+                src: `${P}/poke-web/menu.png`,
+                alt: "Menu principal com o aspeto de um terminal holográfico de Kanto, com uma silhueta de Pokémon desfocada à esquerda e as opções Empezar, Configurar, Puntajes e Créditos à direita",
+                caption: "Menu principal: o redesenho de terminal holográfico, com pré-visualização de uma silhueta em direto.",
+              },
+              {
+                src: `${P}/poke-web/config.png`,
+                alt: "Ecrã de escolha de dificuldade com as opções Fácil, Normal e Difícil, cada uma com as suas vidas, tempo por pergunta e pistas disponíveis",
+                caption: "Escolha de dificuldade: Fácil, Normal e Difícil ajustam de forma diferente as vidas, o tempo e as pistas.",
+              },
+              {
+                src: `${P}/poke-web/game.png`,
+                alt: "Ecrã de jogo com uma silhueta negra de Pokémon dentro de um scanner ao estilo Pokédex, um temporizador, um botão de pista e quatro opções de resposta em baixo",
+                caption: "O ecrã de adivinhar: uma contagem decrescente, um botão de pista e quatro opções vindas da PokeAPI.",
+              },
+            ],
+          },
+          {
+            h: "Stack",
+            p: [
+              "Vue 3 com Options API e TypeScript para a aplicação em si, Axios a falar diretamente com a PokeAPI sem camada de cache pelo meio, e estilos com classes utilitárias com algumas animações keyframe com âmbito para as linhas de varrimento do Pokédex e o brilho da lente.",
+            ],
+          },
+        ],
+      },
+      it: {
+        title: "¿Quién es ese Pokémon?",
+        tagline: "Indovina la sagoma. Batti la classifica.",
+        description:
+          "Gioco a quiz in Vue 3 + TypeScript sulla PokeAPI: indovina il Pokémon dalla sagoma prima che finiscano il tempo e i cuori.",
+        client: "Progetto personale",
+        role: "Ingegnere frontend",
+        year: "dal 2021 al 2026",
+        tags: ["Vue 3", "TypeScript", "Axios", "PokeAPI", "Vue CLI"],
+        challenge:
+          "Un piccolo gioco nato nel 2021 come progetto per imparare Vue e diventato il mio laboratorio di idee per le interfacce.",
+        built:
+          "Un gioco a quiz sulla PokeAPI: indovina il Pokémon dalla sagoma su tre livelli di difficoltà, con una top 10 locale.",
+        result:
+          "Ridisegnato da zero nel 2026 con un look da terminale olografico retrò. È online, provalo.",
+        tech: [
+          {
+            h: "Perché l'ho costruito",
+            p: [
+              "È stato uno dei miei primi progetti in Vue 3 + TypeScript, fatto nel 2021 per esercitarmi con la composizione dei componenti, le proprietà computed e il recupero di dati dal vivo da una API REST pubblica invece di dati statici. Ci sono tornato nel 2026 per ridisegnare l'interfaccia da zero (l'attuale look da “terminale olografico di Kanto”) lasciando intatta la logica originale del gioco.",
+            ],
+          },
+          {
+            h: "Cosa fa",
+            p: [
+              "A ogni round vengono mescolati i 650 id dei Pokémon da Kanto a Unima, ne vengono recuperati quattro dalla PokeAPI e uno viene mostrato come sagoma nera che si rivela solo dopo la risposta. La difficoltà scelta all'inizio (Fácil, Normal o Difícil) stabilisce le vite, i secondi per domanda e quanti aiuti hai; ogni aiuto elimina due delle tre risposte sbagliate, lasciando una scelta 50/50. Normal e Difícil aggiungono un timer complessivo della partita che costa una vita e si azzera ogni volta che scade. I punteggi finali vengono salvati direttamente in una top 10 locale, senza backend.",
+            ],
+          },
+          {
+            h: "Architettura",
+            p: [
+              "Non c'è né un router né una libreria di stato: `App.vue` si limita ad alternare tra il menu e la schermata di gioco con una coppia prop/emit, e ogni schermata gestisce il proprio stato con la Options API. La logica che non è interfaccia vive in tre piccoli moduli, ciascuno con un solo scopo:",
+            ],
+            rows: [
+              {
+                base: "api/pokemonApi.ts",
+                summary:
+                  "Una sola istanza di Axios puntata all'endpoint /pokemon della PokeAPI: ogni richiesta del nome e dell'id di un Pokémon passa da lì.",
+              },
+              {
+                base: "helper/getPokemonOptions.ts",
+                summary:
+                  "Mescola lato client i 650 id da Kanto a Unima, ne prende quattro e risolve le quattro richieste alla PokeAPI in parallelo con Promise.all.",
+              },
+              {
+                base: "helper/dificultad.ts + scoreStorage.ts",
+                summary:
+                  "Livelli di difficoltà (vite, secondi per domanda, aiuti, tempo totale) e una top 10 in localStorage, riordinata e tagliata a ogni salvataggio.",
+              },
+            ],
+            code: {
+              ...pokeSnippet,
+              notes: { 8: "rimescolate" },
+              caption:
+                "`PokemonPage.vue`: usare un aiuto mantiene il Pokémon corretto e un'esca casuale, poi rimescola i due perché la posizione della risposta sullo schermo non la tradisca.",
+            },
+          },
+          {
+            h: "Schermate",
+            p: ["Le schermate qui sotto sono dell'app in esecuzione in locale, non mockup."],
+            shots: [
+              {
+                src: `${P}/poke-web/menu.png`,
+                alt: "Menu principale in stile terminale olografico di Kanto, con una sagoma di Pokémon sfocata a sinistra e le opzioni Empezar, Configurar, Puntajes e Créditos a destra",
+                caption: "Menu principale: il redesign a terminale olografico, con anteprima dal vivo di una sagoma.",
+              },
+              {
+                src: `${P}/poke-web/config.png`,
+                alt: "Schermata di scelta della difficoltà con le opzioni Fácil, Normal e Difícil, ciascuna con le proprie vite, il tempo per domanda e gli aiuti disponibili",
+                caption: "Scelta della difficoltà: Fácil, Normal e Difícil regolano in modo diverso vite, tempo e aiuti.",
+              },
+              {
+                src: `${P}/poke-web/game.png`,
+                alt: "Schermata di gioco con una sagoma nera di Pokémon dentro uno scanner in stile Pokédex, un conto alla rovescia, un pulsante di aiuto e quattro opzioni di risposta sotto",
+                caption: "La schermata dell'indovinello: un conto alla rovescia, un pulsante di aiuto e quattro opzioni dalla PokeAPI.",
+              },
+            ],
+          },
+          {
+            h: "Stack",
+            p: [
+              "Vue 3 con Options API e TypeScript per l'app vera e propria, Axios che parla direttamente con la PokeAPI senza livelli di cache in mezzo, e stili con classi utility con qualche animazione keyframe con scope per le scanline del Pokédex e il bagliore della lente.",
             ],
           },
         ],
